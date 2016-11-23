@@ -19,7 +19,7 @@ Django form page with the following elements:
 * Link to add a new corpus
 * Content generation method controls:N-gram length. chain on stopword or shared non-stopword. Shortest tweet length.  Longest tweet length. Autogen hashtag?</ul>
 
-### Corpora Mangement Page
+### Corpora Management Page
 Tabular list of current corpora configured by the user, with the fields: corpus_name, total_words, total_sentences, and link to edit/deleted corpus.
 
 At top of page, "add source" button and dropdown select for user-generated source or twitter account. If twitter is selected,  a textbox with the "Twitter Screen Name" and an add button will appear.
@@ -37,24 +37,60 @@ At top of page, "add source" button and dropdown select for user-generated sourc
 
 ## Schedule
 #### Week 1
-Creation and testing of business algorithms. Study into NLTK and markov chain bots. Configurable features will be brainstormed and built out from here. Getting started on this early will help me prioritize the rest of the project, and this tough and crucial functionality drives the rest of the project.
+Creation and testing of basic algorithm, and create django Models for 
+storing corpora. Start Django project and get database schema into place.
+Study into NLTK and markov chain bots. 
+Configurable features will be brainstormed and built out from here. 
+Getting started on this early will help me prioritize the rest of the 
+project, and this tough and crucial functionality drives the rest of the
+project.
 
 #### Week 2
- Continue tweaking core bot functionality. Start Django project and get database schema into place.
+Continue tweaking core bot functionality. Begin building out scaffolding
+for bot creation, corpora management, etc once Models and algorithms are in place
 
 #### Week 3
+Polish front end, work on user accounts management
+and continue adding algorithms. Probably wrestle with huge data storage
+and modeling problems. 
 
 #### Week 4
-
+Add user features and continue to wrestle with storage and model issues
 
 ## Models to Create:
 
 ##### User
-_password/username/email_
+`password/username/email`
+
 ##### Corpus
  Where source material is stored
 
 `time_added, added_by, is_public, body, sent_tokens, bi-, tri-, quad-, septgrams`
+
+##### Word
+Includes POS tags for words
+
+`word, pos_tag, corpus_id`
+
+##### Bigram
+Word pairs with foreign key to originating Corpus and 'appears' counter var
+
+`word1, word2, appears, corpus_id`
+
+##### Trigram
+Word triplets with foreign key to originating Corpus
+
+`word1, word2, word3, appears, corpus_id`
+
+##### Quadgram
+Word quadruplets with foreign key to originating Corpus
+
+`word1, word2, word3, word4, appears, corpus_id`
+
+##### Sentence
+NLTK parsed sentence tokens with foreign key to originating Corpus
+
+`sentence, corpus_id`
 
 ##### Bot
 Collection of mashup algorithm, corpora, and twitter identity
@@ -118,7 +154,14 @@ and mash them together, prepending a #
 ##Research Dump
 Good way to store NLTK tokens after parsing?
 Dataset module:
+
 https://dataset.readthedocs.io/en/latest/
 
 Maybe a custom model field in django?
+
 https://docs.djangoproject.com/en/1.10/howto/custom-model-fields/
+
+N-grams may run off the rails? Could get a handle by only storing top X 
+per corpus:
+
+http://stackoverflow.com/questions/26341518/effective-1-5-grams-extraction-with-python?rq=1
