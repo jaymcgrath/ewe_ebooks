@@ -92,6 +92,11 @@ NLTK parsed sentence tokens with foreign key to originating Corpus
 
 `sentence, corpus_id`
 
+##### Hashtag
+Contains hashtags from a given corpus
+
+`hashtag, corpus_id`
+
 ##### Bot
 Collection of mashup algorithm, corpora, and twitter identity
 
@@ -150,6 +155,8 @@ _ParseyMcParseFace_ - Uses google's grammar parser to try to output grammatical 
 ##Future Features
 Hashtag generator - Randomly select words that appear frequently in both corpora
 and mash them together, prepending a #
+
+Wordcloud of some sort!
 
 ##Research Dump
 Good way to store NLTK tokens after parsing?
