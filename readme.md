@@ -153,10 +153,18 @@ _ParseyMcParseFace_ - Uses google's grammar parser to try to output grammatical 
 
 
 ##Future Features
-Hashtag generator - Randomly select words that appear frequently in both corpora
+* Hashtag generator - Randomly select words that appear frequently in both corpora
 and mash them together, prepending a #
 
-Wordcloud of some sort!
+* Wordcloud of some sort!
+
+* GraphQL API query language integration? This looks really cool and
+any excuse to learn about it would be great
+http://graphql.org/
+
+* Add google ngrams API as a "corpus" called `interwebs`
+
+* Investigate hidden markov models
 
 ##Research Dump
 Good way to store NLTK tokens after parsing?
@@ -168,7 +176,7 @@ Maybe a custom model field in django?
 
 https://docs.djangoproject.com/en/1.10/howto/custom-model-fields/
 
-N-grams may run off the rails? Could get a handle by only storing top X 
-per corpus:
+parsing and storing n-grams wholesale might get out of hand?
+Could get a handle by only storing top X ngrams per corpus:
 
 http://stackoverflow.com/questions/26341518/effective-1-5-grams-extraction-with-python?rq=1
