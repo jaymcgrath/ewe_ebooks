@@ -65,7 +65,7 @@ Add user features and continue to wrestle with storage and model issues
 ##### Corpus
  Where source material is stored
 
-`time_added, added_by, is_public, body, sent_tokens, bi-, tri-, quad-, septgrams`
+`time_added, added_by, is_public, body,`
 
 ##### Word
 Includes POS tags for words
