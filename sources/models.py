@@ -18,9 +18,9 @@ class Corpus(models.Model):
     desc = models.TextField(null=True, help_text = "A description of this source")
     is_public = models.BooleanField(default=False)
     type = models.CharField(max_lenth=8, choices=TYPE_CHOICES)
-    twitter_username = models.CharField(max_length=15, null)
+    twitter_username = models.CharField(max_length=15, null=True)
     author = models.TextField(max_length=64, null=True)
-    added_by = models.ForeignKey(Member, on_delete=models.CASCADE)
+    added_by = models.ForeignKey('people.Member', on_delete=models.CASCADE)
     mash_count = models.IntegerField(default=0)
 
 class Word(models.Model):
