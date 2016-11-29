@@ -1,15 +1,16 @@
 """
-Twitter backend functions for retrieving tweets and seeding corpora
+Twitter backend functions for retrieving tweets and seeding a corpus
 
 """
 import re
 import tweepy
+from nltk import ngrams, word_tokenize, sent_tokenize
 from secrets.secrets import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
 
 
 class Timeline:
     """
-    User timeline class for retrieving tweets via Tweepy wrapper
+    User timeline class for retrieving  and parsing tweets via Tweepy wrapper and NLTK
 
     properties:
     tweets - list of strings, tweet bodies from this timeline
@@ -64,7 +65,7 @@ class Timeline:
         try:
             api = tweepy.API(auth)
         except tweepy.TweepError:
-            # TODO: fix error raised by failed twitter login
+            # TODO: make sure this error bubbles up and gets handled gracefully
             raise PermissionError("Twitter Auth failed")
 
         # Gets a list of status objects (tweets) for this user
@@ -82,30 +83,64 @@ class Timeline:
         # url and hashtag regexes - quick n dirty - just matches start and non-whitespace
 
         url_regex = re.compile(r'(https?|ftp)://[^\s]+')
-        hashtag_regex = re.compile(r'\#[^\s]+')
+        """
+        The problem: want to remove tweet addressees but retain inline mentions as they are semantically
+         relevant. This regex will strip all @'s at the beginning of a tweet while retaining ones appearing later
+        """
+        at_regex = re.compile(r'(^@.*? )([^@]|$)')
+
 
         # Extract the tweet body out of each Status object
-        # TODO: filter out retweets, prepended by 'RT'
+
         for tweet in timeline:
-            tweet_body = tweet.text
-            #TODO: make this less ugly
+            # retweeted_status only exists in retweets
+            if 'retweeted_status' not in tweet._json:
+                tweet_body = tweet.text
+                # Filter out most URLs
+                tweet_body = url_regex.sub('', tweet_body)
+                # Filter out addressees at beginning of tweet
+                tweet_body = at_regex.sub(r'\2', tweet_body)
 
-            these_tags = hashtag_regex.findall(tweet.text)
-            hashtags.extend(these_tags) if these_tags else None
-            # ht = [t for t in hashtags if t is not None]
-            tweet_body = url_regex.sub('', tweet_body)
-            tweets.append(tweet_body)
+                if tweet_body:
+                    # Add it to the list if we have anything left
+                    tweets.append(tweet_body)
 
+                for hash_obj in tweet.entities['hashtags']:
+                        hashtags.extend(hash_obj['text'])
+
+        # Now process cleaned up tweets with NLTK
+        words = []
+        bigrams = []
+        trigrams = []
+        quadgrams = []
+        sentences = []
+
+        for tweet in tweets:
+            these_words = word_tokenize(tweet)
+            sentences.extend(sent_tokenize(tweet))
+            words.extend(these_words)
+            bigrams.extend(ngrams(these_words, 2))
+            trigrams.extend(ngrams(these_words, 3))
+            quadgrams.extend(ngrams(these_words, 4))
+
+
+        self.words = words
+        self.bigrams = bigrams
+        self.trigrams = trigrams
+        self.quadgrams = quadgrams
+        self.sentences = sentences
         self.tweets = tweets
         self.hashtags = hashtags
+        # TODO: Remove this property after testing finished.
+        self.timeline = timeline
+        self.author = username
 
     def __str__(self):
-        #TODO: fill out __str__ method
-        pass
+        return self.author
 
     def __repr__(self):
-        #TODO: fill out __repr__ method
-        pass
+        repr_str = "{} Timeline object, {} tweets, {} hashtags"
+        return repr_str.format(self.author, len(self.tweets), len(self.hashtags))
 
 
 class Tweet:
