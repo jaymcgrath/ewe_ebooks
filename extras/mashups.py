@@ -4,7 +4,7 @@ Support module for ewe_ebooks containing the various business algorithms for com
 """
 
 import random
-from nltk import pos_tag
+from nltk import pos_tag, word_tokenize
 
 def mouse_join(first_source, second_source):
     """
@@ -20,83 +20,41 @@ def mouse_join(first_source, second_source):
     if random.choice([True, False]):
         second_source, first_source = first_source, second_source
 
+    # Generate tags for each set of sentences
 
+    def tag_sentences(sentences):
+        """
+        helper function for tagging senteces. tosses sentences without verbs
+        """
 
-    first_tags = pos_tag(first_source)
-    second_tags = pos_tag(second_source)
+        tagged = []
+        for sentence in sentences:
+            tags = pos_tag(word_tokenize(sentence))
+            if len([word for word in tags if word[1].startswith('VB')]):
+                tagged.append(tags)
 
+        return tagged
 
+    first_tags = tag_sentences(first_source)
+    second_tags = tag_sentences(second_source)
 
-    if random.choice([True, False]):
-        pass
-    else:
-        pass
+    output = []
 
+    for word, tag in random.choice(first_tags):
+        output.append(word)
 
+        if tag.startswith('VB'):
+            break
 
+    # Haven't hit second half of sentence yet
+    second_half = False
 
+    for word, tag in random.choice(second_tags):
+        if tag.startswith('VB'):
+            second_half = True
+            # OK, now start adding words after this verb
 
+        if second_half:
+            output.append(word)
 
-
-
-
-def (first_source, second_source):
-    """
-    given a text, creates a random sentence based on collapsing chained
-    trigrams, chaining word 3 with the most common trigram starting with word 3
-    avoids linking with stopwords to prevent looping phrases like "as well as"
-    :param body_text - text on which to base the sentence:
-    :return prints new sentence:
-    """
-
-
-    tg_counts = dict()
-
-    # Collect trigram counts in the dictionary
-    for trigram in trigrams:
-        tg_counts[trigram] = tg_counts.get(trigram, 0)+1
-
-    # Get a set of unique trigrams for organizational purposes
-    unique_trigrams = set(tg_counts.keys())
-
-    # Create data structure for first word meta dictionary
-    trigrams_by_first_word = dict()
-
-    # We only need the first word.. add an entry and empty list to the dictionary for each word
-    for first_word, second_word, third_word in unique_trigrams:
-        #  Some suboptimal overlapping here
-        trigrams_by_first_word[first_word] = []
-
-    # Push the trigram counts into meta dictionary , structure word: (count,(trigram))
-    for trigram, count in sorted(tg_counts.items()):
-        w1, w2, w3 = trigram
-        trigrams_by_first_word[w1].append((count, trigram))
-
-    # Choose a random starting point
-    startword = random.choice(tokenized_text)
-
-
-    # Generate a random sentence length of trigrams
-    sentence_length = random.choice(range(3,15))
-    print("SENTENCE LENGTH:", sentence_length)
-    tg_count, current_trigram = max(trigrams_by_first_word[startword])
-    print(current_trigram)
-    word1, word2, word3 = current_trigram
-    #Capitalize first word
-    word1 = word1.title()
-    sentence = [word1, word2]
-    nextword = word3
-
-    for _ in range(sentence_length):
-        tg_count, current_trigram = (max(trigrams_by_first_word[nextword]))
-        print(current_trigram)
-        word1, word2, word3 = current_trigram
-
-        sentence.extend([word1, word2])
-        nextword = word3
-        while nextword in stopwords.words('english'):
-            nextword = random.choice(tokenized_text)
-
-
-    output  = " ".join(sentence) + "."
-    print(output)
+    return output
