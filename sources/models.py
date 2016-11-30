@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class Corpus(models.Model):
     """
     Meta representation of a linguistic source. Contains basic information but no body text. All actual
@@ -14,13 +15,18 @@ class Corpus(models.Model):
     title = models.CharField(max_length=64, help_text="The title for this source")
     added = models.DateTimeField(auto_created=True)
     updated = models.DateTimeField()
-    desc = models.TextField(null=True, help_text = "A description of this source")
+    desc = models.TextField(null=True, help_text="A description of this source")
     is_public = models.BooleanField(default=False)
     type = models.CharField(max_length=2, choices=TYPE_CHOICES)
     twitter_username = models.CharField(max_length=15, null=True)
     author = models.TextField(max_length=64, null=True)
     added_by = models.ForeignKey('people.Member', on_delete=models.CASCADE)
     mash_count = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name_plural = 'corpora'
+        default_related_name = 'corpora'
+
 
 class Word(models.Model):
     """
@@ -30,6 +36,7 @@ class Word(models.Model):
     word = models.CharField(max_length=32)
     corpus = models.ForeignKey(Corpus)
 
+
 class Bigram(models.Model):
     """
     Word pairs from all corpora
@@ -37,6 +44,7 @@ class Bigram(models.Model):
     word1 = models.CharField(max_length=32)
     word2 = models.CharField(max_length=32)
     corpus = models.ForeignKey(Corpus)
+
 
 class Trigram(models.Model):
     """
@@ -46,6 +54,7 @@ class Trigram(models.Model):
     word2 = models.CharField(max_length=32)
     word3 = models.CharField(max_length=32)
     corpus = models.ForeignKey(Corpus)
+
 
 class Quadgram(models.Model):
     """
@@ -57,6 +66,7 @@ class Quadgram(models.Model):
     word4 = models.CharField(max_length=32)
     corpus = models.ForeignKey(Corpus)
 
+
 class Sentence(models.Model):
     """
     Sentences from all corpora
@@ -65,10 +75,10 @@ class Sentence(models.Model):
     sentence = models.CharField(max_length=1024)
     corpus = models.ForeignKey(Corpus)
 
-class Hashtag:
+
+class Hashtag(models.Model):
     """
     Stores hashtags from all corpora
     """
     hashtag = models.CharField(max_length=64)
     corpus = models.ForeignKey(Corpus)
-
