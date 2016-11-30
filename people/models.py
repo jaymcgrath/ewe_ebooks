@@ -1,5 +1,5 @@
 from django.db import models
-from contrib.auth import User
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -13,4 +13,5 @@ class Member(models.Model):
     bio = models.TextField(null=True, blank=True)
     dob = models.DateTimeField(auto_now=False)
     last_active = models.DateTimeField(auto_now=True)
+
 

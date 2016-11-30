@@ -7,17 +7,16 @@ class Corpus(models.Model):
     Meta representation of a linguistic source. Contains basic information but no body text. All actual
     content is stored in the other sources classes.
     """
-    TYPE_CHOICES = [
-                    "Twitter",
-                    "External"
-    ]
+    TYPE_CHOICES = (("TW", "Twitter"),
+                    ("EX", "External")
+                    )
 
     title = models.CharField(max_length=64, help_text="The title for this source")
     added = models.DateTimeField(auto_created=True)
     updated = models.DateTimeField()
     desc = models.TextField(null=True, help_text = "A description of this source")
     is_public = models.BooleanField(default=False)
-    type = models.CharField(max_lenth=8, choices=TYPE_CHOICES)
+    type = models.CharField(max_length=2, choices=TYPE_CHOICES)
     twitter_username = models.CharField(max_length=15, null=True)
     author = models.TextField(max_length=64, null=True)
     added_by = models.ForeignKey('people.Member', on_delete=models.CASCADE)
@@ -63,7 +62,7 @@ class Sentence(models.Model):
     Sentences from all corpora
     """
     # TODO: create custom tagged model for storing word:tag pairs as sentences
-    sentence = models.CharField()
+    sentence = models.CharField(max_length=1024)
     corpus = models.ForeignKey(Corpus)
 
 class Hashtag:

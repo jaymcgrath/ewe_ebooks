@@ -50,3 +50,8 @@ secrets
 *secrets*
 secrets.py
 keys.py
+
+# Ipython misc #
+####################
+*ipython*
+*.ipynb_checkpoints*
