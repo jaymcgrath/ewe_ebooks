@@ -10,4 +10,14 @@ class TestMashupAlgorithm(TestCase):
         pass
 
     def test_mashup_algorithm_name(self):
-        self.assertEquals(random_instance.name, 'mouse_join')
+        foo = str(self.random_instance)
+        self.assertEquals(str(self.random_instance), 'mouse_join', 'str should return self.name')
+
+    def test_mashup_algorithm_repr_isset(self):
+        foo = self.random_instance
+        self.assertEquals(repr(self.random_instance), 'mouse_join', 'repr should be equal to self.name')
+
+    def test_mashup_algorithm_usage_count_is_not_null(self):
+        self.assertIsNotNone(self.random_instance.usage_count)
+
+
