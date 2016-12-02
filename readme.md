@@ -154,17 +154,14 @@ _ParseyMcParseFace_ - Uses google's grammar parser to try to output grammatical 
 
 ##Future Features
 * Hashtag generator - Randomly select words that appear frequently in both corpora
-and mash them together, prepending a #
-
+  and mash them together, prepending a #
 * Wordcloud of some sort!
-
 * GraphQL API query language integration? This looks really cool and
-any excuse to learn about it would be great
-http://graphql.org/
-
+  any excuse to learn about it would be great
+  http://graphql.org/
 * Add google ngrams API as a "corpus" called `interwebs`
-
 * Investigate hidden markov models
+* Ipsum generator! People can generate their own ipsum from their twitter feeds
 
 ##Research Dump
 Good way to store NLTK tokens after parsing?
