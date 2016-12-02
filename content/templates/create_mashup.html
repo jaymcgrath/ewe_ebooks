@@ -1,5 +1,9 @@
-    <form target="" method="post">
+{% extends "base.html" %}
+{% block main_content %}
+<form target="" method="post">
+    {% csrf_token %}
     {{ form.as_p }}
         <input type="submit" value="add corpus">
     </form>
     SOME OTHER STUFF
+{% endblock %}
