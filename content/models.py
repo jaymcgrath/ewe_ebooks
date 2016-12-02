@@ -24,8 +24,9 @@ class Mashup(models.Model):
     Union of multiple sources.Corpus (corpora) and a MashupAlgorithm
     """
     title = models.CharField(max_length=32)
+    description = models.TextField()
     algorithm = models.ForeignKey(MashupAlgorithm, related_name='mashups')
-    corpora = models.ManyToManyField('sources.Corpus', related_name='corpora_set')
+    corpora = models.ManyToManyField(Corpus, related_name='corpora_set')
 
     def __str__(self):  # __unicode__ on Python 2
         return self.title

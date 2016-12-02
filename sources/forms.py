@@ -2,6 +2,9 @@ from django import forms
 
 
 class CorpusForm(forms.ModelForm):
+    """
+    Form for testing a Corpus before database insertion
+    """
     class Meta:
         model = 'sources.Corpus'
         fields = (

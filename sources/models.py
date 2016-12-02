@@ -27,6 +27,8 @@ class Corpus(models.Model):
         verbose_name_plural = 'corpora'
         default_related_name = 'corpora'
 
+    def __repr__(self):
+        return self.title
 
 class Word(models.Model):
     """
