@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView
 from .forms import CorpusForm
-from extras.twittstopher import Timeline
+from .models import Corpus
 
 # Create your views here!
 
@@ -12,9 +12,14 @@ class CorpusCreateView(CreateView):
     """
     template_name = 'sources/create_corpus.html'
     form_class = CorpusForm
-    success_url = '/view_sources/'
+    success_url = '/list_sources/'
 
 
 class CorpusListView(ListView):
-    pass
+    model = Corpus
+
+    def get_context_data(self, **kwargs):
+        context = super(CorpusListView, self).get_context_data(**kwargs)
+        return context
+
 
