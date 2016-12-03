@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+    <table class="table table-striped">
+        {% for mashup in object_list %}
+        <tr class="form-row">
+            <td>{{ mashup.title }}</td>
+            <td>{{ mashup.description }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
