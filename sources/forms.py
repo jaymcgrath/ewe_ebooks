@@ -1,4 +1,5 @@
 from django import forms
+from .models import Corpus, Word, Bigram, Trigram, Quadgram, Sentence, Hashtag
 
 
 class CorpusForm(forms.ModelForm):
@@ -6,43 +7,35 @@ class CorpusForm(forms.ModelForm):
     Form for testing a Corpus before database insertion
     """
     class Meta:
-        model = 'sources.Corpus'
-        fields = (
-                 'title',
-                 'desc',
-                 'is_public',
-                 'type',
-                 'twitter_username',
-                 'author',
-                 'mash_count'
-                 )
+        model = Corpus
+        fields = ('twitter_username',)
 
 
 class WordForm(forms.ModelForm):
     class Meta:
-        model = 'sources.Word'
+        model = Word
         fields = ('word',)
 
 
 class BigramForm(forms.ModelForm):
     class Meta:
-        model = 'sources.Bigram'
+        model = Bigram
         fields = ('word1', 'word2')
 
 
 class TrigramForm(forms.ModelForm):
     class Meta:
-        model = 'sources.Trigram'
+        model = Trigram
         fields = ('word1', 'word2', 'word3')
 
 
 class QuadgramForm(forms.ModelForm):
     class Meta:
-        model = 'sources.Quadgram'
+        model = Quadgram
         fields = ('word1', 'word2', 'word3', 'word4')
 
 
 class SentenceForm(forms.ModelForm):
     class Meta:
-        model = 'sources.Sentence'
+        model = Sentence
         fields = ('sentence',)
