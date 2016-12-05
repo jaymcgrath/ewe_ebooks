@@ -55,3 +55,9 @@ keys.py
 ####################
 *ipython*
 *.ipynb_checkpoints*
+
+# Testing reports #
+####################
+htmlcov
+*htmlcov*
+
