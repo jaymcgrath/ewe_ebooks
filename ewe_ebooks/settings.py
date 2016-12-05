@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '7c7#o&r38dw@!-gxl-bd60390b(t8^a2^6u6lhk4k-u&iah)sf'
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'people',
     'content',
     'django_extensions',
+    'extras',
 
 ]
 

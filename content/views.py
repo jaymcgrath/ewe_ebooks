@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .forms import MashupForm
 from .models import Mashup
 
@@ -20,4 +20,10 @@ class MashupListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(MashupListView, self).get_context_data(**kwargs)
         return context
+
+
+class MashupDetailVIew(DetailView):
+    model = Mashup
+    context_object_name = 'mashup'
+    template_name = 'content/mashup_detail.html'
 
