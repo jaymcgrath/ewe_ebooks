@@ -59,7 +59,7 @@ def OutputCreateView(request):
             sent1, sent2 = random.sample(sentences, 2)
             mashed = mashup_algorithms.mouse_join(sent1, sent2)
 
-        outgoing = Output.object.create(body=mashed, mashup=mashup)
+        outgoing = Output.objects.create(body=mashed, mashup=mashup)
         outgoing.save()
 
         # success_url = reverse_lazy('output:output-detail')
