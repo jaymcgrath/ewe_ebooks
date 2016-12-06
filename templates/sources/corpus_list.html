@@ -4,10 +4,14 @@
     <div class="well">
         <form action="/add_source/" method="post">
             {% csrf_token %}
+            <div class="ansibold">
+                Add a twitter source!
+            </div>
             <div class="form-group">
-                <div class="input-group input-group-lg col-md-10">
+                <div class="input-group input-group-sm">
                     <span class="input-group-addon" id="username1">@</span>
-                    <input type="text" value="" name="twitter_username" class="form-control" placeholder="username" aria-describedby="username1">
+                    <input type="text" value="" name="twitter_username" class="form-control"
+                           placeholder="username" aria-describedby="username1">
                 </div>
                 <input type="submit" value="submit" class="btn-info">
             </div>
