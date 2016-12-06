@@ -14,4 +14,8 @@ class Member(models.Model):
     dob = models.DateTimeField(auto_now=False)
     last_active = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.offline_name
+    def __repr__(self):
+        return self.offline_name
 
