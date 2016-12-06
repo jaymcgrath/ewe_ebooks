@@ -68,6 +68,9 @@ class Output(models.Model):
     def __repr__(self):
         return "{m}: {b}.. {v}".format(m=self.mashup.title, b=self.body[:33], v=self.num_votes)
 
+    def get_absolute_url(self):
+        return "/view_output/%i/" % self.id
+
 
 
 

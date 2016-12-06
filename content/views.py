@@ -1,7 +1,7 @@
 import random
 
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
 
@@ -64,16 +64,19 @@ def OutputCreateView(request):
             except:
                 raise ValueError('The Mouse Join mashup algorithm needs at least two sources')
 
-            # Cool stuff happens here :sunglasses: :100:
+            # Cool stuff happens below :sunglasses: :100:
 
             mashed = " ".join(mashup_algorithms.mouse_join(sent1, sent2)) #returns a list, join it
 
-        outgoing = Output.objects.create(body=mashed, mashup=mashup)
-        outgoing.save()
+        this_output = Output.objects.create(body=mashed, mashup=mashup)
+        this_output.save()
 
-        # success_url = reverse_lazy('output:output-detail')
 
-    return render(request, 'content/output_detail.html')
+    # success_url = reverse_lazy('output:output-detail')
+    # display_url = '/view_output/{pk}/'.format(pk=outgoing.pk)
+
+    # Relies on the get_absolute_url method on Output model
+    return redirect(this_output)
 
 class OutputListView(ListView):
     model = Output
@@ -81,6 +84,7 @@ class OutputListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(OutputListView, self).get_context_data(**kwargs)
         return context
+
 
 class OutputDetailView(DetailView):
     model = Output

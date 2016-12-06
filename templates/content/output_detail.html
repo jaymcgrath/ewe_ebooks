@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 {% block title %}
-    {{ output.mashup.title }}
+    {{ object.mashup.title }}
 {% endblock %}
 
 {% block main_content %}
-<div class="jumbotron" id="output">
-    {{ output.body }}
+    <div class="col-xs-4">
+<div class="card">
+    <div class="card-header">
+    {{ object.mashup.title }}
+    </div>
+    <div class="card-block">
+        <p class="card-text">{{ object.body }}</p>
+    </div>
 </div>
+    </div>
 {% endblock %}

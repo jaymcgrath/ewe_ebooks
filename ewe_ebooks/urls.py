@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^list_mashups/$', MashupListView.as_view()),
     url(r'^view_mashup/(?P<pk>\d+)/$', MashupDetailView.as_view()),
     url(r'^create_output/$', OutputCreateView),
-    url(r'^view_output/(?P<pk>\d+)/$', OutputDetailView.as_view())
+    url(r'^view_output/(?P<pk>\d+)/$', OutputDetailView.as_view(), name='output-detail')
 
 
 ]
