@@ -44,7 +44,10 @@ class Corpus(models.Model):
         :return:
         """
 
-        tl = Timeline(self.twitter_username)
+        # TODO: Unset boundary of 20 for production
+
+        tl = Timeline(self.twitter_username, 20)
+
         # TODO: fetch good values w Timeline class for author, desc, title
         self.title = "Twitter timeline of {}".format(self.twitter_username)
         self.desc = "The collected wisdom of {}".format(self.twitter_username)
@@ -53,25 +56,26 @@ class Corpus(models.Model):
 
         super(Corpus, self).save(*args, **kwargs)
 
-        for word1, word2 in tl.bigrams:
-            bg = Bigram.objects.create(corpus=self, word1=word1, word2=word2)
-            bg.save()
-
-        for word1, word2, word3 in tl.trigrams:
-            tg = Trigram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3)
-            tg.save()
-
-        for word1, word2, word3, word4 in tl.quadgrams:
-            qg = Quadgram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3, word4=word4)
-            qg.save()
+        # TODO: Uncomment after writing models that use each data type
+        # for word1, word2 in tl.bigrams:
+        #     bg = Bigram.objects.create(corpus=self, word1=word1, word2=word2)
+        #     bg.save()
+        #
+        # for word1, word2, word3 in tl.trigrams:
+        #     tg = Trigram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3)
+        #     tg.save()
+        #
+        # for word1, word2, word3, word4 in tl.quadgrams:
+        #     qg = Quadgram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3, word4=word4)
+        #     qg.save()
 
         for sentence in tl.sentences:
             sent = Sentence.objects.create(corpus=self, sentence=sentence)
             sent.save()
 
-        for word in tl.words:
-            wrd = Word.objects.create(corpus=self, word=word)
-            wrd.save()
+        # for word in tl.words:
+        #     wrd = Word.objects.create(corpus=self, word=word)
+        #     wrd.save()
 
 
 class Word(models.Model):
