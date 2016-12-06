@@ -45,19 +45,28 @@ def OutputCreateView(request):
 
         sentences = list() # Accumulator variable for random sentences to be mashed
         # Get the related corpora for this mashup, then select a random sentence from each
+
+        # Create container for random slices of sentences
+        corpus_samples = list()
+
         for corpus in mashup.corpora.all():
-            #TODO: remove this breakpoint :)
-            #TODO: figure out why this isn't working?
-            import ipdb;
-            ipdb.set_trace()
-            random_sent = random.choice(corpus.sentences.all())
-            sentences.append(random_sent.sentence)
+
+            # Get a dozen random sentences from each corpus and put them in samples container
+            corpus_samples.append([sentence.sentence for sentence in corpus.sentences.order_by('?')[:12]])
+
 
         # Hard coded algo lookups based on choice field.. more algorithms will be added here and on the
         # mashup model as they are written
         if mashup.algorithm == 'MJN':
-            sent1, sent2 = random.sample(sentences, 2)
-            mashed = mashup_algorithms.mouse_join(sent1, sent2)
+            # mouse_join expects two lists of sentences, snag a pair from our container or raise an error
+            try:
+                sent1, sent2 = random.sample(corpus_samples, 2)
+            except:
+                raise ValueError('The Mouse Join mashup algorithm needs at least two sources')
+
+            # Cool stuff happens here :sunglasses: :100:
+
+            mashed = " ".join(mashup_algorithms.mouse_join(sent1, sent2)) #returns a list, join it
 
         outgoing = Output.objects.create(body=mashed, mashup=mashup)
         outgoing.save()
@@ -75,7 +84,7 @@ class OutputListView(ListView):
 
 class OutputDetailView(DetailView):
     model = Output
-    context_object_name = 'output'
+    context_object_name = 'Output'
     template_name = 'content/output_detail.html'
 
 

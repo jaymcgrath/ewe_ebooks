@@ -59,13 +59,8 @@ class Output(models.Model):
         :param kwargs:
         :return:
         """
-        # Get mashup algo and pass some info to it, then write the result
 
-
-        # output.body =
-
-        # Got it, write this puppy
-        output.save()
+        super().save(*args, **kwargs)
 
     def __str__(self):  # __unicode__ on Python 2
         return "{m}: {b}.. {v}".format(m=self.mashup.title, b=self.body[:33], v=self.num_votes)
