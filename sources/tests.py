@@ -1,12 +1,14 @@
+import pickle
 from django.test import TestCase
-from mixer.backend.django import mixer
-from extras import twittstopher
 
+# Create timeline object from canonical source
+
+with open('timeline_fixture.p', 'rb')as tl_fixture:
+    tl = pickle.load(tl_fixture)
 
 # Create your tests here.
 
 class TestCorpus(TestCase):
-    tl = twittstopher.Timeline('jack', 500)
     def setUp(self):
         pass
 
@@ -14,9 +16,9 @@ class TestCorpus(TestCase):
         pass
 
     def test_has_bigrams(self):
-        pass
+        assert(tl.bigrams is not Null)
 
-    def test_corpus_model_instanation(self):
+    def test_corpus_database_insertion(self):
         pass
 
 class TestBigram(TestCase):

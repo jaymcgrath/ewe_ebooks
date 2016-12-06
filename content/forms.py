@@ -1,5 +1,6 @@
 from django import forms
-from .models import Mashup
+from .models import Mashup, Output
+
 
 class MashupForm(forms.ModelForm):
     """
@@ -13,4 +14,3 @@ class MashupForm(forms.ModelForm):
                  'algorithm',
                  'corpora'
                  )
-

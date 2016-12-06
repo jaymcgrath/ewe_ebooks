@@ -6,6 +6,13 @@
         <tr class="form-row">
             <td>{{ mashup.title }}</td>
             <td>{{ mashup.description }}</td>
+            <td>
+                <form action="/create_output/" method="POST" target="_blank">
+                    {% csrf_token %}
+                    <input type="hidden" name="mashup_id" value="{{ mashup.id }}">
+                    <input type="submit" value="Mash it!" class="btn-default">
+                </form>
+            </td>
         </tr>
     {% endfor %}
     </table>

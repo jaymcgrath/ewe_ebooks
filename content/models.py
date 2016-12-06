@@ -1,5 +1,6 @@
 from django.db import models
 from sources.models import Corpus
+from extras.mashup_algorithms import mouse_join as mj
 
 
 # Create your models here.
@@ -19,14 +20,20 @@ class MashupAlgorithm(models.Model):
         return self.name
 
 
+
 class Mashup(models.Model):
     """
     Union of multiple sources.Corpus (corpora) and a MashupAlgorithm
     """
+    ALGOS = (
+        ('MJN', 'Mouse Join'),
+    )
+
     title = models.CharField(max_length=32)
     description = models.TextField()
-    algorithm = models.ForeignKey(MashupAlgorithm, related_name='mashups')
     corpora = models.ManyToManyField(Corpus, related_name='mashup_set')
+    algorithm = models.CharField(max_length=3, choices=ALGOS, default='MJN')
+
 
     def __str__(self):  # __unicode__ on Python 2
         return self.title
@@ -44,6 +51,21 @@ class Output(models.Model):
     num_votes = models.PositiveIntegerField(default=0)
     mashup = models.ForeignKey(Mashup, related_name="outputs")
 
+    def save(self, *args, **kwargs):
+        """
+        Get the mashup algorithm and sources, then do some munging and save it
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        # Get mashup algo and pass some info to it, then write the result
+
+
+        # output.body =
+
+        # Got it, write this puppy
+        output.save()
 
     def __str__(self):  # __unicode__ on Python 2
         return "{m}: {b}.. {v}".format(m=self.mashup.title, b=self.body[:33], v=self.num_votes)

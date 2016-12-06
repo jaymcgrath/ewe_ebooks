@@ -29,7 +29,12 @@ class Corpus(models.Model):
         default_related_name = 'corpora'
 
     def __repr__(self):
-        return self.title
+        # TODO: make this return something that tells whether a fixed upload source or twitter
+        return "{}: {}".format(self.type, self.twitter_username)
+
+    def __str__(self):
+        # TODO: make this return something that tells whether a fixed upload source or twitter
+        return "{}: {}".format(self.type, self.twitter_username)
 
     def save(self, *args, **kwargs):
         """
@@ -114,7 +119,7 @@ class Sentence(models.Model):
     """
     # TODO: create custom tagged model for storing word:tag pairs as sentences
     sentence = models.CharField(max_length=1024)
-    corpus = models.ForeignKey(Corpus)
+    corpus = models.ForeignKey(Corpus, related_name='sentences')
 
 
 class Hashtag(models.Model):
