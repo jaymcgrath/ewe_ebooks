@@ -38,26 +38,31 @@ def mouse_join(first_source, second_source):
     first_tags = tag_sentences(first_source)
     second_tags = tag_sentences(second_source)
 
+    # OK, got some valid sentences. it's #GoTime
     output = []
 
-    for word, tag in random.choice(first_tags):
-        output.append(word)
+    try:
+        for word, tag in random.choice(first_tags):
+            output.append(word)
 
-        if tag.startswith('VB'):
-            break
+            if tag.startswith('VB'):
+                break
 
-    # Haven't hit second half of sentence yet
-    second_half = False
-    first_verb = True
-    for word, tag in random.choice(second_tags):
-        if tag.startswith('VB'):
-            second_half = True
-            if first_verb:
-                first_verb = False
-                continue # Don't add this verb, but add the rest
+        # Haven't hit second half of sentence yet
+        second_half = False
+
+        first_verb = True
+        for word, tag in random.choice(second_tags):
+            if tag.startswith('VB'):
+                second_half = True
+                if first_verb:
+                    first_verb = False
+                    continue # Don't add this verb, but add the rest
             # OK, now start adding words after this verb
 
-        if second_half:
-            output.append(word)
+            if second_half:
+                output.append(word)
+    except:
+        raise ValueError('Invalid source material, mashup failed. Please try a different source')
 
     return output
