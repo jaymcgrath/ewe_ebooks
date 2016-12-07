@@ -3,6 +3,7 @@ from extras.twittstopher import Timeline, User
 
 # Create your models here.
 
+
 class Corpus(models.Model):
     """
     Meta representation of a linguistic source. Contains basic information but no body text. All actual
@@ -79,19 +80,12 @@ class Corpus(models.Model):
             sent.save()
 
         for hashtag in tl.hashtags:
-            hash = Hashtag.objects.create(corpus=self, hashtag=hashtag)
-            hash.save()
+            this_hash = Hashtag.objects.create(corpus=self, hashtag=hashtag)
+            this_hash.save()
 
         # for word in tl.words:
         #     wrd = Word.objects.create(corpus=self, word=word)
         #     wrd.save()
-
-
-
-
-
-
-
 
 
 class Word(models.Model):
@@ -100,7 +94,7 @@ class Word(models.Model):
     TODO: make this unique and store corpus: word counts in a separate M2M table?
     """
     word = models.CharField(max_length=32)
-    corpus = models.ForeignKey(Corpus)
+    corpus = models.ForeignKey(Corpus, related_name='words')
 
 
 class Bigram(models.Model):
@@ -109,7 +103,7 @@ class Bigram(models.Model):
     """
     word1 = models.CharField(max_length=32)
     word2 = models.CharField(max_length=32)
-    corpus = models.ForeignKey(Corpus)
+    corpus = models.ForeignKey(Corpus, related_name='bigrams')
 
 
 class Trigram(models.Model):
@@ -119,7 +113,7 @@ class Trigram(models.Model):
     word1 = models.CharField(max_length=32)
     word2 = models.CharField(max_length=32)
     word3 = models.CharField(max_length=32)
-    corpus = models.ForeignKey(Corpus)
+    corpus = models.ForeignKey(Corpus, related_name='trigrams')
 
 
 class Quadgram(models.Model):
@@ -130,7 +124,7 @@ class Quadgram(models.Model):
     word2 = models.CharField(max_length=32)
     word3 = models.CharField(max_length=32)
     word4 = models.CharField(max_length=32)
-    corpus = models.ForeignKey(Corpus)
+    corpus = models.ForeignKey(Corpus, related_name='quadgrams')
 
 
 class Sentence(models.Model):
@@ -147,4 +141,4 @@ class Hashtag(models.Model):
     Stores hashtags from all corpora
     """
     hashtag = models.CharField(max_length=64)
-    corpus = models.ForeignKey(Corpus)
+    corpus = models.ForeignKey(Corpus, related_name='hashtags')
