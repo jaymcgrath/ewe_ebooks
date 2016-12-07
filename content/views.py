@@ -4,9 +4,12 @@ from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
+from django.db.models import F
+
 
 from .forms import MashupForm
 from .models import Mashup, Output
+from sources.models import Corpus
 
 from extras import mashup_algorithms
 
@@ -53,6 +56,12 @@ def OutputCreateView(request):
 
             # Get a dozen random sentences from each corpus and put them in samples container
             corpus_samples.append([sentence.sentence for sentence in corpus.sentences.order_by('?')[:12]])
+            # TODO: Make sure this update actually works, teehee
+
+
+            Corpus.objects.filter(id=corpus.id).update(mash_count=F('mash_count') + 1)
+
+
 
 
         # Hard coded algo lookups based on choice field.. more algorithms will be added here and on the
@@ -66,7 +75,14 @@ def OutputCreateView(request):
 
             # Cool stuff happens below :sunglasses: :100:
 
-            mashed = " ".join(mashup_algorithms.mouse_join(sent1, sent2)) #returns a list, join it
+            try:
+                # this algo returns a list, so join it
+                mashed = " ".join(mashup_algorithms.mouse_join(sent1, sent2))
+            except ValueError as e:
+                raise ValueError(e)
+                # Something went wrong...
+
+
 
         this_output = Output.objects.create(body=mashed, mashup=mashup)
         this_output.save()
