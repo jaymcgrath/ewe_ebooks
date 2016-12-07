@@ -78,6 +78,9 @@ def OutputCreateView(request):
             try:
                 # this algo returns a list, so join it
                 mashed = " ".join(mashup_algorithms.mouse_join(sent1, sent2))
+
+                #TODO: make a smashtag - random conjoined hashtag
+
             except ValueError as e:
                 raise ValueError(e)
                 # Something went wrong...
