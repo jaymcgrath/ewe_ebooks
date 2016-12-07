@@ -1,5 +1,5 @@
 from django.db import models
-from extras.twittstopher import Timeline
+from extras.twittstopher import Timeline, User
 
 # Create your models here.
 
@@ -8,8 +8,9 @@ class Corpus(models.Model):
     Meta representation of a linguistic source. Contains basic information but no body text. All actual
     content is stored in the other sources classes.
     """
-    TYPE_CHOICES = (("TW", "Twitter"),
-                    ("EX", "External")
+    TYPE_CHOICES = (
+                    ("TW", "Twitter"),
+                    ("EX", "External"),
                     )
 
     title = models.CharField(max_length=64, help_text="The title for this source")
@@ -19,6 +20,7 @@ class Corpus(models.Model):
     is_public = models.BooleanField(default=False)
     type = models.CharField(max_length=2, choices=TYPE_CHOICES)
     twitter_username = models.CharField(max_length=15, null=True)
+    image_url = models.CharField(max_length=256, null=True)
     author = models.TextField(max_length=64, null=True)
     # TODO: remove default=1 from added_by to link it with people.Member
     added_by = models.ForeignKey('people.Member', on_delete=models.CASCADE, default=1)
@@ -44,16 +46,19 @@ class Corpus(models.Model):
         :return:
         """
 
-        # TODO: Unset boundary of 20 for production
-
-        tl = Timeline(self.twitter_username, 20)
+        # TODO: Increase tweets_to_fetch (currently 50) for production
+        tweets_to_fetch = 50
+        tl = Timeline(self.twitter_username, tweets_to_fetch)
+        usr = User(self.twitter_username)
 
         # TODO: fetch good values w Timeline class for author, desc, title
-        self.title = "Twitter timeline of {}".format(self.twitter_username)
-        self.desc = "The collected wisdom of {}".format(self.twitter_username)
+        self.title = "The collected tweets of @{} aka {}".format(self.twitter_username, usr.screen_name)
+        self.desc = usr.description
         self.type = "TW"
         self.author = self.twitter_username
+        self.image_url = usr.image
 
+        # TODO: Remove (Corpus, self) from super call
         super(Corpus, self).save(*args, **kwargs)
 
         # TODO: Uncomment after writing models that use each data type
@@ -76,6 +81,12 @@ class Corpus(models.Model):
         # for word in tl.words:
         #     wrd = Word.objects.create(corpus=self, word=word)
         #     wrd.save()
+
+
+
+
+
+
 
 
 class Word(models.Model):
