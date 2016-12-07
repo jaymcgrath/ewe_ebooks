@@ -45,41 +45,51 @@ def OutputCreateView(request):
         # mashup_id is passed in as a hidden form field
         mashup = Mashup.objects.get(id=request.POST['mashup_id'])
 
-
-        sentences = list() # Accumulator variable for random sentences to be mashed
-        # Get the related corpora for this mashup, then select a random sentence from each
-
-        # Create container for random slices of sentences
-        corpus_samples = list()
-
-        for corpus in mashup.corpora.all():
-
-            # Get a dozen random sentences from each corpus and put them in samples container
-            corpus_samples.append([sentence.sentence for sentence in corpus.sentences.order_by('?')[:12]])
-            # TODO: Make sure this update actually works, teehee
-
-
-            Corpus.objects.filter(id=corpus.id).update(mash_count=F('mash_count') + 1)
-
-
-
-
         # Hard coded algo lookups based on choice field.. more algorithms will be added here and on the
         # mashup model as they are written
+
         if mashup.algorithm == 'MJN':
+            # Get the related corpora for this mashup, then select a random sentence from each
+
+            # Create container for random slices of sentences
+            corpus_samples = list()
+
+            for corpus in mashup.corpora.all():
+                """
+                Get up to a dozen random sentences and hashtags from each corpus and
+                store them as tuples in our corpus_samples container
+                data structure: list of these tuples, ([sentences, ], [hashtags, ])
+                """
+                corpus_samples.append(
+                    (
+                    [sentence.sentence for sentence in corpus.sentences.order_by('?')[:12]],
+                    [hashtag.hashtag for hashtag in corpus.hashtags.all().order_by('?')[:24]],
+                    )
+                )
+                # TODO: Make sure this update actually works, teehee
+
+                # Increment mash_count for this corpus
+                Corpus.objects.filter(id=corpus.id).update(mash_count=F('mash_count') + 1)
+
             # mouse_join expects two lists of sentences, snag a pair from our container or raise an error
             try:
-                sent1, sent2 = random.sample(corpus_samples, 2)
+                samp1, samp2 = random.sample(corpus_samples, 2)
             except:
                 raise ValueError('The Mouse Join mashup algorithm needs at least two sources')
 
             # Cool stuff happens below :sunglasses: :100:
 
             try:
-                # this algo returns a list, so join it
-                mashed = " ".join(mashup_algorithms.mouse_join(sent1, sent2))
+                # this algo returns a list of words, concatenate them into a sentence
+                mashed = " ".join(mashup_algorithms.mouse_join(samp1[0], samp2[0]))
 
-                #TODO: make a smashtag - random conjoined hashtag
+                #TODO: try to make a smashtag - random conjoined hashtag
+                if len(samp1[1])> 0 and len(samp2[1]) > 0:
+                    smashtag = '#' + ''.join((random.choice(samp1[1]), random.choice(samp2[1]),))
+                    mashed += " " + smashtag
+
+
+
 
             except ValueError as e:
                 raise ValueError(e)
