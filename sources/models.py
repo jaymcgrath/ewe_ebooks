@@ -78,9 +78,14 @@ class Corpus(models.Model):
             sent = Sentence.objects.create(corpus=self, sentence=sentence)
             sent.save()
 
+        for hashtag in tl.hashtags:
+            hash = Hashtag.objects.create(corpus=self, hashtag=hashtag)
+            hash.save()
+
         # for word in tl.words:
         #     wrd = Word.objects.create(corpus=self, word=word)
         #     wrd.save()
+
 
 
 
