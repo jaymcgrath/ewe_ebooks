@@ -106,7 +106,7 @@ class Timeline:
                     tweets.append(tweet_body)
 
                 for hash_obj in tweet.entities['hashtags']:
-                        hashtags.extend(hash_obj['text'])
+                        hashtags.append(hash_obj['text'])
 
         # Now process cleaned up tweets with NLTK
         words = []
