@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
 
 {% block main_content %}
+    <a href="/create_mashup/">Create another mashup!</a>
     <table class="table table-striped">
         {% for mashup in object_list %}
         <tr class="form-row">
             <td>{{ mashup.title }}</td>
+            <td>{% for mashup in mashup.corpora.all %}
+                    {% if mashup %}
+                        <img src= "{{ mashup.image_url }}">
+                        {% if not forloop.last %}
+                            <i class="fa fa-asterisk" aria-hidden="true"></i>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                </td>
             <td>{{ mashup.description }}</td>
             <td>
                 <form action="/create_output/" method="POST" target="_blank">

@@ -13,5 +13,10 @@
         <p class="card-text">{{ object.body }}</p>
     </div>
 </div>
+    <form action="/create_output/" method="POST" target="_self">
+                    {% csrf_token %}
+                    <input type="hidden" name="mashup_id" value="{{ object.mashup.id }}">
+                    <input type="submit" value="Mash Another!" class="btn-default">
+    </form>
     </div>
 {% endblock %}
