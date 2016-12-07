@@ -123,7 +123,6 @@ class Timeline:
             trigrams.extend(ngrams(these_words, 3))
             quadgrams.extend(ngrams(these_words, 4))
 
-
         self.words = words
         self.bigrams = bigrams
         self.trigrams = trigrams
@@ -151,7 +150,33 @@ class Tweet:
     pass
 
 
+class User:
+    """
+    Twitter user class.
+    Primary use: fetching profile picture and details/statistics when initializing as a source
+    """
 
+    def __init__(self, twitter_username):
+        # TODO: Login to twitter for corpus generation using end user's credentials
+        auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+        auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
+        # Connect to Twitter - raise TweepError if we brick out on this
+        try:
+            api = tweepy.API(auth)
+        except tweepy.TweepError:
+            # TODO: make sure this error bubbles up and gets handled gracefully
+            raise PermissionError("Twitter Auth failed")
 
+        usr = api.get_user(twitter_username)
+        self.username = twitter_username
+        self.image = usr.profile_image_url
+        self.api = usr
+        self.description = usr.description
+        self.screen_name = usr.screen_name
 
+    def __repr__(self):
+        return self.username + "(Tweepy User object)"
+
+    def __str__(self):
+        return self.username + "(Tweepy User object)"
