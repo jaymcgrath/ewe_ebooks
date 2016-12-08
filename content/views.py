@@ -117,7 +117,7 @@ class OutputListView(ListView):
 
 class OutputDetailView(DetailView):
     model = Output
-    context_object_name = 'Output'
+    context_object_name = 'output'
     template_name = 'content/output_detail.html'
 
 
