@@ -22,10 +22,9 @@ class MashupCreateView(CreateView):
     form_class = MashupForm
     success_url = '/list_mashups/'
 
-
 class MashupListView(ListView):
     model = Mashup
-
+    queryset = Mashup.objects.order_by('-created')
     def get_context_data(self, **kwargs):
         context = super(MashupListView, self).get_context_data(**kwargs)
         return context
@@ -106,6 +105,7 @@ def OutputCreateView(request):
 
     # Relies on the get_absolute_url method on Output model
     return redirect(this_output)
+
 
 class OutputListView(ListView):
     model = Output
