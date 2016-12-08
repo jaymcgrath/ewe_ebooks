@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, UpdateView
 from .forms import CorpusForm
 from .models import Corpus
 
@@ -24,4 +24,18 @@ class CorpusListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(CorpusListView, self).get_context_data(**kwargs)
         return context
+
+class CorpusDetailView(DetailView):
+    """
+    View for individual corpus (will have a refresh button)
+    """
+    model = Corpus
+    context_object_name = 'corpus'
+
+class CorpusUpdateView(UpdateView):
+    """
+    View for freshening an individual corpus
+    """
+    model = Corpus
+    pass
 
