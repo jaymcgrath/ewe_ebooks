@@ -33,6 +33,7 @@ class Mashup(models.Model):
     description = models.TextField()
     corpora = models.ManyToManyField(Corpus, related_name='mashup_set')
     algorithm = models.CharField(max_length=3, choices=ALGOS, default='MJN')
+    created = models.DateTimeField(auto_created=True)
 
 
     def __str__(self):  # __unicode__ on Python 2
@@ -69,7 +70,7 @@ class Output(models.Model):
         return "{m}: {b}.. {v}".format(m=self.mashup.title, b=self.body[:33], v=self.num_votes)
 
     def get_absolute_url(self):
-        return "/view_output/%i/" % self.id
+        return "/view_output/{pk}/".format(pk=self.id)
 
 
 
