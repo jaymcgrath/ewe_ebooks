@@ -1,6 +1,6 @@
 from django.db import models
 from sources.models import Corpus
-from extras.mashup_algorithms import mouse_join as mj
+from people.models import Member
 
 
 # Create your models here.
@@ -11,7 +11,7 @@ class MashupAlgorithm(models.Model):
     """
     name = models.CharField(max_length=64)
     description = models.TextField()
-    usage_count = models.IntegerField(default=0)
+    output_count = models.IntegerField(default=0)
 
     def __str__(self):  # __unicode__ on Python 2
         return self.name
@@ -34,6 +34,7 @@ class Mashup(models.Model):
     corpora = models.ManyToManyField(Corpus, related_name='mashup_set')
     algorithm = models.CharField(max_length=3, choices=ALGOS, default='MJN')
     created = models.DateTimeField(auto_created=True)
+    public = models.BooleanField(default=False, help_text='Whether to display this mashup and its output publicly')
 
 
     def __str__(self):  # __unicode__ on Python 2
@@ -50,7 +51,7 @@ class Output(models.Model):
     body = models.CharField(max_length=144)
     generated = models.DateTimeField(auto_now=True)
     num_votes = models.PositiveIntegerField(default=0)
-    mashup = models.ForeignKey(Mashup, related_name="outputs")
+    mashup = models.ForeignKey(Mashup, related_name='outputs')
 
     def save(self, *args, **kwargs):
         """
@@ -71,6 +72,35 @@ class Output(models.Model):
 
     def get_absolute_url(self):
         return "/view_output/{pk}/".format(pk=self.id)
+
+class Bot(models.Model):
+    """
+    Bot for posting mashups to twitter
+    """
+    name = models.CharField(max_length=64, help_text='A name for this bot (can be different from twitter username)')
+    post_frequency = models.DurationField(null=True, default='12 hours', help_text='how frequently this bot posts')
+    post_count = models.IntegerField(default=0)
+    created = models.DateTimeField(auto_created=True, help_text='when this bot was created')
+    updated = models.DateTimeField(auto_now=True, help_text='the last time this bot was updated')
+    consumer_key = models.CharField(max_length=255, help_text='consumer key from dev.twitter.com')
+    consumer_secret = models.CharField(max_length=255, help_text='consumer secret from dev.twitter.com ')
+    access_token = models.CharField(max_length=255, help_text='access token from dev.twitter.com')
+    access_token_secret = models.CharField(max_length=255, help_text='access token secret from dev.twitter.com')
+    mashup = models.ForeignKey(Mashup, related_name='bots')
+    member = models.ForeignKey(Member, related_name='bots')
+
+
+    def __str__(self):  # __unicode__ on Python 2
+        return "{n}: {m} <{pf}>".format(n=self.name, m=self.mashup.title, pf=self.post_frequency)
+
+    def __repr__(self):
+        return "{n}: {m} <{pf}>".format(n=self.name, m=self.mashup.title, pf=self.post_frequency)
+
+    def get_absolute_url(self):
+        return "/view_bot/{pk}/".format(pk=self.id)
+
+
+
 
 
 
