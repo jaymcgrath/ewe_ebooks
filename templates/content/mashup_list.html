@@ -5,12 +5,17 @@
     <table class="table table-striped">
         {% for mashup in object_list %}
         <tr class="form-row">
-            <td>{{ mashup.title }}</td>
-            <td>{% for mashup in mashup.corpora.all %}
-                    {% if mashup %}
-                        <img src= "{{ mashup.image_url }}">
+            <td>
+                <a href="/mashup_detail/{{ mashup.id }}/">
+                {{ mashup.title }}
+                </a>
+                <span class="tag tag-pill tag-default">{{ mashup.outputs.count }}</span>
+            </td>
+            <td>{% for corpus in mashup.corpora.all %}
+                    {% if corpus %}
+                        <img src= "{{ corpus.image_url }}">
                         {% if not forloop.last %}
-                            <i class="fa fa-asterisk" aria-hidden="true"></i>
+                            <i class="fa fa-plus fa-spin" aria-hidden="true"></i>
                         {% endif %}
                     {% endif %}
                 {% endfor %}

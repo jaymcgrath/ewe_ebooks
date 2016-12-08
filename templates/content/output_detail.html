@@ -4,15 +4,28 @@
 {% endblock %}
 
 {% block main_content %}
-    <div class="col-xs-4">
-<div class="card">
-    <div class="card-header">
-    {{ object.mashup.title }}
-    </div>
+<div class="col-xs-4">
+    <div class="card">
+        <div class="card-header bg-info text-xs-center">
+            <span class="h5 text-xs-center">{{ object.mashup.title }}</span>
+        </div>
+        <div class="card-header text-xs-center">
+            {% for corpus in object.mashup.corpora.all %}
+                    {% if corpus %}
+                        <img src="{{ corpus.image_url }}" class="rounded-circle">
+                        {% if not forloop.last %}
+                            <i class="fa fa-plus fa-spin" aria-hidden="true"></i>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+        </div>
     <div class="card-block">
-        <p class="card-text">{{ object.body }}</p>
+        <p class="card-text">
+            <i class="fa fa-quote-left fa-3x fa-pull-left fa-border" aria-hidden="true"></i>
+            {{ object.body }}
+        </p>
     </div>
-</div>
+    </div>
     <form action="/create_output/" method="POST" target="_self">
                     {% csrf_token %}
                     <input type="hidden" name="mashup_id" value="{{ object.mashup.id }}">
