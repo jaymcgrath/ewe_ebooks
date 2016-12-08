@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from sources.views import CorpusCreateView, CorpusListView
+from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView, CorpusUpdateView
 from content.views import MashupCreateView, MashupListView, MashupDetailView, OutputCreateView, OutputDetailView
 
 
@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^add_source/$', CorpusCreateView.as_view()),
     url(r'^list_sources/$', CorpusListView.as_view()),
+    url(r'^view_source/(?P<pk>\d+)/$', CorpusDetailView.as_view()),
     url(r'^create_mashup/$', MashupCreateView.as_view()),
     url(r'^list_mashups/$', MashupListView.as_view()),
     url(r'^view_mashup/(?P<pk>\d+)/$', MashupDetailView.as_view()),
