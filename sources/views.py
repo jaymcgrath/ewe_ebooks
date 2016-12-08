@@ -17,9 +17,11 @@ class CorpusCreateView(CreateView):
 
 class CorpusListView(ListView):
     model = Corpus
+    queryset = Corpus.objects.order_by('-mash_count')
+    # context_object_name = 'corpus_list'
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super(CorpusListView, self).get_context_data(**kwargs)
         return context
-
 
