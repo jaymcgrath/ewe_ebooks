@@ -12,9 +12,16 @@
         <div class="card-header text-xs-center">
             {% for corpus in object.mashup.corpora.all %}
                     {% if corpus %}
-                        <img src="{{ corpus.image_url }}" class="rounded-circle">
+                            <img src="{{ corpus.image_url }}" class="thumbnail">
+                        <span class="wrapper">
+                            {% if corpus.type == "TW" %}
+                            <span class="fa fa-twitter"></span>
+                            {% elif corpus.type == "EX" %}
+                            <span class="fa fa-book"></span>
+                            {% endif %}
+                        </span>
                         {% if not forloop.last %}
-                            <i class="fa fa-plus fa-spin" aria-hidden="true"></i>
+                            <i class="fa fa-plus" aria-hidden="true"></i>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
