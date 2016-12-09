@@ -108,9 +108,6 @@ def OutputCreateView(request):
         this_output.save()
 
 
-    # success_url = reverse_lazy('output:output-detail')
-    # display_url = '/view_output/{pk}/'.format(pk=outgoing.pk)
-
     # Relies on the get_absolute_url method on Output model
     return redirect(this_output)
 
@@ -118,6 +115,8 @@ def OutputCreateView(request):
 class OutputListView(ListView):
     model = Output
     # TODO: Filter this to only show most recent or top or something like that
+    context_object_name = 'output_list'
+    template_name = 'content/output_list.html'
     def get_context_data(self, **kwargs):
         context = super(OutputListView, self).get_context_data(**kwargs)
         return context
