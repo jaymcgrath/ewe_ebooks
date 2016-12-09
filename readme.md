@@ -177,3 +177,7 @@ parsing and storing n-grams wholesale might get out of hand?
 Could get a handle by only storing top X ngrams per corpus:
 
 http://stackoverflow.com/questions/26341518/effective-1-5-grams-extraction-with-python?rq=1
+
+Free front end/admin theme for building admin panels:
+
+https://github.com/puikinsh/gentelella
