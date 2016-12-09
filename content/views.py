@@ -6,10 +6,15 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
 from django.db.models import F
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status, mixins, generics
 
 from .forms import MashupForm
 from .models import Mashup, Output
 from sources.models import Corpus
+
+from .serializers import OutputSerializer, OutputWriteSerializer
 
 from extras import mashup_algorithms
 
@@ -116,9 +121,26 @@ class OutputListView(ListView):
 
 
 class OutputDetailView(DetailView):
+    """
+    Conventional view for Output
+    """
     model = Output
     context_object_name = 'output'
     template_name = 'content/output_detail.html'
+
+class CreateOutputView(generics.ListCreateAPIView):
+    pass
+    # TODO: create this view
+
+class DisplayOutputView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    RESTful API view for getting/
+    """
+    queryset = Output.objects.all()
+    serializer_class = OutputSerializer
+    # TODO: create this view
+
+
 
 
 
