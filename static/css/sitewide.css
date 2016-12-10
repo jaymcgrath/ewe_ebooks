@@ -17,12 +17,13 @@
    display: relative;
 }
 
-.wrapper {
+.wrapper .fa {
   position: relative ;
   top: 18px;
   left: -20px;
   font-size: 16px;
   color: blue;
+
 }
 
 
