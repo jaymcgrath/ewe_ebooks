@@ -33,7 +33,7 @@ class Mashup(models.Model):
     description = models.TextField()
     corpora = models.ManyToManyField(Corpus, related_name='mashup_set')
     algorithm = models.CharField(max_length=3, choices=ALGOS, default='MJN')
-    created = models.DateTimeField(auto_created=True)
+    created = models.DateTimeField(auto_now=True)
     public = models.BooleanField(default=False, help_text='Whether to display this mashup and its output publicly')
 
 
