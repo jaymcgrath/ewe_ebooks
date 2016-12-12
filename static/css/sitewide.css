@@ -22,8 +22,13 @@
   top: 18px;
   left: -20px;
   font-size: 16px;
-  color: blue;
+  color: cyan;
 
+}
+
+
+.card-block {
+    min-height: 100px;
 }
 
 
