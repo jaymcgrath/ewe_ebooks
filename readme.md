@@ -152,6 +152,7 @@ _ParseyMcParseFace_ - Uses google's grammar parser to try to output grammatical 
 * /bot/botname/ Give users a REST endpoint for generating on_demand content bots
 
 
+
 ##Future Features
 * Hashtag generator - Randomly select words that appear frequently in both corpora
   and mash them together, prepending a #
@@ -181,3 +182,17 @@ http://stackoverflow.com/questions/26341518/effective-1-5-grams-extraction-with-
 Free front end/admin theme for building admin panels:
 
 https://github.com/puikinsh/gentelella
+
+
+
+Bootstrap admin templates:
+
+https://colorlib.com/wp/free-bootstrap-admin-dashboard-templates/
+
+
+
+HTML 5 charts in JS
+
+http://www.chartjs.org/
+
+****
