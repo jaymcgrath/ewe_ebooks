@@ -73,6 +73,73 @@ def OutputCreateView(request):
     # Relies on the get_absolute_url method on Output model
     return redirect(this_output)
 
+def OutputRandomView(request):
+    """
+    Endpoint for generating output from 2 randomly selected corpora
+    Optional save button on display
+    :param request:
+    :return:
+    """
+
+    # TODO: select random join method as well
+
+    """
+    Avoid expensive random database ordering and just grab 2 random queryset indices
+    If a new corpus is created between counting this queryset and selecting against it,
+    the new corpus won't be eligible to appear, but that is officially No Big Deal
+    """
+
+    last = Corpus.objects.count() - 1
+
+    randidx1 = random.randint(0, last)
+    randidx2 = random.randint(0, last - 1)
+
+    if randidx1 == randidx2:
+        # Just make sure they aren't the same
+        randidx2 = last
+
+    rand_corpora = [Corpus.objects.all()[randidx1], Corpus.objects.all()[randidx2]]
+
+    """
+    Check if there's already a mashup with just these two corpora, if so, load it,
+    otherwise, create it
+    """
+    id1, id2 = [corpus.id for corpus in rand_corpora]
+
+    # Try to find a mashup that already has these two corpora as sources:
+
+    if Mashup.objects.filter(corpora__id=id1).filter(corpora__id=id2).exists():
+        # We got at least one match. Attribute this tweet to that source
+        mashup = Mashup.objects.filter(corpora__id=id1).filter(corpora__id=id2)[0]
+
+    else:  # Create this mashup on the fly
+        corpus1, corpus2 = rand_corpora
+        mashup_details = {
+            'title': "{} vs. {} (rando)".format(corpus1.twitter_username, corpus2.twitter_username),
+            'description': "randomly created, new mashup from /random/",
+            'algorithm': 'MJN', #TODO: select this randomly too
+            'public': True
+            }
+
+
+        mashup = Mashup(**mashup_details)
+        mashup.save()
+        # Have to save it before adding a M2M relationship
+        mashup.corpora.add(*rand_corpora)
+        mashup.save()
+
+    if mashup.algorithm == 'MJN':
+        # Randomly order the corpora we're going to join, this will generate better output
+        mashed = mashup_algorithms.mouse_join(mashup.corpora.all().order_by('?'), smashtag=True)
+
+    this_output = Output.objects.create(body=mashed, mashup=mashup)
+    this_output.save()
+
+    # Update mash_counts for the various corpora just used:
+    for corpus in mashup.corpora.all():
+        Corpus.objects.filter(id=corpus.id).update(mash_count=F('mash_count') + 1)
+
+    return redirect(this_output)
 
 class OutputListView(ListView):
     model = Output

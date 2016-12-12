@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView, CorpusUpdateView
 from content.views import MashupCreateView, MashupListView, MashupDetailView, OutputCreateView,\
-                          OutputDetailView, OutputListView, DisplayOutputView
+                          OutputDetailView, OutputListView, DisplayOutputView, OutputRandomView
 
 
 urlpatterns = [
@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^list_mashups/$', MashupListView.as_view()),
     url(r'^view_mashup/(?P<pk>\d+)/$', MashupDetailView.as_view()),
     url(r'^create_output/$', OutputCreateView),
+    url(r'^random/$', OutputRandomView),
     url(r'^view_output/(?P<pk>\d+)/$', OutputDetailView.as_view(), name='output-detail'),
     url(r'^output/(?P<pk>\d+)/$', DisplayOutputView.as_view()),  # REST API endpoint
     url(r'^list_output/$', OutputListView.as_view(), name='output-list'),
