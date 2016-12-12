@@ -1,24 +1,16 @@
 import random
 
-from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import render, redirect
+from django.db.models import F
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
-from django.db.models import F
+from rest_framework import generics
 
-
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status, mixins, generics
-
+from api.serializers import OutputSerializer
+from extras import mashup_algorithms, corpus_utils
+from sources.models import Corpus
 from .forms import MashupForm
 from .models import Mashup, Output
-from sources.models import Corpus
-
-from .serializers import OutputSerializer, OutputWriteSerializer
-
-from extras import mashup_algorithms, corpus_utils
 
 # Create your views here.
 class MashupCreateView(CreateView):

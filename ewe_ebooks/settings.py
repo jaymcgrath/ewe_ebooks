@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'content',
     'django_extensions',
     'extras',
+    'api',
+    'rest_framework',
 
 ]
 

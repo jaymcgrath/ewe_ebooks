@@ -1,5 +1,6 @@
-from rest_framework import serializers
+from rest_framework import routers, serializers, viewsets
 from content.models import Mashup, Output
+from sources.models import Corpus
 
 
 class OutputSerializer(serializers.ModelSerializer):
@@ -8,7 +9,6 @@ class OutputSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Output
-        depth = 2 # Include details about fk relationships
         fields = ('id', 'body', 'num_votes', 'mashup')
 
 
