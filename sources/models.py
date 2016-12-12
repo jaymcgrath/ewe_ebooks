@@ -26,6 +26,7 @@ class Corpus(models.Model):
     # TODO: remove default=1 from added_by to link it with people.Member
     added_by = models.ForeignKey('people.Member', on_delete=models.CASCADE, default=1)
     mash_count = models.IntegerField(default=0, editable=False)
+    last_tweet_id = models.IntegerField(default=1, editable=False, help_text='id of most recent saved tweet')
 
     class Meta:
         verbose_name_plural = 'corpora'
@@ -53,11 +54,12 @@ class Corpus(models.Model):
         usr = User(self.twitter_username)
 
         # TODO: fetch good values w Timeline class for author, desc, title
-        self.title = "The collected tweets of @{} aka {}".format(self.twitter_username, usr.screen_name)
+        self.title = "Tweets of @{} aka {}".format(self.twitter_username, usr.screen_name)
         self.desc = usr.description
         self.type = "TW"
         self.author = self.twitter_username
         self.image_url = usr.image
+        self.last_tweet_id = tl.last_tweet_id
 
         # TODO: Remove (Corpus, self) from super call
         super(Corpus, self).save(*args, **kwargs)

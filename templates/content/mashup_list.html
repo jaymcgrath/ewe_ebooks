@@ -2,6 +2,7 @@
 
 {% block main_content %}
     <a href="/create_mashup/">Create another mashup!</a>
+<div class="container-responsive">
     <table class="table table-striped">
         {% for mashup in object_list %}
         <tr class="form-row">
@@ -15,7 +16,7 @@
                     {% if corpus %}
                         <img src= "{{ corpus.image_url }}">
                         {% if not forloop.last %}
-                            <i class="fa fa-plus fa-spin" aria-hidden="true"></i>
+                            <i class="fa fa-plus" aria-hidden="true"></i>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
@@ -31,4 +32,5 @@
         </tr>
     {% endfor %}
     </table>
+</div>
 {% endblock %}

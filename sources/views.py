@@ -19,7 +19,7 @@ class CorpusListView(ListView):
     model = Corpus
     queryset = Corpus.objects.order_by('-mash_count')
     # context_object_name = 'corpus_list'
-    paginate_by = 5
+    paginate_by = 25
 
     def get_context_data(self, **kwargs):
         context = super(CorpusListView, self).get_context_data(**kwargs)
@@ -31,6 +31,7 @@ class CorpusDetailView(DetailView):
     """
     model = Corpus
     context_object_name = 'corpus'
+
 
 class CorpusUpdateView(UpdateView):
     """

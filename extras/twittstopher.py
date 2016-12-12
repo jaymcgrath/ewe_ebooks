@@ -54,9 +54,8 @@ class Timeline:
 
     """
     # TODO: write a real docstring
-    # TODO: add some methods
 
-    def __init__(self, username, count=100):
+    def __init__(self, username, count=100, last_tweet_id=1):
         # TODO: Login to twitter for corpus generation using end user's credentials
         auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
         auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
@@ -69,7 +68,7 @@ class Timeline:
             raise PermissionError("Twitter Auth failed")
 
         # Gets a list of status objects (tweets) for this user
-        timeline = api.user_timeline(username, count=count)
+        timeline = api.user_timeline(username, count=count, since_id=last_tweet_id)
 
         """
         some setup for tweet parsing
@@ -108,6 +107,13 @@ class Timeline:
                 for hash_obj in tweet.entities['hashtags']:
                         hashtags.append(hash_obj['text'])
 
+        # Get the ID of the last tweet fetched, for freshening purposes
+        try:
+            last_tweet_id = timeline.ids()[0]
+        except:
+            raise tweepy.TweepError("Nothing fetched!")
+
+
         # Now process cleaned up tweets with NLTK
         words = []
         bigrams = []
@@ -130,9 +136,11 @@ class Timeline:
         self.sentences = sentences
         self.tweets = tweets
         self.hashtags = hashtags
-        # TODO: Remove this property after testing finished.
+        # TODO: Remove this api property after testing finished.
+        self.api = api
         self.timeline = timeline
         self.author = username
+        self.last_tweet_id = last_tweet_id
 
     def __str__(self):
         return self.author
