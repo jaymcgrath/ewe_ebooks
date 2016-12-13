@@ -4,11 +4,11 @@ Utilities for managing and maintaining individual Corpus objects
 from datetime import datetime, timedelta
 from tzlocal import get_localzone
 from .twittstopher import Timeline
+from sources.models import Corpus, Sentence, Hashtag
 
 # How long to wait before refreshing our timelines with new content?
 DAYS_TIL_STALE = 1
 
-from sources.models import Corpus
 
 def freshen_corpus(corpus):
     """
@@ -22,7 +22,39 @@ def freshen_corpus(corpus):
     # Check to see if freshening is necessary
 
     if now - timedelta(days=DAYS_TIL_STALE) > corpus.updated:
-        freshened = Timeline(corpus.twitter_username, last_tweet_id=corpus.last_tweet_id)
-        # TODO: update corpus with fresh tweets and relateds -- break logic out of Corpus.save method?
+        tl = Timeline(corpus.twitter_username, last_tweet_id=corpus.last_tweet_id)
+
+        for sentence in tl.sentences:
+            sent = Sentence.objects.create(corpus=corpus, sentence=sentence)
+            sent.save()
+
+        for hashtag in tl.hashtags:
+            this_hash = Hashtag.objects.create(corpus=corpus, hashtag=hashtag)
+            this_hash.save()
+
+        # TODO: Uncomment after writing models that use each data type
+        # for word1, word2 in tl.bigrams:
+        #     bg = Bigram.objects.create(corpus=self, word1=word1, word2=word2)
+        #     bg.save()
+        #
+        # for word1, word2, word3 in tl.trigrams:
+        #     tg = Trigram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3)
+        #     tg.save()
+        #
+        # for word1, word2, word3, word4 in tl.quadgrams:
+        #     qg = Quadgram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3, word4=word4)
+        #     qg.save()
+        # for word in tl.words:
+        #     wrd = Word.objects.create(corpus=self, word=word)
+        #     wrd.save()
+
+        corpus.last_tweet_id = tl.last_tweet_id
+        corpus.save()
+
+
+
+            # TODO: update corpus with fresh tweets and relateds -- break logic out of Corpus.save method?
+
+
 
 
