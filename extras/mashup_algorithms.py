@@ -5,7 +5,8 @@ Support module for ewe_ebooks containing the various business algorithms for com
 
 import random
 from nltk import pos_tag, word_tokenize
-
+import re
+from .corpus_utils import rem_contractions
 
 def mouse_join(corpora, smashtag=False):
     """
@@ -24,9 +25,30 @@ def mouse_join(corpora, smashtag=False):
         helper function for tagging sentences. tosses sentences without verbs
         """
 
+        def post_proc(toks):
+            """
+            helper func for conjoining contractions
+            :param toks:
+            :return:
+            """
+            toks_out = []
+            while len(toks) > 1:
+                bigram = toks[:2]
+                if bigram[1][0] == "'":
+                    toks_out.append("".join(bigram))
+                    toks = toks[2:]
+                else:
+                    toks_out.append(bigram[0])
+                    toks = toks[1:]
+
+            toks_out.extend(toks)
+
+            return toks_out
+
         tagged = []
         for sentence in sentences:
-            tags = pos_tag(word_tokenize(sentence))
+            tokens = post_proc(word_tokenize(sentence))
+            tags = pos_tag(tokens)
             if len([word for word in tags if word[1].startswith('VB')]):
                 tagged.append(tags)
 
@@ -55,8 +77,8 @@ def mouse_join(corpora, smashtag=False):
     # Get some random sentences from our two sources (corpora)
 
     # Shuffle up the sentences, then grab up to 25 of them
-    first_sents = [sentence.sentence for sentence in first_corpus.sentences.all()]
-    second_sents = [sentence.sentence for sentence in second_corpus.sentences.all()]
+    first_sents = [rem_contractions(sentence.sentence) for sentence in first_corpus.sentences.all()]
+    second_sents = [rem_contractions(sentence.sentence) for sentence in second_corpus.sentences.all()]
 
     random.shuffle(first_sents)
     random.shuffle(second_sents)
