@@ -85,7 +85,7 @@ def rem_contractions(input_text):
 
     return " ".join(outputlist)
 
-def add_contractions:
+def add_contractions(input_text):
     """
     contracts most common ngrams to re-coloquialize text :)
     :return:
