@@ -184,6 +184,9 @@ Free front end/admin theme for building admin panels:
 https://github.com/puikinsh/gentelella
 
 
+django md5 hashing to store user creds in db
+
+
 
 Bootstrap admin templates:
 
