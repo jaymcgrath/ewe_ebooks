@@ -81,7 +81,10 @@ class Timeline:
         # TODO: test and tweak url and hashtag regular expressions
         # url and hashtag regexes - quick n dirty - just matches start and non-whitespace
 
-        url_regex = re.compile(r'(https?|ftp)://[^\s]+')
+        url_regex = re.compile(r"""
+                                   (https?|ftp)://    #  Optional s
+                                   [^\s]+             #  Not Spaces one or more times.
+                               """, re.VERBOSE)
         """
         The problem: want to remove tweet addressees but retain inline mentions as they are semantically
          relevant. This regex will strip all @'s at the beginning of a tweet while retaining ones appearing later
@@ -108,10 +111,11 @@ class Timeline:
                         hashtags.append(hash_obj['text'])
 
         # Get the ID of the last tweet fetched, for freshening purposes
-        try:
-            last_tweet_id = timeline.ids()[0]
-        except:
-            raise tweepy.TweepError("Nothing fetched!")
+
+            if len(timeline.ids()) > 0:
+                last_tweet_id = timeline.ids()[0]
+            else:
+                last_tweet_id = 1
 
 
         # Now process cleaned up tweets with NLTK
@@ -136,8 +140,6 @@ class Timeline:
         self.sentences = sentences
         self.tweets = tweets
         self.hashtags = hashtags
-        # TODO: Remove this api property after testing finished.
-        self.api = api
         self.timeline = timeline
         self.author = username
         self.last_tweet_id = last_tweet_id
@@ -149,6 +151,8 @@ class Timeline:
         repr_str = "{} Timeline object, {} tweets, {} hashtags"
         return repr_str.format(self.author, len(self.tweets), len(self.hashtags))
 
+    def __len__(self):
+        return len(self.tweets)
 
 class Tweet:
     """
