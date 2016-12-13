@@ -74,14 +74,25 @@ def mouse_join(corpora, smashtag=False):
     # Initialize accumulator variable, will be a words that we'll join to produce the polished output
     output = []
 
+
+# TODO: implement lookahead and pivot once we reach a non-verb
+
     try:
+        found_verb = False
         for word, tag in random.choice(first_tags):
             output.append(word)
 
             if tag.startswith('VB'):
+                # At the first verb. We want all verbs after this, then pivot at the first non-verb
+                found_verb = True
+                continue
+
+
+            if not tag.startswith('VB') and found_verb is True:
+                # Ok, got all the verbs that appear in a row, break
                 break
 
-        # Haven't hit second half of sentence yet
+        # Flag to discard the first half of the sentence til we hit a verb
         second_half = False
 
         first_verb = True
