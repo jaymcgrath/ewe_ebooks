@@ -1,10 +1,13 @@
 """
 Utilities for managing and maintaining individual Corpus objects
 """
+import pickle, random
 from datetime import datetime, timedelta
+
 from tzlocal import get_localzone
+
+from sources.models import Sentence, Hashtag
 from .twittstopher import Timeline
-from sources.models import Corpus, Sentence, Hashtag
 
 # How long to wait before refreshing our timelines with new content?
 DAYS_TIL_STALE = 1
@@ -57,4 +60,36 @@ def freshen_corpus(corpus):
 
 
 
+def rem_contractions(input_text):
+    """
+    Utility function for removing English contractions from text based on dictionary lookups
+    If multiple expansion possibilites, one is selected at random
+    :param input_text:
+    :return:
 
+    >>> rem_contractions("I'll do it soon."):
+    'I will do it soon.' OR 'I shall do it soon.' # Random expansion
+
+
+    """
+
+    # Unserialize stored dictionary
+    with open("extras/contractions.p", 'rb') as fh:
+        contractions = pickle.load(fh)
+
+    outputlist = []
+    for word in input_text.split(" "):
+        if word in contractions.keys():
+            word = random.choice(contractions[word])
+        outputlist.append(word)
+
+    return " ".join(outputlist)
+
+def add_contractions:
+    """
+    contracts most common ngrams to re-coloquialize text :)
+    :return:
+    """
+    # TODO: only contract some words, possibly based on n-gram frequency in english?
+    # TODO: Maybe create bigrams and check each bigram against dict?
+    pass
