@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block more_headers %}
     <style>
     #main_content {
@@ -10,11 +11,30 @@
         margin: 15px;
         padding: 10px;
     }
+
+    .corpus-card  {
+        margin: 2px;
+        padding: 8px;
+        background-color: aliceblue;
+    }
+
+    .corpus-desc {
+        font-size: 55%;
+    }
+
+    .tag-text {
+        font-size: 40%;
+    }
+
+    .corpus-thumb {
+        float: left;
+    }
+
+
     </style>
 {% endblock %}
 {% block main_content %}
     <section id="main_content">
-    <div id="select-result" class="notification"></div>
     <div class="container">
         <div class="row">
             <div class="col-xs-6">
@@ -27,20 +47,39 @@
                         {{ form.algorithm }}
                     </div>
                     <input type="submit" value="submit">
-                </form>
+
+                <div id="select-result" class="jumbotron"></div>
             </div><!-- end column -->
-            <div class="col-xs-6">
+            <div class="col-xs-6 list-group">
                 <div class="corpus-select">
                     {% for corpus in form.fields.corpora.queryset.all %}
-                        <div class="card notification_widget">
-                        <!-- TODO: insert super kick-ass looking rounded-corner bootstrap checkboxy things here -->
-                            {{ corpus.twitter_username }}
-                            {{ checkbox }}
-                        </div>
+                        <div class="card corpus-card list-group-item" id="corpus-card{{ corpus.id }}" >
+                            <input type="checkbox" name="corpora" value="{{ corpus.id }}"
+                                   id="corpora{{ corpus.id }}" class="hidden">
+                            <div class="media">
+                                <div class="media-left media-middle">
+                                    <a href="#">
+                                        <img src="{{ corpus.image_url }}" class="media-object" title="{{ corpus.desc }}">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h6 class="media-heading">
+                                        {{ corpus.twitter_username }}
+                                        <span class="tag tag-info tag-text">
+                                            {{ corpus.mash_count }} uses
+                                        </span>
+                                    </h6>
+                                    <p class="corpus-desc">
+                                        {{ corpus.desc }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div><!-- end corpus-card -->
                     {% endfor %}
-                </div>
-            </div>
+            </div><!-- end corpus-select -->
         </div><!-- end row -->
     </div>
     </section>
+</form>
+<script src="{% static "js/create_mashup.js" %}"></script>
 {% endblock %}
