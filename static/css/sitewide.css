@@ -13,10 +13,6 @@
     height: 96px;
 }
 
-.wrapper {
-   display: relative;
-}
-
 .wrapper .fa {
   position: relative ;
   top: 18px;
