@@ -1,10 +1,46 @@
 {% extends "base.html" %}
+{% block more_headers %}
+    <style>
+    #main_content {
+        overflow: hidden;
+    }
+    .corpus-select {
+        overflow-y: scroll;
+        height: 80vh;
+        margin: 15px;
+        padding: 10px;
+    }
+    </style>
+{% endblock %}
 {% block main_content %}
-<form action="" method="post">
-    {% csrf_token %}
-      <div class="form-group">
-        {{ form.as_p }}
-      </div>
-        <input type="submit" value="submit">
-    </form>
+    <section id="main_content">
+    <div id="select-result" class="notification"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form.errors }}
+                        {{ form.title }}
+                        {{ form.description }}
+                        {{ form.algorithm }}
+                    </div>
+                    <input type="submit" value="submit">
+                </form>
+            </div><!-- end column -->
+            <div class="col-xs-6">
+                <div class="corpus-select">
+                    {% for corpus in form.fields.corpora.queryset.all %}
+                        <div class="card notification_widget">
+                        <!-- TODO: insert super kick-ass looking rounded-corner bootstrap checkboxy things here -->
+                            {{ corpus.twitter_username }}
+                            {{ checkbox }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div><!-- end row -->
+    </div>
+    </section>
 {% endblock %}
