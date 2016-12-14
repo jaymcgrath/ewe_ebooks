@@ -21,6 +21,7 @@ class MashupCreateView(CreateView):
     form_class = MashupForm
     success_url = '/list_mashups/'
 
+
 class MashupListView(ListView):
     model = Mashup
     queryset = Mashup.objects.order_by('-created')
