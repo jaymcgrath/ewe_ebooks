@@ -1,0 +1,53 @@
+#main_content {
+    overflow: hidden;
+}
+.corpus-select {
+    overflow-y: scroll;
+    height: 80vh;
+    margin: 15px;
+    padding: 10px;
+
+}
+
+.corpus-card  {
+    margin: 2px;
+    padding: 8px;
+    background-color: aliceblue;
+}
+
+.corpus-desc {
+    font-size: 55%;
+}
+
+.tag-text {
+    font-size: 40%;
+}
+
+.corpus-thumb {
+    float: left;
+}
+
+.corpus-card-icon .fa {
+  position: relative ;
+  top: 52px;
+  left: 33px;
+  font-size: 16px;
+  color: cyan;
+
+}
+
+.corpus-preview-icon .fa {
+  position: relative ;
+  top: 18px;
+  left: 48px;
+  font-size: 16px;
+  color: cyan;
+}
+
+/* make this thing line up */
+
+.fa-plus {
+  position:relative;
+  left: 8px;
+
+}

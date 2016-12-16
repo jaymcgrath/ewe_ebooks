@@ -1,37 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block more_headers %}
-    <style>
-    #main_content {
-        overflow: hidden;
-    }
-    .corpus-select {
-        overflow-y: scroll;
-        height: 80vh;
-        margin: 15px;
-        padding: 10px;
-    }
-
-    .corpus-card  {
-        margin: 2px;
-        padding: 8px;
-        background-color: aliceblue;
-    }
-
-    .corpus-desc {
-        font-size: 55%;
-    }
-
-    .tag-text {
-        font-size: 40%;
-    }
-
-    .corpus-thumb {
-        float: left;
-    }
-
-
-    </style>
+<link href="{% static 'css/content/create_mashup.css' %}" rel="stylesheet">
 {% endblock %}
 {% block main_content %}
 <section id="main_content">
@@ -42,17 +12,30 @@
             <div class="col-xs-6">
                 <div class="form-group">
                     {{ form.errors }}
+                    Mashup Title:
                     {{ form.title }}
+                    Mashup Description:
                     {{ form.description }}
+                    Mashup Algorithm:
                     {{ form.algorithm }}
                 </div>
                 <input type="submit" value="submit">
-                <div id="corpus-preview" class="jumbotron"></div>
+    <div class="card">
+        <div class="card-header bg-alert text-xs-center">
+            <span class="h5 text-xs-center" id="title_preview">
+                <!-- mashup title goes here -->
+            </span>
+        </div><!-- end card header -->
+        <div class="card-block corpus text-xs-center" id="corpus_preview">
+            <!-- Corpus thumbnails go here -->
+        </div><!-- end card body -->
+
+    </div>
             </div><!-- end column -->
             <div class="col-xs-6 list-group">
-                <div class="corpus-select" id="cselect{{ corpus.id }}" data-corpus="{{ corpus.id }}">
+                <div class="corpus-select" id="cselect{{ corpus.id }}" data-corpus_id="{{ corpus.id }}">
                     {% for corpus in form.fields.corpora.queryset.all %}
-                        <div class="card corpus-card list-group-item" id="corpus-card{{ corpus.id }}" data-corpus="{{ corpus.id }}">
+                        <div class="card corpus-card list-group-item" id="corpus-card{{ corpus.id }}" data-corpus_id="{{ corpus.id }}">
                             <input type="checkbox" name="corpora" value="{{ corpus.id }}"
                                    id="cbox{{ corpus.id }}" class="hidden">
                             <div class="media">
@@ -64,7 +47,7 @@
                                                     <i class="fa fa-book"></i>
                                                 {% endif %}
                                             <img src="{{ corpus.image_url }}" class="media-object" title="{{ corpus.desc }}"
-                                                 id="cimage{{ corpus.id }}" data-corpus="{{ corpus.id }}">
+                                                 id="cimage{{ corpus.id }}" data-corpus_id="{{ corpus.id }}">
 
                                 </div>
                                 <div class="media-body">
@@ -87,5 +70,5 @@
     </div>
     </section>
 </form>
-<script src="{% static "js/create_mashup.js" %}"></script>
+<script src="{% static "js/content/create_mashup.js" %}"></script>
 {% endblock %}
