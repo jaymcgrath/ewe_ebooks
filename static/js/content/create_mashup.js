@@ -1,7 +1,10 @@
-/* behavior when each corpus is clicked */
+$('#id_title').prop('classs', 'form-control');
+$('#id_title').prop('placeholder', 'Together at Last! <mashup title goes here>');
+
 
 $('.corpus-card').click(
     function(){
+    /* behavior when each corpus is clicked */
 
         // get the id of the one they clicked
         var $corpus_id = $(this).data('corpus_id');
