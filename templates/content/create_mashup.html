@@ -34,33 +34,38 @@
     </style>
 {% endblock %}
 {% block main_content %}
-    <section id="main_content">
+<section id="main_content">
     <div class="container">
+        <form action="" method="post" id="create_corpus_form">
+            {% csrf_token %}
         <div class="row">
             <div class="col-xs-6">
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        {{ form.errors }}
-                        {{ form.title }}
-                        {{ form.description }}
-                        {{ form.algorithm }}
-                    </div>
-                    <input type="submit" value="submit">
-
-                <div id="select-result" class="jumbotron"></div>
+                <div class="form-group">
+                    {{ form.errors }}
+                    {{ form.title }}
+                    {{ form.description }}
+                    {{ form.algorithm }}
+                </div>
+                <input type="submit" value="submit">
+                <div id="corpus-preview" class="jumbotron"></div>
             </div><!-- end column -->
             <div class="col-xs-6 list-group">
-                <div class="corpus-select">
+                <div class="corpus-select" id="cselect{{ corpus.id }}" data-corpus="{{ corpus.id }}">
                     {% for corpus in form.fields.corpora.queryset.all %}
-                        <div class="card corpus-card list-group-item" id="corpus-card{{ corpus.id }}" >
+                        <div class="card corpus-card list-group-item" id="corpus-card{{ corpus.id }}" data-corpus="{{ corpus.id }}">
                             <input type="checkbox" name="corpora" value="{{ corpus.id }}"
-                                   id="corpora{{ corpus.id }}" class="hidden">
+                                   id="cbox{{ corpus.id }}" class="hidden">
                             <div class="media">
-                                <div class="media-left media-middle">
-                                    <a href="#">
-                                        <img src="{{ corpus.image_url }}" class="media-object" title="{{ corpus.desc }}">
-                                    </a>
+                                <div class="media-left media-middle corpus-card-icon">
+                                            <!-- include the appropriate icon -->
+                                                {% if corpus.type == "TW" %}
+                                                    <i class="fa fa-twitter"></i>
+                                                {% elif corpus.type == "EX" %}
+                                                    <i class="fa fa-book"></i>
+                                                {% endif %}
+                                            <img src="{{ corpus.image_url }}" class="media-object" title="{{ corpus.desc }}"
+                                                 id="cimage{{ corpus.id }}" data-corpus="{{ corpus.id }}">
+
                                 </div>
                                 <div class="media-body">
                                     <h6 class="media-heading">
@@ -76,8 +81,9 @@
                             </div>
                         </div><!-- end corpus-card -->
                     {% endfor %}
-            </div><!-- end corpus-select -->
+                </div><!-- end corpus-select -->
         </div><!-- end row -->
+        </form>
     </div>
     </section>
 </form>
