@@ -15,6 +15,7 @@ class MashupForm(forms.ModelForm):
                  'algorithm',
                  'corpora'
                  )
+        # widget = {'title': forms.Select(choices=((1,)), attrs={'class': 'myclass', 'placeholder': 'zipcode'})}
 
     def __init__(self, *args, **kwargs):
         super(MashupForm, self).__init__(*args, **kwargs)

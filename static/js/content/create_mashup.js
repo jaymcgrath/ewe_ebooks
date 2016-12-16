@@ -1,3 +1,5 @@
+"use strict";
+
 $('#id_title').prop('classs', 'form-control');
 $('#id_title').prop('placeholder', 'Together at Last! <mashup title goes here>');
 
@@ -34,22 +36,34 @@ $('.corpus-card').click(
             $(this).children('input').prop('checked', true);
 
             // add this thumb to the preview card
-            var $image_url = $(this).find('img').prop('src')
-            var $elem = $('<span data-corpus_id="' + $corpus_id + '">');
+            var $image_url = $(this).data('corpus_image_url');
+            var $corpus_id = $(this).data('corpus_id');
+
+            var $elem = $('<span class="preview-thumb-wrapper" data-corpus_id="' + $corpus_id + '">');
 
             // check if this is the first image added to the div
-            if ($('#corpus_preview').find('img').length > 0){
+            if ($('#corpus_preview').find('span[class="preview-thumb-wrapper"]').length > 0){
 
                 // some pics are already there, so drop a plus sign into the span
                 $elem.append($('<i class="fa fa-plus" aria-hidden="true"></i>'));
-                }
+
+            }
+
+            var thumb_div = '<div style="background-image:url(' + $image_url  + ')" class="corpus-thumb">';
 
             // append icon and /span tags
-            $elem.append($('<span class="corpus-preview-icon"><i class="fa fa-twitter"></i></span>'));
-            $elem.append($('<img class="corpus-preview thumbnail" id="preview_img' + $corpus_id + '" src="' + $image_url + '" />'));
 
-            // close span tag
-            $elem.append($('</span>'));
+            if ($(this).data('corpus_type') === 'TW'){
+                thumb_div += ' <i class="fa fa-twitter"></i> '
+            }
+            else if ($(this).data('corpus_type') === 'EX'){
+                thumb_div += ' <i class="fa fa-book"></i> '
+            }
+
+            thumb_div += "</span>";
+
+            // OK, thumb div is constructed, now append it
+            $elem.append(thumb_div);
 
             // insert all of these elements into the div
             $('#corpus_preview').append($elem);
