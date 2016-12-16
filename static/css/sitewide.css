@@ -13,12 +13,23 @@
     height: 96px;
 }
 
-.wrapper .fa {
+.icon-wrapper .fa {
   position: relative ;
   top: 18px;
   left: -20px;
   font-size: 16px;
   color: cyan;
+
+}
+
+.corpus-card-icon .fa {
+  position: relative ;
+  top: 52px;
+  left: 33px;
+  font-size: 16px;
+  color: cyan;
+
+}
 
 }
 
