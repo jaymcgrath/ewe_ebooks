@@ -163,6 +163,9 @@ _ParseyMcParseFace_ - Uses google's grammar parser to try to output grammatical 
 * Add google ngrams API as a "corpus" called `interwebs`
 * Investigate hidden markov models
 * Ipsum generator! People can generate their own ipsum from their twitter feeds
+* De-couple mashup from output generation.. that way _all_ pieces can be randomly combined with low overhead,
+  or mashup preview output can be created via AJAX on selecting
+
 
 ##Research Dump
 Good way to store NLTK tokens after parsing?
