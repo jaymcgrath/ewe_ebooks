@@ -8,6 +8,9 @@ $('.corpus-card').click(
     function(){
     /* behavior when each corpus is clicked */
 
+        // clear the example thumbs out
+        $('#example_thumbs').remove();
+
         // get the id of the one they clicked
         var $corpus_id = $(this).data('corpus_id');
 
@@ -28,7 +31,7 @@ $('.corpus-card').click(
             var $firstspan = $('#corpus_preview').children('span:first');
             // if ($firstspan.length > 0) {
                     // will remove the <i> tag from the first one if there is one
-                    $firstspan.children('i:first.fa-plus').remove();
+                    $firstspan.find('i:first.fa-plus').remove();
             //        }
 
         } else {
@@ -45,7 +48,7 @@ $('.corpus-card').click(
             if ($('#corpus_preview').find('span[class="preview-thumb-wrapper"]').length > 0){
 
                 // some pics are already there, so drop a plus sign into the span
-                $elem.append($('<i class="fa fa-plus" aria-hidden="true"></i>'));
+                $elem.append($('<span class="preview-plus"><i class="fa fa-plus" aria-hidden="true"></i></span>'));
 
             }
 

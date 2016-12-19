@@ -1,12 +1,45 @@
 #main_content {
     overflow: hidden;
 }
+
+#create_mashup_button {
+    margin-top: 10px;   
+}
+/* preview */
+
 .corpus-preview {
     display: flex;
     flex-wrap: wrap;
-
-
+    justify-content: center;
+    flex-direction: row;
 }
+
+
+.corpus-preview .fa-plus {
+    margin: 4px;
+}
+
+.preview-thumb-wrapper {
+    display: flex;
+}
+
+/* preview example */
+.example-thumbs {
+    display: flex;
+}
+
+.example-thumbs .fa {
+    margin: 4px;
+}
+
+.preview-plus {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+/* corpus select */
+
 .corpus-select {
     overflow-y: scroll;
     height: 80vh;
@@ -16,8 +49,16 @@
 
 .corpus-card  {
     margin: 2px;
-    padding: 8px;
+    padding: 14px;
     background-color: aliceblue;
+}
+
+.corpus-title {
+    margin-left: 6px
+}
+
+.corpus-desc {
+    margin-left: 6px
 }
 
 .corpus-thumb {
@@ -44,31 +85,3 @@
     font-size: 40%;
 }
 
-.corpus-card-icon .fa {
-  position: relative ;
-  top: 52px;
-  left: 33px;
-  font-size: 16px;
-  color: cyan;
-}
-
-.corpus-preview-icon .fa {
-  position: relative ;
-  top: 18px;
-  left: 48px;
-  font-size: 16px;
-  color: cyan;
-}
-
-/* make this thing line up */
-
-.fa-plus {
-    position:relative;
-    margin: 10px;
-    padding-top: 9px;
-
-}
-
-.preview-thumb-wrapper {
-    display: flex;
-}

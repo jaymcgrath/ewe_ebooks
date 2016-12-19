@@ -24,7 +24,7 @@ class MashupForm(forms.ModelForm):
 
         title_attrs = {
                 'class': 'form-control',
-                'placeholder': 'Together at last! (title goes here)',
+                'placeholder': 'Mashup Title',
                 'aria-label': 'Input the mashup title',
                 }
         self.fields['title'].widget.attrs.update(title_attrs)

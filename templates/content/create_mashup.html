@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 {% block more_headers %}
-<link href="{% static 'css/content/create_mashup.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/content/create_mashup.css' %}" rel="stylesheet">
+
 {% endblock %}
+
 {% block main_content %}
 <section id="main_content">
     <div class="container">
@@ -10,7 +13,33 @@
             {% csrf_token %}
         <div class="row">
             <div class="col-xs-6">
-                <div class="form-group">
+                <div class="card">
+                    <div class="card-header text-xs-center">
+                        <span class="h5 text-xs-center" id="title_preview">
+                            <span class="text-muted" id="example_title">My Awesome Mashup</span><!-- mashup title goes here -->
+                        </span>
+                    </div><!-- end card header -->
+
+                    <div class="card-block corpus-preview" id="corpus_preview">
+                        <!-- Corpus thumbnails go here -->
+
+                        <span id="example_thumbs" class="example-thumbs">
+
+                            <!-- grayed out example stuff -->
+                            <i class="fa fa-meh-o fa-4x text-muted" aria-hidden="true"></i>
+
+                            <span id="example_plus" class="preview-plus">
+                                <i class="fa fa-plus text-muted" aria-hidden="true" id="example_plus_char"></i>
+                            </span>
+
+                            <i class="fa fa-smile-o fa-4x text-muted" aria-hidden="true"></i>
+
+                        </span>
+                    </div><!-- end card body -->
+
+                </div><!-- end card -->
+
+                <fieldset class="form-group">
                     {{ form.errors }}
                     <div class="input-group">
                         <span class="input-group-addon">
@@ -25,20 +54,10 @@
                         </span>
                         {{ form.algorithm }}
                       </div>
-                </div>
-                <input type="submit" value="Create it!" class="btn-primary">
-    <div class="card">
-        <div class="card-header bg-alert text-xs-center">
-            <span class="h5 text-xs-center" id="title_preview">
-                <!-- mashup title goes here -->
-            </span>
-        </div><!-- end card header -->
-        <div class="card-block corpus-preview text-xs-center" id="corpus_preview">
-            <!-- Corpus thumbnails go here -->
-        </div><!-- end card body -->
-
-    </div>
+                    <input type="submit" value="Create it!" class="btn-primary" id="create_mashup_button">
+                </fieldset>
             </div><!-- end column -->
+
             <div class="col-xs-6 list-group">
                 <div class="corpus-select" id="cselect{{ corpus.id }}" data-corpus_id="{{ corpus.id }}">
                     {% for corpus in form.fields.corpora.queryset.all %}
@@ -48,17 +67,22 @@
                             <input type="checkbox" name="corpora" value="{{ corpus.id }}"
                                    id="cbox{{ corpus.id }}" class="hidden">
                             <div class="media">
-                                    <div style="background-image:url({{ corpus.image_url }})" class="media-object media-left media-middle corpus-thumb"
-                                         title="{{ corpus.desc }}" id="cimage{{ corpus.id }}" data-corpus_id="{{ corpus.id }}">
-                                        <!-- include the appropriate icon -->
+                                    <div style="background-image:url({{ corpus.image_url }})"
+                                         class="media-object media-left media-middle corpus-thumb"
+                                         title="{{ corpus.desc }}" id="cimage{{ corpus.id }}"
+                                         data-corpus_id="{{ corpus.id }}">
+
+                                        {#  include the appropriate icon #}
+
                                         {% if corpus.type == "TW" %}
                                             <i class="fa fa-twitter"></i>
                                         {% elif corpus.type == "EX" %}
                                             <i class="fa fa-book"></i>
                                         {% endif %}
+
                                     </div>
                                 <div class="media-body">
-                                    <h6 class="media-heading">
+                                    <h6 class="media-heading corpus-title">
                                         {{ corpus.twitter_username }}
                                         <span class="tag tag-info tag-text">
                                             {{ corpus.mash_count }} uses
@@ -74,7 +98,7 @@
                 </div><!-- end corpus-select -->
         </div><!-- end row -->
         </form>
-    </div>
+    </div><!-- end container> -->
     </section>
 </form>
 <script src="{% static "js/content/create_mashup.js" %}"></script>
