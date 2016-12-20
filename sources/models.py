@@ -1,5 +1,6 @@
 from django.db import models
-from extras.twittstopher import Timeline, User
+from extras.twittstopher import Timeline, TwitterUser
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -24,7 +25,7 @@ class Corpus(models.Model):
     image_url = models.CharField(max_length=256, null=True)
     author = models.TextField(max_length=64, null=True)
     # TODO: remove default=1 from added_by to link it with people.Member
-    added_by = models.ForeignKey('people.Member', on_delete=models.CASCADE, default=1)
+    added_by = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     mash_count = models.IntegerField(default=0, editable=False)
     last_tweet_id = models.IntegerField(default=1, editable=False, help_text='id of most recent saved tweet')
 
@@ -52,7 +53,7 @@ class Corpus(models.Model):
             # TODO: Increase tweets_to_fetch (currently 50) for production
             tweets_to_fetch = 50
             tl = Timeline(self.twitter_username, tweets_to_fetch)
-            usr = User(self.twitter_username)
+            usr = TwitterUser(self.twitter_username)
 
             # TODO: fetch good values w Timeline class for author, desc, title
             self.title = "Tweets of @{} aka {}".format(self.twitter_username, usr.screen_name)

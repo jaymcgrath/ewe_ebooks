@@ -20,7 +20,7 @@ from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView, Co
 from content.views import MashupCreateView, MashupListView, MashupDetailView, OutputCreateView,\
                           OutputDetailView, OutputListView, DisplayOutputView, OutputRandomView,\
                           OutputListViewByUser
-
+from people.views import ProfileCreateView, update_profile, create_profile
 from rest_framework import routers
 from api.content_api import OutputViewset
 
@@ -54,6 +54,8 @@ urlpatterns = [
     # Auth
     url(r'^login/$', django.contrib.auth.login, name='login'),
     url(r'^logout/$', django.contrib.auth.logout, name='logout'),
+    url(r'^signup/$', create_profile),
+    url(r'^edit_profile', update_profile),
 
     # API Endpoints
     url(r'^output/(?P<pk>\d+)/$', DisplayOutputView.as_view()),  # REST API endpoint

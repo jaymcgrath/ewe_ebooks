@@ -1,6 +1,6 @@
 from django.db import models
 from sources.models import Corpus
-from people.models import Member
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -37,7 +37,7 @@ class Mashup(models.Model):
     algorithm = models.CharField(max_length=3, choices=ALGOS, default='MJN')
     created = models.DateTimeField(auto_now=True)
     public = models.BooleanField(default=False, help_text='Whether to display this mashup and its output publicly')
-    member = models.ForeignKey(Member, related_name='mashups')
+    user = models.ForeignKey(User, related_name='mashups')
 
 
     def __str__(self):  # __unicode__ on Python 2
@@ -90,7 +90,7 @@ class Bot(models.Model):
     access_token = models.CharField(max_length=255, help_text='access token from dev.twitter.com')
     access_token_secret = models.CharField(max_length=255, help_text='access token secret from dev.twitter.com')
     mashup = models.ForeignKey(Mashup, related_name='bots')
-    member = models.ForeignKey(Member, related_name='bots')
+    user = models.ForeignKey(User, related_name='bots')
 
 
     def __str__(self):  # __unicode__ on Python 2

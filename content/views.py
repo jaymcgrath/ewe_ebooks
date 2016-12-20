@@ -158,7 +158,7 @@ class OutputListViewByUser(ListView):
     # TODO: fix this.. passing queryset in to template
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(mashup__member__id=self.kwargs['pk'])
+        return qs.filter(mashup__user__id=self.kwargs['pk'])
 
 
 

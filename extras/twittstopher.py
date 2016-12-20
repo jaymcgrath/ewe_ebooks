@@ -162,7 +162,7 @@ class Tweet:
     pass
 
 
-class User:
+class TwitterUser:
     """
     Twitter user class.
     Primary use: fetching profile picture and details/statistics when initializing as a source
