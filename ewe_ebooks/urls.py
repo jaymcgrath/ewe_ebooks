@@ -18,7 +18,8 @@ from django.contrib import admin
 import django.contrib.auth
 from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView, CorpusUpdateView
 from content.views import MashupCreateView, MashupListView, MashupDetailView, OutputCreateView,\
-                          OutputDetailView, OutputListView, DisplayOutputView, OutputRandomView
+                          OutputDetailView, OutputListView, DisplayOutputView, OutputRandomView,\
+                          OutputListViewByUser
 
 from rest_framework import routers
 from api.content_api import OutputViewset
@@ -47,13 +48,15 @@ urlpatterns = [
     url(r'^create_output/$', OutputCreateView),
     url(r'^random/$', OutputRandomView),
     url(r'^view_output/(?P<pk>\d+)/$', OutputDetailView.as_view(), name='output-detail'),
-    url(r'^output/(?P<pk>\d+)/$', DisplayOutputView.as_view()),  # REST API endpoint
     url(r'^list_output/$', OutputListView.as_view(), name='output-list'),
+    url(r'^list_output/(?P<pk>\d+)', OutputListViewByUser.as_view()),
 
     # Auth
     url(r'^login/$', django.contrib.auth.login, name='login'),
     url(r'^logout/$', django.contrib.auth.logout, name='logout'),
 
+    # API Endpoints
+    url(r'^output/(?P<pk>\d+)/$', DisplayOutputView.as_view()),  # REST API endpoint
 
 
 ]

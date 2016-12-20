@@ -144,6 +144,25 @@ class OutputListView(ListView):
         return context
 
 
+class OutputListViewByUser(ListView):
+    model = Output
+    # TODO: Attach user to output
+    context_object_name = 'output_list'
+    template_name = 'content/output_list.html'
+    # queryset = Output.objects.filter(output__id=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(OutputListView, self).get_context_data(**kwargs)
+        return context
+
+    # TODO: fix this.. passing queryset in to template
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user__id=self.kwargs['pk'])
+
+
+
+
 class OutputDetailView(DetailView):
     """
     Conventional view for Output
