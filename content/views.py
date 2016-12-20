@@ -152,13 +152,13 @@ class OutputListViewByUser(ListView):
     # queryset = Output.objects.filter(output__id=self.kwargs['pk'])
 
     def get_context_data(self, **kwargs):
-        context = super(OutputListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         return context
 
     # TODO: fix this.. passing queryset in to template
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(user__id=self.kwargs['pk'])
+        return qs.filter(mashup__member__id=self.kwargs['pk'])
 
 
 

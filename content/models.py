@@ -27,14 +27,17 @@ class Mashup(models.Model):
     """
     ALGOS = (
         ('MJN', 'Mouse Join'),
+        ('BOW', 'Bag of Words'),
+        ('MDB', 'Mad Lib'),
     )
 
     title = models.CharField(max_length=32)
     description = models.TextField()
-    corpora = models.ManyToManyField(Corpus, related_name='mashup_set')
+    corpora = models.ManyToManyField(Corpus, related_name='mashups')
     algorithm = models.CharField(max_length=3, choices=ALGOS, default='MJN')
     created = models.DateTimeField(auto_now=True)
     public = models.BooleanField(default=False, help_text='Whether to display this mashup and its output publicly')
+    member = models.ForeignKey(Member, related_name='mashups')
 
 
     def __str__(self):  # __unicode__ on Python 2
