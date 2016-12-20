@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+import django.contrib.auth
 from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView, CorpusUpdateView
 from content.views import MashupCreateView, MashupListView, MashupDetailView, OutputCreateView,\
                           OutputDetailView, OutputListView, DisplayOutputView, OutputRandomView
@@ -48,6 +49,10 @@ urlpatterns = [
     url(r'^view_output/(?P<pk>\d+)/$', OutputDetailView.as_view(), name='output-detail'),
     url(r'^output/(?P<pk>\d+)/$', DisplayOutputView.as_view()),  # REST API endpoint
     url(r'^list_output/$', OutputListView.as_view(), name='output-list'),
+
+    # Auth
+    url(r'^login/$', django.contrib.auth.login, name='login'),
+    url(r'^logout/$', django.contrib.auth.logout, name='logout'),
 
 
 
