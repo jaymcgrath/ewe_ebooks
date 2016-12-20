@@ -22,15 +22,16 @@
   </head>
   <body>
     {% block nav_bar_head %}
-    {% endblock %}
+
 
     {% include "navbar_head.html" %}
 
-    <div class="notification_widget">
+    {% endblock %}
+    <span class="notification_widget">
         {% block notifications %}
 
         {% endblock %}
-    </div>
+    </span>
 
     <main class="container">
     {% block main_content %}

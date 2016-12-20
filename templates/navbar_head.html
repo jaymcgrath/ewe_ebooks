@@ -3,7 +3,10 @@
 <item class="nav-item pull-left" style="display: flex; flex-direction: column; justify-content: space-around;  align-items: center;">
     <i class="fa fa-user fa-2x fa-inverse"></i>
     <span class="tag-pill tag-default" style="font-size:.6em;">
-    {% if request.user.is_authenticated %}{{ request.user.username }}
+    {% if request.user.is_authenticated %}
+        <a href="/dashboard/" style="text-decoration: none;">
+        {{ request.user.username }}
+        </a>
     {% else %}<a href="{% url 'login' %}">Login</a>
     {% endif %}
     </span>
@@ -41,8 +44,8 @@
         <a class="nav-link navbar-inverse dropdown-toggle" href="http://example.com" id="supportedContentDropdown"
            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sources</a>
         <div class="dropdown-menu" aria-labelledby="supportedContentDropdown">
-            <a class="dropdown-item" href="/list_sources/">Browse</a>
-            <a class="dropdown-item" href="/add_source/">Create</a>
+            <a class="dropdown-item" href="/list_sources/">Browse Existing Sources</a>
+            <a class="dropdown-item" href="/add_source/">Add A Source</a>
             <!-- management link placeholder
             <a class="dropdown-item" href="#">Manage</a>
             -->
@@ -53,7 +56,7 @@
         <span class="fa-stack">
             <i class="fa fa-circle fa-stack-2x"></i>
             <i class="fa fa-twitter fa-stack-1x fa-lg" style="color: cyan; "></i>
-            <i class="fa fa-random fa-stack-1x" style="font-size: .45em; margin-top: 2px; color: darkblue;"></i>
+            <i class="fa fa-random fa-stack-1x" style="font-size: .45em; margin-top: 1px; color: darkblue;"></i>
         </span>
        Ewe_Ebooks
     </a>

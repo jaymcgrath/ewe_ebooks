@@ -13,16 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+import django.contrib.auth
 from django.conf.urls import url, include
 from django.contrib import admin
-import django.contrib.auth
-from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView, CorpusUpdateView
+from rest_framework import routers
+
+from api.content_api import OutputViewset
 from content.views import MashupCreateView, MashupListView, MashupDetailView, OutputCreateView,\
                           OutputDetailView, OutputListView, DisplayOutputView, OutputRandomView,\
                           OutputListViewByUser
-from people.views import ProfileCreateView, update_profile, create_profile
-from rest_framework import routers
-from api.content_api import OutputViewset
+from people.views import update_profile, create_profile, UserDetailView
+from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView
 
 # Instantiate Router
 router = routers.DefaultRouter()
@@ -54,8 +55,9 @@ urlpatterns = [
     # Auth
     url(r'^login/$', django.contrib.auth.login, name='login'),
     url(r'^logout/$', django.contrib.auth.logout, name='logout'),
-    url(r'^signup/$', create_profile),
-    url(r'^edit_profile', update_profile),
+    url(r'^signup/$', create_profile, name='signup'),
+    url(r'^edit_profile/$', update_profile),
+    url(r'^dashboard/$', UserDetailView.as_view(), name='dashboard'),
 
     # API Endpoints
     url(r'^output/(?P<pk>\d+)/$', DisplayOutputView.as_view()),  # REST API endpoint

@@ -1,8 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.decorators import method_decorator
+from django.views.generic import DetailView
 from django.views.generic.edit import CreateView
+from django.contrib.auth.models import User
 
 from people.forms import ProfileForm
 from people.models import Profile
@@ -77,3 +80,15 @@ def create_profile(request):
         'user_form': user_form,
         'profile_form': profile_form
     })
+
+
+@method_decorator(login_required, name='dispatch')
+class UserDetailView(DetailView):
+    model = User
+    context_object_name = 'user'
+    template_name = 'people/user_detail.html'
+
+    def get_object(self):
+        #import ipdb; ipdb.set_trace()
+        return get_object_or_404(User, pk=self.request.session['_auth_user_id'])
+
