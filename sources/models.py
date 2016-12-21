@@ -13,7 +13,7 @@ class Corpus(models.Model):
     """
     TYPE_CHOICES = (
                     ("TW", "Twitter"),
-                    ("EX", "External"),
+                    ("EX", "Excerpt"),
                     )
 
     title = models.CharField(max_length=64, help_text='The title for this source')
