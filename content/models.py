@@ -37,7 +37,7 @@ class Mashup(models.Model):
     algorithm = models.CharField(max_length=3, choices=ALGOS, default='MJN')
     created = models.DateTimeField(auto_now=True)
     public = models.BooleanField(default=False, help_text='Whether to display this mashup and its output publicly')
-    user = models.ForeignKey(User, related_name='mashups')
+    user = models.ForeignKey(User, related_name='mashups', default=1)
 
 
     def __str__(self):  # __unicode__ on Python 2
