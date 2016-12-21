@@ -82,7 +82,11 @@
                                     </div>
                                 <div class="media-body">
                                     <h6 class="media-heading corpus-title">
-                                        {{ corpus.twitter_username }}
+                                        {% if corpus.type == 'TW' %}
+                                            {{ corpus.twitter_username }}
+                                        {% else %}
+                                            {{ corpus.author }}
+                                        {% endif %}
                                         <span class="tag tag-info tag-text">
                                             {{ corpus.mash_count }} uses
                                         </span>
