@@ -32,7 +32,7 @@ router.register(r'output', OutputViewset)
 
 urlpatterns = [
     # Admin Area
-    url(r'^admin/', admin.site.urls),
+    url(r'^nothinghere/', admin.site.urls),
 
     # REST Endpoints
     url(r'^api/', include(router.urls)),

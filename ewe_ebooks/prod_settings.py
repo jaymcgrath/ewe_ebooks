@@ -13,21 +13,25 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 from secrets import secrets
 
-ADMINS = [('Bramlet "The Scorpion" Abercrombie', 'tremblingzebra@gmail.com')]
+# SECURITY WARNING: don't run with debug turned on in production!
+# No Safety net
+DEBUG = False
+
+ADMINS = secrets.ADMINS
 
 # TODO: change to host IP when deployed
 
 ALLOWED_HOSTS = ['*']
-DEFAULT_FROM_EMAIL = 'djdclaw@gmail.com'
+DEFAULT_FROM_EMAIL = secrets.FROM_EMAIL
 
 # Don't want to get spammed during dev
 if DEBUG is True:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'djdclaw@gmail.com'
+EMAIL_HOST_USER = secrets.FROM_EMAIL
 EMAIL_PORT = '465'
 EMAIL_HOST_PASSWORD = secrets.EMAIL_PASS
 EMAIL_SUBJECT_PREFIX = '[Django]'
@@ -42,12 +46,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = secrets.DB_KEY
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# No Safety net
-DEBUG = False
-
-ALLOWED_HOSTS = []
 
 
 # Application definition

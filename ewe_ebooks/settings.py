@@ -11,21 +11,42 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from secrets import secrets
+
+# SECURITY WARNING: don't run with debug turned on in production!
+# Yes Safety net
+DEBUG = True
+
+ADMINS = secrets.ADMINS
+
+# TODO: change to host IP when deployed
+
+ALLOWED_HOSTS = ['*']
+DEFAULT_FROM_EMAIL = secrets.FROM_EMAIL
+
+# Don't want to get spammed during dev
+if DEBUG is True:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = secrets.FROM_EMAIL
+EMAIL_PORT = '465'
+EMAIL_HOST_PASSWORD = secrets.EMAIL_PASS
+EMAIL_SUBJECT_PREFIX = '[Django]'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '7c7#o&r38dw@!-gxl-bd60390b(t8^a2^6u6lhk4k-u&iah)sf'
+SECRET_KEY = secrets.DB_KEY
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -83,13 +104,24 @@ WSGI_APPLICATION = 'ewe_ebooks.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if DEBUG is True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'ewe_ebooks',
+            'USER': 'ewe_user',
+            'PASSWORD': secrets.DB_PASSWORD,
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
