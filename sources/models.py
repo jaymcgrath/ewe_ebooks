@@ -50,8 +50,7 @@ class Corpus(models.Model):
         """
         if not self.pk:
             # If no PK exists for this object, it's new, so create it
-            # TODO: Increase tweets_to_fetch (currently 50) for production
-            tweets_to_fetch = 50
+            tweets_to_fetch = 200
             tl = Timeline(self.twitter_username, tweets_to_fetch)
             usr = TwitterUser(self.twitter_username)
 
