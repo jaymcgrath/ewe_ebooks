@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    Sources: All
+{% endblock %}
+
 {% block main_content %}
-    <div class="well">
         <form action="/add_source/" method="post">
             {% csrf_token %}
             <div class="h6">
@@ -16,19 +19,35 @@
                 <input type="submit" value="submit" class="btn-info">
             </div>
         </form>
-    </div>
     <table class="table-striped table-responsive">
+        <thead class="thead-default">
+    <tr>
+      <th class="text-xs-center">Source</th>
+      <th class="text-xs-center">Author</th>
+      <th class="text-xs-center">Description</th>
+      <th class="text-xs-center">Appearances</th>
+    </tr>
+  </thead>
         {% for corpus in object_list %}
         <tr>
             <td>
-            <a href="/view_source/{{ corpus.id }}/">
                 {% if corpus.image_url %}
-            <img src="{{ corpus.image_url }}">
-            {% endif %}
-            @{{ corpus.author }}
-            </a>
-            <td>{{ corpus.desc}}</td>
-            <td><span class="tag tag-pill tag-default">{{ corpus.mash_count }} uses</span></td>
+                    <a href="/view_source/{{ corpus.id }}/">
+                        <img src="{{ corpus.image_url }}">
+                    </a>
+                {% endif %}
+            </td>
+            <td>
+                <a href="/view_source/{{ corpus.id }}/">
+                    {{ corpus.author }}
+                </a>
+            </td>
+            <td>
+                {{ corpus.desc}}
+            </td>
+            <td>
+                <span class="tag tag-pill tag-default">{{ corpus.mash_count }} uses</span>
+            </td>
         </tr>
     {% endfor %}
     </table>

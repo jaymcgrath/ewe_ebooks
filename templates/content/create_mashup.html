@@ -73,7 +73,6 @@
                                          data-corpus_id="{{ corpus.id }}">
 
                                         {#  include the appropriate icon #}
-
                                         {% if corpus.type == "TW" %}
                                             <i class="fa fa-twitter"></i>
                                         {% elif corpus.type == "EX" %}
@@ -100,6 +99,5 @@
         </form>
     </div><!-- end container> -->
     </section>
-</form>
 <script src="{% static "js/content/create_mashup.js" %}"></script>
 {% endblock %}
