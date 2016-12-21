@@ -183,9 +183,11 @@ class TwitterUser:
         usr = api.get_user(twitter_username)
         self.username = twitter_username
         self.image = usr.profile_image_url
-        self.api = usr
+        # Exposes entire api - for debugging only
+        # self.api = usr
         self.description = usr.description
         self.screen_name = usr.screen_name
+        self.name = usr.name
 
     def __repr__(self):
         return self.username + "(Tweepy TwitterUser object)"

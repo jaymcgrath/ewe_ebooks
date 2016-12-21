@@ -55,7 +55,7 @@ class Corpus(models.Model):
             usr = TwitterUser(self.twitter_username)
 
             # TODO: fetch good values w Timeline class for author, desc, title
-            self.title = "Tweets of @{} aka {}".format(self.twitter_username, usr.screen_name)
+            self.title = "Tweets of @{} aka {}".format(self.twitter_username, usr.name)
             self.desc = usr.description
             self.type = "TW"
             self.author = self.twitter_username
