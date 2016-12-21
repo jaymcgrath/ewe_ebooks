@@ -15,12 +15,12 @@ class Corpus(models.Model):
                     ("EX", "External"),
                     )
 
-    title = models.CharField(max_length=64, help_text="The title for this source")
+    title = models.CharField(max_length=64, help_text='The title for this source')
     added = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now=True)
-    desc = models.TextField(null=True, help_text="A description of this source")
+    desc = models.TextField(null=True, help_text='A description of this source')
     is_public = models.BooleanField(default=False)
-    type = models.CharField(max_length=2, choices=TYPE_CHOICES)
+    type = models.CharField(max_length=2, choices=TYPE_CHOICES, default='TW')
     twitter_username = models.CharField(max_length=15, null=True)
     image_url = models.CharField(max_length=256, null=True)
     author = models.TextField(max_length=64, null=True)
@@ -48,53 +48,59 @@ class Corpus(models.Model):
         :param kwargs:
         :return:
         """
-        if not self.pk:
-            # If no PK exists for this object, it's new, so create it
-            tweets_to_fetch = 200
-            tl = Timeline(self.twitter_username, tweets_to_fetch)
-            usr = TwitterUser(self.twitter_username)
+        if self.type is 'TW':
+            # Twitter Corpora Specifics
 
-            # TODO: fetch good values w Timeline class for author, desc, title
-            self.title = "Tweets of @{} aka {}".format(self.twitter_username, usr.name)
-            self.desc = usr.description
-            self.type = "TW"
-            self.author = self.twitter_username
-            self.image_url = usr.image
-            self.last_tweet_id = tl.last_tweet_id
+            if not self.pk:
+                # If no PK exists for this object, it's new, so create it
+                tweets_to_fetch = 50
+                tl = Timeline(self.twitter_username, tweets_to_fetch)
+                usr = TwitterUser(self.twitter_username)
 
-            super(Corpus, self).save(*args, **kwargs)
+                # TODO: fetch good values w Timeline class for author, desc, title
+                self.title = "Tweets of @{} aka {}".format(self.twitter_username, usr.name)
+                self.desc = usr.description
+                self.type = "TW"
+                self.author = self.twitter_username
+                self.image_url = usr.image
+                self.last_tweet_id = tl.last_tweet_id
 
-            """
-            Ok, new corpus saved. Now process the dependencies..
-            """
-            # TODO: Uncomment after writing models that use each data type
-            # for word1, word2 in tl.bigrams:
-            #     bg = Bigram.objects.create(corpus=self, word1=word1, word2=word2)
-            #     bg.save()
-            #
-            # for word1, word2, word3 in tl.trigrams:
-            #     tg = Trigram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3)
-            #     tg.save()
-            #
-            # for word1, word2, word3, word4 in tl.quadgrams:
-            #     qg = Quadgram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3, word4=word4)
-            #     qg.save()
+                super(Corpus, self).save(*args, **kwargs)
 
-            for sentence in tl.sentences:
-                sent = Sentence.objects.create(corpus=self, sentence=sentence)
-                sent.save()
+                """
+                Ok, new corpus saved. Now process the dependencies..
+                """
+                # TODO: Uncomment after writing models that use each data type
+                # for word1, word2 in tl.bigrams:
+                #     bg = Bigram.objects.create(corpus=self, word1=word1, word2=word2)
+                #     bg.save()
+                #
+                # for word1, word2, word3 in tl.trigrams:
+                #     tg = Trigram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3)
+                #     tg.save()
+                #
+                # for word1, word2, word3, word4 in tl.quadgrams:
+                #     qg = Quadgram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3, word4=word4)
+                #     qg.save()
 
-            for hashtag in tl.hashtags:
-                this_hash = Hashtag.objects.create(corpus=self, hashtag=hashtag)
-                this_hash.save()
+                for sentence in tl.sentences:
+                    sent = Sentence.objects.create(corpus=self, sentence=sentence)
+                    sent.save()
 
-                # for word in tl.words:
-                #     wrd = Word.objects.create(corpus=self, word=word)
-                #     wrd.save()
+                for hashtag in tl.hashtags:
+                    this_hash = Hashtag.objects.create(corpus=self, hashtag=hashtag)
+                    this_hash.save()
 
+                    # for word in tl.words:
+                    #     wrd = Word.objects.create(corpus=self, word=word)
+                    #     wrd.save()
+
+            else:
+                # Calling from corpus_utils.freshen_corpus, so just update instead
+                super(Corpus, self).save(*args, **kwargs)
         else:
-            # Calling from corpus_utils.freshen_corpus, so just update instead
-            super(Corpus, self).save(*args, **kwargs)
+            # Just a text corpus
+            pass
 
 
 class Word(models.Model):
