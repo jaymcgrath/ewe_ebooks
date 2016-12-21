@@ -1,5 +1,6 @@
 from django.db import models
 from extras.twittstopher import Timeline, TwitterUser
+from extras.bookstopher import Excerpt
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -16,6 +17,7 @@ class Corpus(models.Model):
                     )
 
     title = models.CharField(max_length=64, help_text='The title for this source')
+    body = models.TextField(null=True, help_text='Body of external corpora')
     added = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now=True)
     desc = models.TextField(null=True, help_text='A description of this source')
@@ -48,8 +50,11 @@ class Corpus(models.Model):
         :param kwargs:
         :return:
         """
+
         if self.type is 'TW':
-            # Twitter Corpora Specifics
+            """
+            Twitter Corpus - specific save method
+            """
 
             if not self.pk:
                 # If no PK exists for this object, it's new, so create it
@@ -99,8 +104,44 @@ class Corpus(models.Model):
                 # Calling from corpus_utils.freshen_corpus, so just update instead
                 super(Corpus, self).save(*args, **kwargs)
         else:
-            # Just a text corpus
-            pass
+            """
+            Save method for external corpora
+            """
+
+            super(Corpus, self).save(*args, **kwargs)
+
+            ex = Excerpt(self.body)
+
+            # Parse sentences with NLTK sentence Parser
+
+            """
+            Ok, new corpus saved. Now process the dependencies..
+            """
+            # TODO: Uncomment after writing models that use each data type
+            for word1, word2 in ex.bigrams:
+                 bg = Bigram.objects.create(corpus=self, word1=word1, word2=word2)
+                 bg.save()
+
+            for word1, word2, word3 in ex.trigrams:
+                 tg = Trigram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3)
+                 tg.save()
+
+            for word1, word2, word3, word4 in ex.quadgrams:
+                 qg = Quadgram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3, word4=word4)
+                 qg.save()
+
+            for sentence in ex.sentences:
+                sent = Sentence.objects.create(corpus=self, sentence=sentence)
+                sent.save()
+
+            for hashtag in ex.hashtags:
+                this_hash = Hashtag.objects.create(corpus=self, hashtag=hashtag)
+                this_hash.save()
+
+            for word in ex.words:
+                wrd = Word.objects.create(corpus=self, word=word)
+                wrd.save()
+
 
 
 class Word(models.Model):

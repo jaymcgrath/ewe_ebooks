@@ -17,7 +17,7 @@ class CorpusCreateView(CreateView):
 
 class CorpusListView(ListView):
     model = Corpus
-    queryset = Corpus.objects.order_by('-mash_count')
+    queryset = Corpus.objects.order_by('-updated')
     # context_object_name = 'corpus_list'
     paginate_by = 25
 
