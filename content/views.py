@@ -54,6 +54,9 @@ def OutputCreateView(request):
         if mashup.algorithm == 'MJN':
             # Randomly order the corpora we're going to join, this will generate better output
             mashed = mashup_algorithms.mouse_join(mashup.corpora.all().order_by('?'), smashtag=True)
+        else:
+            #TODO: add other join methods.. MJN used for everything rn
+            mashed = mashup_algorithms.mouse_join(mashup.corpora.all().order_by('?'), smashtag=True)
 
         this_output = Output.objects.create(body=mashed, mashup=mashup)
         this_output.save()
