@@ -64,3 +64,6 @@ htmlcov
 *htmlcov*
 .coverage
 
+# Backup misc #
+###################
+/backup*
