@@ -32,9 +32,19 @@
         <tr>
             <td>
                 {% if corpus.image_url %}
-                    <a href="/view_source/{{ corpus.id }}/">
-                        <img src="{{ corpus.image_url }}">
-                    </a>
+                    <span class="thumb-wrapper">
+                                    <div style="background-image:url({{ corpus.image_url }})"
+                                                class="corpus-thumb"
+                                                     title="{{ corpus.desc }}" id="cimage{{ corpus.id }}"
+                                                     data-corpus_id="{{ corpus.id }}">
+                                    {#  include the appropriate icon #}
+                                                    {% if corpus.type == "TW" %}
+                                                        <i class="fa fa-twitter"></i>
+                                                    {% elif corpus.type == "EX" %}
+                                                        <i class="fa fa-book"></i>
+                                                    {% endif %}
+                                    </div>
+                                </span>
                 {% endif %}
             </td>
             <td>
