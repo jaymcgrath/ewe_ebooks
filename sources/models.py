@@ -37,11 +37,17 @@ class Corpus(models.Model):
 
     def __repr__(self):
         # TODO: make this return something that tells whether a fixed upload source or twitter
-        return "{}: {}".format(self.type, self.twitter_username)
+        if self.type == 'TW':
+            return "{}: {}".format("Twitter: ", self.twitter_username)
+        else:
+            return "{}: {}".format("Excerpt: ", self.author)
 
     def __str__(self):
         # TODO: make this return something that tells whether a fixed upload source or twitter
-        return "{}: {}".format(self.type, self.twitter_username)
+        if self.type == 'TW':
+            return "{}: {}".format("Twitter: ", self.twitter_username)
+        else:
+            return "{}: {}".format("Excerpt: ", self.author)
 
     def save(self, *args, **kwargs):
         """
