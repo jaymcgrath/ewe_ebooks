@@ -55,7 +55,7 @@ class Timeline:
     """
     # TODO: write a real docstring
 
-    def __init__(self, username, count=100, last_tweet_id=1):
+    def __init__(self, username, count=200, last_tweet_id=1):
         # TODO: Login to twitter for corpus generation using end user's credentials
         auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
         auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
@@ -188,7 +188,7 @@ class TwitterUser:
         self.screen_name = usr.screen_name
 
     def __repr__(self):
-        return self.username + "(Tweepy User object)"
+        return self.username + "(Tweepy TwitterUser object)"
 
     def __str__(self):
-        return self.username + "(Tweepy User object)"
+        return self.username + "(Tweepy TwitterUser object)"
