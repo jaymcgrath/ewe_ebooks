@@ -13,21 +13,53 @@
     height: 96px;
 }
 
-.icon-wrapper .fa {
-  position: relative ;
-  top: 18px;
-  left: -20px;
-  font-size: 16px;
-  color: cyan;
-
-}
-
 .card-block {
     min-height: 100px;
 }
 
 .hidden {
     display: none;
+}
+
+
+/* Corpus Thumbnail Classes */
+
+
+.thumb-wrapper {
+  display: flex;
+
+}
+
+.corpus-thumb {
+    height: 48px;
+    width: 48px;
+    position: relative;
+    background-repeat: none;
+    min-width: 48px;
+}
+
+.corpus-thumb > .fa {
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    color: cyan;
+}
+
+.preview-plus {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.corpus-preview {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.corpus-preview .fa-plus {
+    margin: 4px;
 }
 
 

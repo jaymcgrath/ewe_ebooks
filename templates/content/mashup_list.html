@@ -2,8 +2,16 @@
 
 {% block main_content %}
     <a href="/create_mashup/">Create another mashup!</a>
-<div class="container-responsive">
-    <table class="table table-striped">
+<div class="container-responsive" style="padding-top: 25px">
+    <table class="table table-striped table-responsive">
+        <thead class="thead-inverse">
+    <tr>
+      <th class="text-xs-left">Title</th>
+      <th class="text-xs-center">Sources</th>
+      <th class="text-xs-left">Description</th>
+      <th class="text-xs-center">Mash?</th>
+    </tr>
+  </thead>
         {% for mashup in object_list %}
         <tr class="form-row">
             <td>
@@ -12,15 +20,33 @@
                 </a>
                 <span class="tag tag-pill tag-default">{{ mashup.outputs.count }}</span>
             </td>
-            <td>{% for corpus in mashup.corpora.all %}
-                    {% if corpus %}
-                        <img src= "{{ corpus.image_url }}">
-                        {% if not forloop.last %}
+            <td>
+                <div class="corpus-preview">
+                        {% for corpus in mashup.corpora.all %}
+                            {% if corpus %}
+                                <span class="thumb-wrapper">
+                                    <div style="background-image:url({{ corpus.image_url }})"
+                                                class="corpus-thumb"
+                                                     title="{{ corpus.desc }}" id="cimage{{ corpus.id }}"
+                                                     data-corpus_id="{{ corpus.id }}">
+                                    {#  include the appropriate icon #}
+                                                    {% if corpus.type == "TW" %}
+                                                        <i class="fa fa-twitter"></i>
+                                                    {% elif corpus.type == "EX" %}
+                                                        <i class="fa fa-book"></i>
+                                                    {% endif %}
+                                    </div>
+                                </span>
+                    {% if not forloop.last %}
+                        {# include the plus between elements #}
+                        <span class="preview-plus">
                             <i class="fa fa-plus" aria-hidden="true"></i>
+                        </span>
+                    {% endif %} {# end inner loop #}
                         {% endif %}
-                    {% endif %}
-                {% endfor %}
-                </td>
+                    {% endfor %}
+                </div>
+            </td>
             <td>{{ mashup.description }}</td>
             <td>
                 <form action="/create_output/" method="POST" target="_blank">
