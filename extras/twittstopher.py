@@ -68,7 +68,11 @@ class Timeline:
             raise PermissionError("Twitter Auth failed")
 
         # Gets a list of status objects (tweets) for this user
-        timeline = api.user_timeline(username, count=count, since_id=last_tweet_id)
+        try:
+            timeline = api.user_timeline(username, count=count, since_id=last_tweet_id)
+        except tweepy.TweepError:
+            raise PermissionError("Failed to retrieve timeline for " + username)
+
 
         """
         some setup for tweet parsing
