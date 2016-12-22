@@ -17,15 +17,16 @@
                                 {% if corpus %}
                                     <span class="thumb-wrapper">
                                         <div style="background-image:url({{ corpus.image_url }})"
-                                             class="corpus-thumb"
-                                             title="{{ corpus.desc }}" id="cimage{{ corpus.id }}"
+                                             class="corpus-thumb" title="{{ corpus.desc }}" id="cimage{{ corpus.id }}"
                                              data-corpus_id="{{ corpus.id }}">
-                                        {#  include the appropriate icon #}
+
+                                            {#include the appropriate icon #}
                                              {% if corpus.type == "TW" %}
                                                 <i class="fa fa-twitter"></i>
                                              {% elif corpus.type == "EX" %}
                                                 <i class="fa fa-book"></i>
                                              {% endif %}
+
                                         </div>
                                     </span>
                         {% if not forloop.last %}
