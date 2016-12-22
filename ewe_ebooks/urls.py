@@ -31,6 +31,9 @@ router.register(r'output', OutputViewset)
 
 
 urlpatterns = [
+    # Root URL
+    url(r'^$', OutputListView.as_view()),
+
     # Admin Area
     url(r'^nothinghere/', admin.site.urls),
 

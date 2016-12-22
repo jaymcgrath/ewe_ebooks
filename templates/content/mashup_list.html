@@ -15,7 +15,7 @@
         {% for mashup in object_list %}
         <tr class="form-row">
             <td>
-                <a href="/mashup_detail/{{ mashup.id }}/">
+                <a href="/view_mashup/{{ mashup.id }}/">
                 {{ mashup.title }}
                 </a>
                 <span class="tag tag-pill tag-default">{{ mashup.outputs.count }}</span>

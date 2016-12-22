@@ -40,7 +40,9 @@
     <div class="card-block">
         <p class="card-text">
             <i class="fa fa-quote-left fa-3x fa-pull-left fa-border" aria-hidden="true"></i>
-            {{ object.body }}
+            {% autoescape on %}
+                {{ object.body }}
+            {% endautoescape %}
         </p>
     </div>
     </div>
