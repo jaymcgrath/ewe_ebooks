@@ -10,7 +10,7 @@ from api.serializers import OutputSerializer
 from extras import mashup_algorithms, corpus_utils
 from sources.models import Corpus
 from .forms import MashupForm
-from .models import Mashup, Output
+from .models import Mashup, Output, Bot
 
 # Create your views here.
 class MashupCreateView(CreateView):
@@ -185,6 +185,31 @@ class DisplayOutputView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Output.objects.all()
     serializer_class = OutputSerializer
     # TODO: create this view
+
+class BotDetailView(DetailView):
+    """
+    Conventional view for a single Bot
+    """
+    model = Bot
+    context_object_name = 'bot'
+    template_name = 'content/bot_detail.html'
+
+class BotListViewByUser(ListView):
+    model = Bot
+    # TODO: Attach user to output
+    context_object_name = 'bot_list'
+    template_name = 'content/bot_list.html'
+    # queryset = Output.objects.filter(output__id=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    # TODO: fix this.. passing queryset in to template
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user__id=self.kwargs['pk'])
+
 
 
 

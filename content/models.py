@@ -56,6 +56,7 @@ class Output(models.Model):
     num_votes = models.PositiveIntegerField(default=0)
     mashup = models.ForeignKey(Mashup, related_name='outputs')
 
+
     def save(self, *args, **kwargs):
         """
         Get the mashup algorithm and sources, then do some munging and save it
@@ -78,7 +79,7 @@ class Output(models.Model):
 
 class Bot(models.Model):
     """
-    Bot for posting mashups to twitter
+    Bot for posting a mashups to twitter
     """
     name = models.CharField(max_length=64, help_text='A name for this bot (can be different from twitter username)')
     post_frequency = models.DurationField(null=True, default='12 hours', help_text='how frequently this bot posts')
