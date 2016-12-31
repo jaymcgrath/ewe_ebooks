@@ -81,8 +81,16 @@ class Bot(models.Model):
     """
     Bot for posting a mashups to twitter
     """
+
+    POST_FREQS = (
+                ('6 hours', 'Four times daily'),
+                ('12 hours', 'Twice daily'),
+                ('1 day', 'Once Daily'),
+                ('2 days', 'Every Other Day'),
+    )
     name = models.CharField(max_length=64, help_text='A name for this bot (can be different from twitter username)')
-    post_frequency = models.DurationField(null=True, default='12 hours', help_text='how frequently this bot posts')
+    description = models.TextField(null=True, help_text='A brief description of how this bot looks on Twitter')
+    post_frequency = models.DurationField(null=True, choices=POST_FREQS, default='12 hours', help_text='how frequently this bot posts')
     post_count = models.IntegerField(default=0)
     created = models.DateTimeField(auto_created=True, help_text='when this bot was created')
     updated = models.DateTimeField(auto_now=True, help_text='the last time this bot was updated')
