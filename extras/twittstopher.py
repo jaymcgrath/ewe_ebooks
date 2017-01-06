@@ -6,7 +6,7 @@ import re
 import tweepy
 from nltk import ngrams, word_tokenize, sent_tokenize
 from secrets.secrets import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
-
+import html
 
 class Timeline:
     """
@@ -78,7 +78,7 @@ class Timeline:
         some setup for tweet parsing
         """
 
-        # accumulators
+        # create some accumulators
         tweets = []
         hashtags = []
 
@@ -101,7 +101,8 @@ class Timeline:
         for tweet in timeline:
             # retweeted_status only exists in retweets
             if 'retweeted_status' not in tweet._json:
-                tweet_body = tweet.text
+                # Get content from the tweet, unescaping HTML elements
+                tweet_body = html.unescape(tweet.text)
                 # Filter out most URLs
                 tweet_body = url_regex.sub('', tweet_body)
                 # Filter out addressees at beginning of tweet
