@@ -2,6 +2,19 @@ from django.db import models
 from extras.twittstopher import Timeline, TwitterUser
 from extras.bookstopher import Excerpt
 from django.contrib.auth.models import User
+from django.db.models.aggregates import Count
+from random import randint
+
+class RandomManager(models.Manager):
+    """
+    Custom manager class, adds random() method which returns a single random item to the Manager class
+    """
+
+    def random(self):
+        count = self.aggregate(count=Count('id'))['count']
+        random_index = randint(0, count - 1)
+        return self.all()[random_index]
+
 
 # Create your models here.
 
@@ -228,6 +241,7 @@ class Sentence(models.Model):
     # TODO: create custom tagged model for storing word:tag pairs as sentences
     sentence = models.CharField(max_length=1024)
     corpus = models.ForeignKey(Corpus, related_name='sentences')
+    objects = RandomManager()
 
     def __repr__(self):
         return "{}: {}".format(self.corpus.author, self.sentence[:42])
