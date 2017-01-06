@@ -28,8 +28,8 @@ class Corpus(models.Model):
     author = models.TextField(max_length=64, null=True)
     # TODO: remove default=1 from added_by to link it with people.Member
     added_by = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    mash_count = models.IntegerField(default=0, editable=False)
-    last_tweet_id = models.IntegerField(default=1, editable=False, help_text='id of most recent saved tweet')
+    mash_count = models.BigIntegerField(default=0, editable=False)
+    last_tweet_id = models.BigIntegerField(default=1, editable=False, help_text='id of most recent saved tweet')
 
     class Meta:
         verbose_name_plural = 'corpora'
