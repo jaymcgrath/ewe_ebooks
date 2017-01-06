@@ -142,5 +142,5 @@ def mouse_join(corpora, smashtag=False):
 
 
     # Returns (string, Sentence object, Sentence object)
-    return (output, sentence1, sentence2)
+    return (output, (sentence1, sentence2))
 

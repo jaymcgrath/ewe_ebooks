@@ -53,14 +53,16 @@ def OutputCreateView(request):
 
         if mashup.algorithm == 'MJN':
             # Randomly order the corpora we're going to join, this will generate better output
-            mashed, sentence1, sentence2 = mashup_algorithms.mouse_join(mashup.corpora.all(), smashtag=True)
+            mashed, parent_sents = mashup_algorithms.mouse_join(mashup.corpora.all(), smashtag=True)
         else:
             #TODO: add other join methods.. MJN used for everything rn
-            mashed, sentence1, sentence2 = mashup_algorithms.mouse_join(mashup.corpora.all(), smashtag=True)
+            mashed, parent_sents = mashup_algorithms.mouse_join(mashup.corpora.all(), smashtag=True)
 
         # TODO - create relational table linking parent sentences (sentence1 and sentence2) and Output
         this_output = Output.objects.create(body=mashed, mashup=mashup)
         this_output.save()
+
+        this_output.sentences.add(*parent_sents)
 
         # Update mash_counts for the various corpora just used:
         for corpus in mashup.corpora.all():

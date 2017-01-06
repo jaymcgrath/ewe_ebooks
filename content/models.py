@@ -56,6 +56,7 @@ class Output(models.Model):
     generated = models.DateTimeField(auto_now=True)
     num_votes = models.PositiveIntegerField(default=0)
     mashup = models.ForeignKey(Mashup, related_name='outputs')
+    sentences = models.ManyToManyField(Sentence, related_name='outputs')
 
 
     def save(self, *args, **kwargs):
