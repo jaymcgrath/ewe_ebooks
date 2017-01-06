@@ -1,5 +1,5 @@
 from django.db import models
-from sources.models import Corpus
+from sources.models import Corpus, Sentence
 from django.contrib.auth.models import User
 
 
