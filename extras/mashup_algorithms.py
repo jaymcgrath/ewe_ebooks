@@ -8,6 +8,7 @@ from nltk import pos_tag, word_tokenize
 import re
 from .corpus_utils import rem_contractions
 
+
 def mouse_join(corpora, smashtag=False):
     """
     Takes list of sources.Corpus objects. Selects two at random, then extracts random sentences from each,
@@ -17,10 +18,10 @@ def mouse_join(corpora, smashtag=False):
 
     :param corpora: list of ewe_ebooks.sources.Corpus objects
     :param smashtag: Boolean flag, include a hashtag taken from combining two random hashtags
-    :return: New sentence with optional hashtag
+    :return: Tuple containing new sentence with optional hashtag and the two parent sentence objects
     """
 
-    def tag_sentences(sentences):
+    def tag_sentence(sentence):
         """
         helper function for tagging sentences. tosses sentences without verbs
         """
@@ -46,13 +47,12 @@ def mouse_join(corpora, smashtag=False):
             return toks_out
 
         tagged = []
-        for sentence in sentences:
-            tokens = post_proc(word_tokenize(sentence))
-            tags = pos_tag(tokens)
-            if len([word for word in tags if word[1].startswith('VB')]):
-                tagged.append(tags)
-
-        return tagged
+        tokens = post_proc(word_tokenize(sentence))
+        tags = pos_tag(tokens)
+        if len([word for word in tags if word[1].startswith('VB')]):
+            return tags
+        else:
+            return False
 
     def gen_smashtag(corpus1, corpus2):
         """
@@ -69,28 +69,27 @@ def mouse_join(corpora, smashtag=False):
             # One of these didn't have any hashtags..
             return ''
 
-    # Get two of them from the list
+    # Get two corpora from the list
     first_corpus, second_corpus = corpora[:2]
 
-    # import ipdb; ipdb.set_trace()
+    # Get random sentences from our two sources (corpora)
+    # Try to find sentences with verbs.. to avoid an infinite loop, just try ten times
 
-    # Get some random sentences from our two sources (corpora)
+    sentence1 = first_corpus.sentences.random()
+    num_tries = 0
+    while (len([word for word in pos_tag(word_tokenize(sentence1.sentence)) if word[1].startswith('VB')]) < 1) and num_tries < 10:
+        sentence1 = first_corpus.sentences.random()
+        num_tries += 1
 
-    # Shuffle up the sentences, then grab up to 25 of them
-    first_sents = [rem_contractions(sentence.sentence) for sentence in first_corpus.sentences.all()]
-    second_sents = [rem_contractions(sentence.sentence) for sentence in second_corpus.sentences.all()]
+    sentence2 = second_corpus.sentences.random()
+    num_tries = 0
+    while (len([word for word in pos_tag(word_tokenize(sentence2.sentence)) if word[1].startswith('VB')]) < 1) and num_tries < 10:
+        sentence2 = second_corpus.sentences.random()
+        num_tries += 1
 
-    random.shuffle(first_sents)
-    random.shuffle(second_sents)
-
-    first_sents = first_sents[:25]
-    second_sents = second_sents[:25]
-
-    # These will contain tuples in the format (word, tag)
-    first_tags = tag_sentences(first_sents)
-    second_tags = tag_sentences(second_sents)
 
     # OK, hopefully got some valid sentences. it's #GoTime
+
     # TODO: do some error handling here
 
     # Initialize accumulator variable, will be a words that we'll join to produce the polished output
@@ -101,7 +100,8 @@ def mouse_join(corpora, smashtag=False):
 
     try:
         found_verb = False
-        for word, tag in random.choice(first_tags):
+
+        for word, tag in tag_sentence(rem_contractions(sentence1.sentence)):
             output.append(word)
 
             if tag.startswith('VB'):
@@ -118,7 +118,8 @@ def mouse_join(corpora, smashtag=False):
         second_half = False
 
         first_verb = True
-        for word, tag in random.choice(second_tags):
+
+        for word, tag in tag_sentence(rem_contractions(sentence2.sentence)):
             if tag.startswith('VB'):
                 second_half = True
                 if first_verb:
@@ -139,5 +140,7 @@ def mouse_join(corpora, smashtag=False):
     if smashtag is True:
         output += gen_smashtag(first_corpus, second_corpus)
 
-    return output
+
+    # Returns (string, Sentence object, Sentence object)
+    return (output, sentence1, sentence2)
 
