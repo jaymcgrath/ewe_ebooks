@@ -1,14 +1,41 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}
 Add a new source
 {% endblock %}
+{% block notifications %}
+    {{ form.errors }}
+{% endblock %}
+
 {% block  main_content %}
-    <form action="" method="post">
+    <form action="" method="post" novalidate>
         {% csrf_token %}
-        <div class="form-group">
-            {{ form.errors }}
-            {{ form.twitter_username }}
-            <input type="submit" value="submit" class="btn-info">
-        </div>
+        <div class="container">
+            <div class="form-group row">
+                <div class="col-xs-6">
+                    What kind of source are you adding?
+                </div>
+                <div class="col-xs-6">
+                    <div class="dropdown">
+                        {{ form.variety }}
+                    </div>
+                </div><!--endcol-->
+            </div><!--endrow-->
+            <div class="form-group row" id="twitter_items">
+                 <span class="input-group-addon" id="username1">@</span>
+                {{ form.twitter_username }}
+                <input type="submit" value="submit" class="btn-info">
+            </div>
+            <div class="form-group row hidden" id="excerpt_items">
+                {{ form.title }}
+                {{ form.description }}
+                {{ form.body }}
+                <input type="submit" value="submit" class="btn-info">
+            </div>
+        </div><!--endcontainer-->
     </form>
 {% endblock %}
+
+{% block footers %}
+    <script src="{% static "js/sources/create_corpus.js" %}"></script>
+{% endblock%}
