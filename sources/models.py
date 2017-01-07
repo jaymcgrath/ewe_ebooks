@@ -36,7 +36,7 @@ class Corpus(models.Model):
     desc = models.TextField(null=True, help_text='A description of this source')
     is_public = models.BooleanField(default=False)
     type = models.CharField(max_length=2, choices=TYPE_CHOICES, default='TW')
-    twitter_username = models.CharField(max_length=15, null=True)
+    twitter_username = models.CharField(max_length=15, unique=True, null=True)
     image_url = models.CharField(max_length=256, null=True)
     author = models.TextField(max_length=64, null=True)
     # TODO: remove default=1 from added_by to link it with people.Member
@@ -49,14 +49,12 @@ class Corpus(models.Model):
         default_related_name = 'corpora'
 
     def __repr__(self):
-        # TODO: make this return something that tells whether a fixed upload source or twitter
         if self.type == 'TW':
             return "{}: {}".format("Twitter: ", self.twitter_username)
         else:
             return "{}: {}".format("Excerpt: ", self.author)
 
     def __str__(self):
-        # TODO: make this return something that tells whether a fixed upload source or twitter
         if self.type == 'TW':
             return "{}: {}".format("Twitter: ", self.twitter_username)
         else:
@@ -94,7 +92,7 @@ class Corpus(models.Model):
                 """
                 Ok, new corpus saved. Now process the dependencies..
                 """
-                # TODO: Uncomment after writing models that use each data type
+                # TODO: Uncomment after writing algorithms that use each data type
                 # for word1, word2 in tl.bigrams:
                 #     bg = Bigram.objects.create(corpus=self, word1=word1, word2=word2)
                 #     bg.save()
@@ -136,7 +134,7 @@ class Corpus(models.Model):
             """
             Ok, new corpus saved. Now process the dependencies..
             """
-            # TODO: Uncomment after writing models that use each data type
+            # TODO: Uncomment after writing algorithms that use each data type
             for word1, word2 in ex.bigrams:
                  bg = Bigram.objects.create(corpus=self, word1=word1, word2=word2)
                  bg.save()
@@ -207,13 +205,10 @@ class Trigram(models.Model):
     corpus = models.ForeignKey(Corpus, related_name='trigrams')
 
     def __repr__(self):
-        return "{a}: {w1} {w2} {w3}".format(a=self.corpus.author, w1=self.word1, w2=self.word2,
-                                                 w3=self.word3)
+        return "{a}: {w1} {w2} {w3}".format(a=self.corpus.author, w1=self.word1, w2=self.word2, w3=self.word3)
 
     def __str__(self):
-        return "{a}: {w1} {w2} {w3}".format(a=self.corpus.author, w1=self.word1, w2=self.word2,
-                                                 w3=self.word3)
-
+        return "{a}: {w1} {w2} {w3}".format(a=self.corpus.author, w1=self.word1, w2=self.word2, w3=self.word3)
 
 class Quadgram(models.Model):
     """
