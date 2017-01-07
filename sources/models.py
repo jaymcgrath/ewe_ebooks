@@ -25,17 +25,17 @@ class Corpus(models.Model):
     content is stored in the other sources classes.
     """
     TYPE_CHOICES = (
-                    ("TW", "Twitter"),
-                    ("EX", "Excerpt"),
+                    ("TW", "Twitter User"),
+                    ("EX", "Text Excerpt"),
                     )
 
     title = models.CharField(max_length=64, help_text='The title for this source')
     body = models.TextField(null=True, help_text='Body of external corpora')
     added = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now=True)
-    desc = models.TextField(null=True, help_text='A description of this source')
+    description = models.TextField(null=True, help_text='A description of this source')
     is_public = models.BooleanField(default=False)
-    type = models.CharField(max_length=2, choices=TYPE_CHOICES, default='TW')
+    variety = models.CharField(max_length=2, choices=TYPE_CHOICES, default='TW')
     twitter_username = models.CharField(max_length=15, unique=True, null=True)
     image_url = models.CharField(max_length=256, null=True)
     author = models.TextField(max_length=64, null=True)
@@ -49,13 +49,13 @@ class Corpus(models.Model):
         default_related_name = 'corpora'
 
     def __repr__(self):
-        if self.type == 'TW':
+        if self.variety == 'TW':
             return "{}: {}".format("Twitter: ", self.twitter_username)
         else:
             return "{}: {}".format("Excerpt: ", self.author)
 
     def __str__(self):
-        if self.type == 'TW':
+        if self.variety == 'TW':
             return "{}: {}".format("Twitter: ", self.twitter_username)
         else:
             return "{}: {}".format("Excerpt: ", self.author)
@@ -68,7 +68,7 @@ class Corpus(models.Model):
         :return:
         """
 
-        if self.type is 'TW':
+        if self.variety is 'TW':
             """
             Twitter Corpus - specific save method
             """
@@ -79,10 +79,10 @@ class Corpus(models.Model):
                 tl = Timeline(self.twitter_username, tweets_to_fetch)
                 usr = TwitterUser(self.twitter_username)
 
-                # TODO: fetch good values w Timeline class for author, desc, title
+                # TODO: fetch good values w Timeline class for author, description, title
                 self.title = "Tweets of @{} aka {}".format(self.twitter_username, usr.name)
-                self.desc = usr.description
-                self.type = "TW"
+                self.description = usr.description
+                self.variety = "TW"
                 self.author = self.twitter_username
                 self.image_url = usr.image
                 self.last_tweet_id = tl.last_tweet_id
