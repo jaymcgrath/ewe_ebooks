@@ -1,1 +1,1 @@
-web: gunicorn ewe_ebooks/wsgi.py --log-file
+web: gunicorn ewe_ebooks/wsgi.py --log-file -
