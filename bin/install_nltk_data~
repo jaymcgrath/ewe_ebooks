@@ -12,7 +12,7 @@ echo "-----> Starting nltk data installation"
 # NOTE: The following command installs the averaged_perceptron_tagger corpora, 
 # so you may want to change for your specific needs.  
 # See http://www.nltk.org/data.html
-python -m nltk.downloader punkt
+python -m nltk.downloader averaged_perceptron_tagger
 
 # If using Textblob, use this instead:
 # python -m textblob.download_corpora lite
