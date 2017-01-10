@@ -2,6 +2,19 @@ from django.db import models
 from extras.twittstopher import Timeline, TwitterUser
 from extras.bookstopher import Excerpt
 from django.contrib.auth.models import User
+from django.db.models.aggregates import Count
+from random import randint
+
+class RandomManager(models.Manager):
+    """
+    Custom manager class, adds random() method which returns a single random item to the Manager class
+    """
+
+    def random(self):
+        count = self.aggregate(count=Count('id'))['count']
+        random_index = randint(0, count - 1)
+        return self.all()[random_index]
+
 
 # Create your models here.
 
@@ -12,39 +25,37 @@ class Corpus(models.Model):
     content is stored in the other sources classes.
     """
     TYPE_CHOICES = (
-                    ("TW", "Twitter"),
-                    ("EX", "Excerpt"),
+                    ("TW", "Twitter User"),
+                    ("EX", "Text Excerpt"),
                     )
 
     title = models.CharField(max_length=64, help_text='The title for this source')
     body = models.TextField(null=True, help_text='Body of external corpora')
     added = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now=True)
-    desc = models.TextField(null=True, help_text='A description of this source')
+    description = models.TextField(null=True, help_text='A description of this source')
     is_public = models.BooleanField(default=False)
-    type = models.CharField(max_length=2, choices=TYPE_CHOICES, default='TW')
-    twitter_username = models.CharField(max_length=15, null=True)
+    variety = models.CharField(max_length=2, choices=TYPE_CHOICES, default='TW')
+    twitter_username = models.CharField(max_length=15, unique=True, null=True)
     image_url = models.CharField(max_length=256, null=True)
     author = models.TextField(max_length=64, null=True)
     # TODO: remove default=1 from added_by to link it with people.Member
     added_by = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    mash_count = models.IntegerField(default=0, editable=False)
-    last_tweet_id = models.IntegerField(default=1, editable=False, help_text='id of most recent saved tweet')
+    mash_count = models.BigIntegerField(default=0, editable=False)
+    last_tweet_id = models.BigIntegerField(default=1, editable=False, help_text='id of most recent saved tweet')
 
     class Meta:
         verbose_name_plural = 'corpora'
         default_related_name = 'corpora'
 
     def __repr__(self):
-        # TODO: make this return something that tells whether a fixed upload source or twitter
-        if self.type == 'TW':
+        if self.variety == 'TW':
             return "{}: {}".format("Twitter: ", self.twitter_username)
         else:
             return "{}: {}".format("Excerpt: ", self.author)
 
     def __str__(self):
-        # TODO: make this return something that tells whether a fixed upload source or twitter
-        if self.type == 'TW':
+        if self.variety == 'TW':
             return "{}: {}".format("Twitter: ", self.twitter_username)
         else:
             return "{}: {}".format("Excerpt: ", self.author)
@@ -57,7 +68,7 @@ class Corpus(models.Model):
         :return:
         """
 
-        if self.type is 'TW':
+        if self.variety is 'TW':
             """
             Twitter Corpus - specific save method
             """
@@ -68,10 +79,10 @@ class Corpus(models.Model):
                 tl = Timeline(self.twitter_username, tweets_to_fetch)
                 usr = TwitterUser(self.twitter_username)
 
-                # TODO: fetch good values w Timeline class for author, desc, title
+                # TODO: fetch good values w Timeline class for author, description, title
                 self.title = "Tweets of @{} aka {}".format(self.twitter_username, usr.name)
-                self.desc = usr.description
-                self.type = "TW"
+                self.description = usr.description
+                self.variety = "TW"
                 self.author = self.twitter_username
                 self.image_url = usr.image
                 self.last_tweet_id = tl.last_tweet_id
@@ -81,7 +92,7 @@ class Corpus(models.Model):
                 """
                 Ok, new corpus saved. Now process the dependencies..
                 """
-                # TODO: Uncomment after writing models that use each data type
+                # TODO: Uncomment after writing algorithms that use each data type
                 # for word1, word2 in tl.bigrams:
                 #     bg = Bigram.objects.create(corpus=self, word1=word1, word2=word2)
                 #     bg.save()
@@ -123,7 +134,7 @@ class Corpus(models.Model):
             """
             Ok, new corpus saved. Now process the dependencies..
             """
-            # TODO: Uncomment after writing models that use each data type
+            # TODO: Uncomment after writing algorithms that use each data type
             for word1, word2 in ex.bigrams:
                  bg = Bigram.objects.create(corpus=self, word1=word1, word2=word2)
                  bg.save()
@@ -194,13 +205,10 @@ class Trigram(models.Model):
     corpus = models.ForeignKey(Corpus, related_name='trigrams')
 
     def __repr__(self):
-        return "{a}: {w1} {w2} {w3}".format(a=self.corpus.author, w1=self.word1, w2=self.word2,
-                                                 w3=self.word3)
+        return "{a}: {w1} {w2} {w3}".format(a=self.corpus.author, w1=self.word1, w2=self.word2, w3=self.word3)
 
     def __str__(self):
-        return "{a}: {w1} {w2} {w3}".format(a=self.corpus.author, w1=self.word1, w2=self.word2,
-                                                 w3=self.word3)
-
+        return "{a}: {w1} {w2} {w3}".format(a=self.corpus.author, w1=self.word1, w2=self.word2, w3=self.word3)
 
 class Quadgram(models.Model):
     """
@@ -228,6 +236,7 @@ class Sentence(models.Model):
     # TODO: create custom tagged model for storing word:tag pairs as sentences
     sentence = models.CharField(max_length=1024)
     corpus = models.ForeignKey(Corpus, related_name='sentences')
+    objects = RandomManager()
 
     def __repr__(self):
         return "{}: {}".format(self.corpus.author, self.sentence[:42])

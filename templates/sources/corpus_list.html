@@ -35,7 +35,7 @@
                     <span class="thumb-wrapper">
                                     <div style="background-image:url({{ corpus.image_url }})"
                                                 class="corpus-thumb"
-                                                     title="{{ corpus.desc }}" id="cimage{{ corpus.id }}"
+                                                     title="{{ corpus.description }}" id="cimage{{ corpus.id }}"
                                                      data-corpus_id="{{ corpus.id }}">
                                     {#  include the appropriate icon #}
                                                     {% if corpus.type == "TW" %}
@@ -53,7 +53,7 @@
                 </a>
             </td>
             <td>
-                {{ corpus.desc}}
+                {{ corpus.description}}
             </td>
             <td>
                 <span class="tag tag-pill tag-default">{{ corpus.mash_count }} uses</span>
