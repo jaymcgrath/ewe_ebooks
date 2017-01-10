@@ -24,7 +24,7 @@ class Corpus(models.Model):
     Meta representation of a linguistic source. Contains basic information but no body text. All actual
     content is stored in the other sources classes.
     """
-    TYPE_CHOICES = (
+    VARIETY_CHOICES = (
                     ("TW", "Twitter User"),
                     ("EX", "Text Excerpt"),
                     )
@@ -35,7 +35,7 @@ class Corpus(models.Model):
     updated = models.DateTimeField(auto_now=True)
     description = models.TextField(null=True, help_text='A description of this source')
     is_public = models.BooleanField(default=False)
-    variety = models.CharField(max_length=2, choices=TYPE_CHOICES, default='TW')
+    variety = models.CharField(max_length=2, choices=VARIETY_CHOICES, default='TW')
     twitter_username = models.CharField(max_length=15, unique=True, null=True)
     image_url = models.CharField(max_length=256, null=True)
     author = models.TextField(max_length=64, null=True)
@@ -68,7 +68,7 @@ class Corpus(models.Model):
         :return:
         """
 
-        if self.variety is 'TW':
+        if self.variety == 'TW':
             """
             Twitter Corpus - specific save method
             """

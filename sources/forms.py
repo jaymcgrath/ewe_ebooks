@@ -4,7 +4,7 @@ from .models import Corpus, Word, Bigram, Trigram, Quadgram, Sentence
 
 class CorpusForm(forms.ModelForm):
     """
-    Form for testing a Corpus before database insertion
+    Form for handling user Corpus submission
     """
     class Meta:
         model = Corpus
@@ -13,8 +13,12 @@ class CorpusForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CorpusForm, self).__init__(*args, **kwargs)
 
-        # Set some additional field attributes
 
+        # With the two way form and post-processing, we don't want some of these fields required from the user side
+        for key in self.fields:
+            self.fields[key].required = False
+
+        # Set some additional field attributes
         variety_attrs = {
                 'class': 'form-control',
                 'placeholder': 'Source Type',
