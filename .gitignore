@@ -24,7 +24,6 @@
 ######################
 *.log
 *.sqlite*
-*migrations*
 
 # OS generated files #
 ######################
@@ -51,6 +50,8 @@ secrets
 *secrets*
 secrets.py
 keys.py
+.env
+*.env
 
 # Ipython notebook stuff (used just for testing)#
 ####################
@@ -67,3 +68,7 @@ htmlcov
 # Backup misc #
 ###################
 /backup*
+
+# Heroku Local Stuff #
+######################
+Procfile.windows*
