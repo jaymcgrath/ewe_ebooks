@@ -1,8 +1,10 @@
-# post_compile
+# bin/post_compile
 #!/usr/bin/env bash
 
-if [ -f bin/post_compile ]; then
-    echo "-----> Running post-compile hook"
-    chmod +x bin/post_compile
-    sub-env bin/post_compile
+if [ -f bin/install_nltk_data ]; then
+    echo "-----> Running install_nltk_data"
+    chmod +x bin/install_nltk_data
+    bin/install_nltk_data
 fi
+
+echo "-----> Post-compile done"
