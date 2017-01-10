@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'extras',
     'api',
     'rest_framework',
+    'gunicorn',
 
 ]
 
