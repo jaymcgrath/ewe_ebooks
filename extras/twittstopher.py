@@ -3,10 +3,15 @@ Twitter backend functions for retrieving tweets and seeding a corpus
 
 """
 import re
+import os
 import tweepy
-from nltk import ngrams, word_tokenize, sent_tokenize
-from secrets.secrets import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
 import html
+from nltk import ngrams, word_tokenize, sent_tokenize
+
+
+# from secrets.secrets import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
+#  unused in heroku deploy ^
+
 
 class Timeline:
     """
@@ -57,8 +62,8 @@ class Timeline:
 
     def __init__(self, username, count=200, last_tweet_id=1):
         # TODO: Login to twitter for corpus generation using end user's credentials
-        auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-        auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+        auth = tweepy.OAuthHandler(os.environ['CONSUMER_KEY'], os.environ['CONSUMER_SECRET'])
+        auth.set_access_token(os.environ['ACCESS_TOKEN'], os.environ['ACCESS_TOKEN_SECRET'])
 
         # Connect to Twitter - raise
         try:

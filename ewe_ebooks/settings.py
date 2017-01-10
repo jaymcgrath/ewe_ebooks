@@ -13,19 +13,18 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 
 import os
-from secrets import secrets
 import dj_database_url
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Yes Safety net
 DEBUG = True
 
-ADMINS = secrets.ADMINS
+ADMINS = os.environ['ADMINS']
 
 # TODO: change to host IP when deployed
 
 ALLOWED_HOSTS = ['*']
-DEFAULT_FROM_EMAIL = secrets.FROM_EMAIL
+DEFAULT_FROM_EMAIL = os.environ['FROM_EMAIL']
 
 # Don't want to get spammed during dev
 if DEBUG is True:
@@ -34,9 +33,9 @@ else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = secrets.FROM_EMAIL
+EMAIL_HOST_USER = os.environ['FROM_EMAIL']
 EMAIL_PORT = '465'
-EMAIL_HOST_PASSWORD = secrets.EMAIL_PASS
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASS']
 EMAIL_SUBJECT_PREFIX = '[Django]'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
@@ -48,7 +47,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secrets.DB_KEY
+SECRET_KEY = os.environ['DB_KEY']
 
 
 
@@ -120,7 +119,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ewe_ebooks',
         'USER': 'ewe_user',
-        'PASSWORD': secrets.DB_PASSWORD,
+        'PASSWORD': os.environ['DB_PASSWORD'],
         'HOST': 'localhost',
         'PORT': '5432',
     }
