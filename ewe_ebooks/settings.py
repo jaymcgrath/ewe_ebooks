@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'gunicorn',
 
+
 ]
 
 MIDDLEWARE = [
