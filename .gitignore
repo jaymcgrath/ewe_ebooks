@@ -72,3 +72,4 @@ htmlcov
 # Heroku Local Stuff #
 ######################
 Procfile.windows*
+winserver.bat

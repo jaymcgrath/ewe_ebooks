@@ -12,6 +12,7 @@ from sources.models import Corpus
 from .forms import MashupForm
 from .models import Mashup, Output, Bot
 
+
 # Create your views here.
 class MashupCreateView(CreateView):
     """

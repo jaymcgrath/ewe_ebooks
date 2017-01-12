@@ -14,12 +14,13 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 import dj_database_url
+import whitenoise
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Yes Safety net
 DEBUG = True
 
-ADMINS = os.environ['ADMINS']
+#ADMINS = os.environ['ADMINS']
 
 # TODO: change to host IP when deployed
 
@@ -117,15 +118,15 @@ WSGI_APPLICATION = 'ewe_ebooks.wsgi.application'
 #     }
 # else:
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ewe_ebooks',
-        'USER': 'ewe_user',
-        'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+     'default': {
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'NAME': 'ewe_ebooks',
+         'USER': 'ewe_user',
+         'PASSWORD': os.environ['DB_PASSWORD'],
+         'HOST': 'localhost',
+         'PORT': '5432',
+     }
+ }
 
 # Heroku / gunicorn stuff
 db_from_env = dj_database_url.config(conn_max_age=500)
