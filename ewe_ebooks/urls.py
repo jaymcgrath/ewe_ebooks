@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-import django.contrib.auth
+from django.contrib.auth import views
 from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework import routers
@@ -24,6 +24,7 @@ from content.views import MashupCreateView, MashupListView, MashupDetailView, Ou
                           OutputListViewByUser
 from people.views import update_profile, create_profile, UserDetailView
 from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView
+from people.forms import LoginForm
 
 # Instantiate Router
 router = routers.DefaultRouter()
@@ -56,8 +57,8 @@ urlpatterns = [
     url(r'^list_output/(?P<pk>\d+)', OutputListViewByUser.as_view()),
 
     # Auth
-    url(r'^login/$', django.contrib.auth.login, name='login'),
-    url(r'^logout/$', django.contrib.auth.logout, name='logout'),
+    url(r'^login/$', views.login, {'template_name': 'people/login.html', 'authentication_form': LoginForm}, name='login'),
+    url(r'^logout/$', views.logout, name='logout'),
     url(r'^signup/$', create_profile, name='signup'),
     url(r'^edit_profile/$', update_profile),
     url(r'^dashboard/$', UserDetailView.as_view(), name='dashboard'),
