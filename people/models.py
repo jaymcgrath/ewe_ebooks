@@ -13,7 +13,7 @@ class Profile(models.Model):
     offline_name = models.CharField(max_length=88, null=True, blank=True)
     email = models.EmailField()
     bio = models.TextField(null=True, blank=True)
-    dob = models.DateField(auto_now=False)
+    dob = models.DateField(auto_now=False, null=True, blank=True)
     last_active = models.DateTimeField(auto_now=True)
     #
     # @receiver(post_save, sender=User)

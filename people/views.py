@@ -77,7 +77,8 @@ def create_profile(request):
         # GET request.. return the form
         user_form = UserCreationForm()
         profile_form = ProfileForm()
-        return render(request, 'people/create_profile.html', {'user_form': user_form, 'profile_form': profile_form})
+
+    return render(request, 'people/create_profile.html', {'user_form': user_form, 'profile_form': profile_form})
 
 
 @method_decorator(login_required, name='dispatch')
