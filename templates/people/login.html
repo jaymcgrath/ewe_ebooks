@@ -1,26 +1,31 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block more_headers %}
+    {% load static %}
+    <link href="{% static 'css/people/login.css' %}" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+{% endblock %}
 {% block notifications %}
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
 {% endblock %}
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+{% block main_content %}
+<div class="container">
+    <div class="card card-container">
+        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+        <form class="form-signin" method="post" action="">
+            {% csrf_token %}
+            <h3 class="form-signin-heading">Sign in here</h3>
+            <label for="inputUsername" class="sr-only">{{ form.username.label_tag }}</label>
+            {{ form.username }}
+            <label for="inputPassword" class="sr-only">{{ form.password.label_tag }}</label>
+            {{ form.password }}
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
-
+        </form>
+        Don't have an account? <a href="/signup/">Create one</a>
+    </div><!--card-container-->
+</div><!-- container -->
 {% endblock %}

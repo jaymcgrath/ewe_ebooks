@@ -1,15 +1,31 @@
 <!-- Header -->
 <nav class="navbar navbar-dark bg-inverse">
 <item class="nav-item pull-left" style="display: flex; flex-direction: column; justify-content: space-around;  align-items: center;">
-    <i class="fa fa-user fa-2x fa-inverse"></i>
-    <span class="tag-pill tag-default" style="font-size:.6em;">
     {% if request.user.is_authenticated %}
-        <a href="/dashboard/" style="text-decoration: none;">
-        {{ request.user.username }}
-        </a>
-    {% else %}<a href="{% url 'login' %}">Login</a>
+        <span class="tag-pill tag-default" style="font-size:.6em;">
+            <div>
+                <a href="/dashboard/" style="text-decoration: none;">
+                    {{ request.user.username }}
+                </a>
+            </div>
+        </span>
+    {%  endif %}
+    <i class="fa fa-user fa-2x fa-inverse"></i>
+    {% if request.user.is_authenticated %}
+        <span class="tag-pill" style="font-size:.6em;">
+            <div>
+                <a href="/logout/" style="text-decoration: none;">
+                    logout
+                </a>
+            </div>
+        </span>
+    {% else %}
+        <span class="tag-pill tag-default" style="font-size:.6em;">
+            <a href="{% url 'login' %}">
+                Login/Signup
+            </a>
+        </span>
     {% endif %}
-    </span>
 </item>
 
 

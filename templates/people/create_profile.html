@@ -1,10 +1,57 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load people_extras %}
+{% block more_headers %}
+    {% load static %}
+    <link href="{% static 'css/people/login.css' %}" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+{% endblock %}
+{% block notifications %}
+    {{ form.errors }}
+{% endblock %}
 
 {% block main_content %}
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ user_form.as_p }}
-        {{ profile_form.as_p }}
-        <input type="submit" value="submit" class="btn-default">
-    </form>
+    <div class="container">
+        <div class="card card-container">
+            <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+            <div class="container form-container">
+                <form action="" method="POST" class="form-signin">
+                    {% csrf_token %}
+                    <h3>Create an account</h3>
+                    <span class="control-group">
+        {#            <label for="id_username" class="control-label">{{ user_form.username.label_tag }}</label>#}
+                        {{ user_form.username|add_attrs:'class:form-control, id:id_username, placeholder: Username' }}
+                    </span>
+        {#            <label for="id_password1" >{{ user_form.password1.label_tag }}</label>#}
+                    {{ user_form.password1|add_attrs:'class:form-control, id:id_password1, placeholder: Password' }}
+        {#            <label for="id_password2" >{{ user_form.password2.label_tag }}</label>#}
+                    {{ user_form.password2|add_attrs:'class:form-control, id:id_password2, placeholder: Password (again)' }}
+        {#            <label for="id_email">{{ profile_form.email.label_tag }}</label>#}
+                    {{ profile_form.email|add_attrs:'class:form-control, id:id_email, placeholder: Your Email' }}
+        {#            <label for="id_offlinename">Your Name</label>#}
+                    {{ profile_form.offline_name|add_attrs:'class:form-control, id:id_offline_name, placeholder: Your Name' }}
+                    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign Up</button>
+                </form>
+                Already have an account? <a href="/login/">Login</a>
+            </div>
 {% endblock %}
+
+
+<!--
+<div class="container">
+    <div class="card card-container">
+        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+        <form class="form-signin" method="post" action="">
+            {% csrf_token %}
+            <h2 class="form-signin-heading">Create an account!</h2>
+            <label for="inputUsername" class="sr-only">{{ form.username.label_tag }}</label>
+            {{ form.username }}
+            <label for="inputPassword" class="sr-only">{{ form.password.label_tag }}</label>
+            {{ form.password }}
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+
+        </form>
+        Don't have an account? <a href="/signup/">Create one</a>
+    </div><!--card-container-->
+</div><!-- container -->
+-->
