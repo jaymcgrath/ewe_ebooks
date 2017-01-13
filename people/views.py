@@ -61,6 +61,7 @@ def create_profile(request):
     if request.method == 'POST':
         user_form = UserCreationForm(data=request.POST)
         profile_form = ProfileForm(data=request.POST)
+
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save(commit=False)
             user.save()
@@ -76,10 +77,7 @@ def create_profile(request):
         # GET request.. return the form
         user_form = UserCreationForm()
         profile_form = ProfileForm()
-    return render(request, 'people/create_profile.html', {
-        'user_form': user_form,
-        'profile_form': profile_form
-    })
+        return render(request, 'people/create_profile.html', {'user_form': user_form, 'profile_form': profile_form})
 
 
 @method_decorator(login_required, name='dispatch')

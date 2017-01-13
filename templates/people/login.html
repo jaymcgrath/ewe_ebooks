@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-
+{# people_extras contains custom template filter add_attrs #}
+{% load people_extras %}
 {% block more_headers %}
     {% load static %}
     <link href="{% static 'css/people/login.css' %}" rel="stylesheet">
@@ -19,9 +20,9 @@
             {% csrf_token %}
             <h3 class="form-signin-heading">Sign in here</h3>
             <label for="inputUsername" class="sr-only">{{ form.username.label_tag }}</label>
-            {{ form.username }}
+            {{ form.username|add_attrs:"class:form-control, id:lg_username, placeholder:Your Username, aria-label: Input for username" }}
             <label for="inputPassword" class="sr-only">{{ form.password.label_tag }}</label>
-            {{ form.password }}
+            {{ form.password|add_attrs:"class:form-control, id:lg_password, placeholder:Your Password, aria-label: Input for username" }}
             <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
 
         </form>

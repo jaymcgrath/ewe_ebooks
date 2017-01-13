@@ -24,7 +24,6 @@ from content.views import MashupCreateView, MashupListView, MashupDetailView, Ou
                           OutputListViewByUser
 from people.views import update_profile, create_profile, UserDetailView
 from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView
-from people.forms import LoginForm
 
 # Instantiate Router
 router = routers.DefaultRouter()
@@ -57,7 +56,7 @@ urlpatterns = [
     url(r'^list_output/(?P<pk>\d+)', OutputListViewByUser.as_view()),
 
     # Auth
-    url(r'^login/$', views.login, {'template_name': 'people/login.html', 'authentication_form': LoginForm}, name='login'),
+    url(r'^login/$', views.login, {'template_name': 'people/login.html'}, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^signup/$', create_profile, name='signup'),
     url(r'^edit_profile/$', update_profile),

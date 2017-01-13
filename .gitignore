@@ -73,3 +73,4 @@ htmlcov
 ######################
 Procfile.windows*
 winserver.bat
+shell_plus.bat
