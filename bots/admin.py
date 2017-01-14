@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MashupAlgorithm, Mashup, Output, Bot
+from .models import Bot
 
 
 class BotAdmin(admin.ModelAdmin):
@@ -11,11 +11,8 @@ class BotAdmin(admin.ModelAdmin):
             'consumer_secret',
             'access_token',
             'access_token_secret',
-            'mashup',
+            'user',
+            'mashup'
     )
 
-# Register your models here.
-
-admin.site.register(MashupAlgorithm)
-admin.site.register(Mashup)
-admin.site.register(Output)
+admin.site.register(Bot, BotAdmin)

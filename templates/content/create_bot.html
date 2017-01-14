@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% load content_extras %}
+{% block title %} Create a Twitter bot - Step 1 {% endblock %}
+
+{% block more_headers %}
+
+    <link href="{% static 'css/content/create_mashup.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block main_content %}
+    <form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+     <input type="submit" value="Create it!" class="btn-primary" id="create_mashup_button">
+    </form>
+{% endblock %}
