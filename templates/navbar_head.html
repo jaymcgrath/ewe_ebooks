@@ -1,39 +1,30 @@
 <!-- Header -->
 <nav class="navbar navbar-dark bg-inverse">
-<item class="nav-item pull-left" style="display: flex; flex-direction: column; justify-content: space-around;  align-items: center;">
-    {% if request.user.is_authenticated %}
-        <span class="tag-pill tag-default" style="font-size:.6em;">
-            <div>
-                <a href="/dashboard/" style="text-decoration: none;">
-                    {{ request.user.username }}
-                </a>
-            </div>
-        </span>
-    {%  endif %}
-    <i class="fa fa-user fa-2x fa-inverse"></i>
-    {% if request.user.is_authenticated %}
-        <span class="tag-pill" style="font-size:.6em;">
-            <div>
-                <a href="/logout/" style="text-decoration: none;">
-                    logout
-                </a>
-            </div>
-        </span>
-    {% else %}
-        <span class="tag-pill tag-default" style="font-size:.6em;">
-            <a href="{% url 'login' %}">
-                Login/Signup
-            </a>
-        </span>
-    {% endif %}
-</item>
-
+<span class="navbar-text float-xs-left">
+    <li class="nav-item dropdown">
+        <a class="nav-link navbar-inverse dropdown-toggle nav-top" href="http://example.com" id="supportedContentDropdown"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i>
+</a>
+        <div class="dropdown-menu bg-inverse" aria-labelledby="supportedContentDropdown">
+            {# Show dashboard and logout links to this user if they are logged in #}
+            {% if request.user.is_authenticated %}
+                <item class="dropdown-item">{{ request.user.username }}</item>
+                <a class="dropdown-item" href="/dashboard/">Dashboard</a>
+                <a class="dropdown-item" href="/logout/">Log Out</a>
+            {# Otherwise, show login and signup links #}
+            {% else %}
+                <a class="dropdown-item" href="/login/">Log in</a>
+                <a class="dropdown-item" href="/signup/">Sign Up</a>
+            {% endif %}
+        </div>
+    </li>
+</span>
 
 <span class="navbar-text float-xs-left">
     <li class="nav-item dropdown">
-        <a class="nav-link navbar-inverse dropdown-toggle" href="http://example.com" id="supportedContentDropdown"
+        <a class="dropdown-toggle nav-top" href="http://example.com" id="supportedContentDropdown"
            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Output</a>
-        <div class="dropdown-menu" aria-labelledby="supportedContentDropdown">
+        <div class="dropdown-menu bg-inverse" aria-labelledby="supportedContentDropdown">
             <a class="dropdown-item" href="/list_output/">Browse Popular</a>
             {# Show a link to this user's unique content if they are logged in #}
             {% if request.user.is_authenticated %}
@@ -47,7 +38,7 @@
     <li class="nav-item dropdown">
         <a class="nav-link navbar-inverse dropdown-toggle" href="http://example.com" id="supportedContentDropdown"
            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Combinations</a>
-        <div class="dropdown-menu" aria-labelledby="supportedContentDropdown">
+        <div class="dropdown-menu bg-inverse" aria-labelledby="supportedContentDropdown">
             <a class="dropdown-item" href="/list_mashups/">Browse</a>
             <a class="dropdown-item" href="/create_mashup/">Create</a>
             <a class="dropdown-item" href="/list_mashups/">Popular</a>
@@ -57,9 +48,9 @@
 
 <span class="navbar-text float-xs-left">
     <li class="nav-item dropdown">
-        <a class="nav-link navbar-inverse dropdown-toggle" href="http://example.com" id="supportedContentDropdown"
+        <a class="nav-link navbar-inverse dropdown-toggle" href="#" id="supportedContentDropdown"
            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sources</a>
-        <div class="dropdown-menu" aria-labelledby="supportedContentDropdown">
+        <div class="dropdown-menu bg-inverse" aria-labelledby="supportedContentDropdown">
             <a class="dropdown-item" href="/list_sources/">Browse Existing Sources</a>
             <a class="dropdown-item" href="/add_source/">Add A Source</a>
             <!-- management link placeholder
