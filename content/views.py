@@ -214,6 +214,12 @@ class BotListViewByUser(ListView):
         qs = super().get_queryset()
         return qs.filter(user__id=self.kwargs['pk'])
 
+class BotCreateView(CreateView):
+    """
+    Basic create view for defining a bot - oauth stuff happens separately
+    """
+    model = Bot
+
 
 
 
