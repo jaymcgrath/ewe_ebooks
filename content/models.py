@@ -39,7 +39,7 @@ class Mashup(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     public = models.BooleanField(default=False, help_text='Whether to display this mashup and its output publicly')
     user = models.ForeignKey(User, related_name='mashups', default=1)
-    bot = models.ManyToManyField(Bot, null=True, related_name='mashups')
+    bot = models.ManyToManyField(Bot, related_name='mashups')
 
     def __str__(self):  # __unicode__ on Python 2
         return self.title

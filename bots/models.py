@@ -19,15 +19,18 @@ class Bot(models.Model):
     )
     name = models.CharField(max_length=64, help_text='A name for this bot (can be different from twitter username)')
     description = models.TextField(null=True, help_text='A brief description of how this bot looks on Twitter')
-    post_frequency = models.DurationField(null=True, choices=POST_FREQS, default='12 hours', help_text='how frequently this bot posts')
+    post_frequency = models.DurationField(null=True, choices=POST_FREQS, default='12 hours',
+                                          help_text='how frequently this bot posts')
     post_count = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True, help_text='when this bot was created')
     updated = models.DateTimeField(auto_now=True, help_text='the last time this bot was updated')
-    consumer_key = models.CharField(max_length=255, null=True, help_text='consumer key from dev.twitter.com')
-    consumer_secret = models.CharField(max_length=255, null=True, help_text='consumer secret from dev.twitter.com ')
-    access_token = models.CharField(max_length=255, null=True, help_text='access token from dev.twitter.com')
-    access_token_secret = models.CharField(max_length=255, null=True, help_text='access token secret from dev.twitter.com')
-    mashup = models.ManyToManyField('content.Mashup', null=True, related_name='bots')
+    request_token = models.CharField(max_length=255, null=True, blank=True, help_text='temporary key from oauth')
+    request_token_secret = models.CharField(max_length=255, null=True, blank=True, help_text='temporary key from oauth')
+    access_token = models.CharField(max_length=255, null=True, blank=True,
+                                    help_text='permanent access token for posting to twitter')
+    access_token_secret = models.CharField(max_length=255, null=True, blank=True,
+                                           help_text='permanent access token secret for posting to twitter')
+    mashup = models.ManyToManyField('content.Mashup', related_name='bots')
     user = models.ForeignKey(User, related_name='bots')
 
 

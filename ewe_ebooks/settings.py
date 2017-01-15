@@ -21,8 +21,6 @@ DEBUG = True
 
 #ADMINS = os.environ['ADMINS']
 
-# TODO: change to host IP when deployed
-
 ALLOWED_HOSTS = ['*']
 DEFAULT_FROM_EMAIL = os.environ['FROM_EMAIL']
 

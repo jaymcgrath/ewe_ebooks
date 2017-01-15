@@ -22,7 +22,7 @@ from api.content_api import OutputViewset
 from content.views import MashupCreateView, MashupListView, MashupDetailView, OutputCreateView,\
                           OutputDetailView, OutputListView, DisplayOutputView, OutputRandomView,\
                           OutputListViewByUser
-from bots.views import BotCreateView, BotDetailView
+from bots.views import BotCreateView, BotDetailView, BotAuthorizeView
 from people.views import update_profile, create_profile, UserDetailView
 from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView
 
@@ -56,9 +56,10 @@ urlpatterns = [
     url(r'^list_output/$', OutputListView.as_view(), name='output-list'),
     url(r'^list_output/(?P<pk>\d+)', OutputListViewByUser.as_view()),
 
-    # Bots - under content app but deserving of own block
+    # Bots - Creation and Management
     url(r'^create_bot/$', BotCreateView.as_view()),
     url(r'^view_bot/(?P<pk>\d+)/$', BotDetailView.as_view(), name='bot-detail'),
+    url(r'^authorize_bot/(?P<pk>\d+)/$', BotAuthorizeView.as_view(), name='bot-authorize'),
 
     # Auth
     url(r'^login/$', views.login, {'template_name': 'people/login.html'}, name='login'),
