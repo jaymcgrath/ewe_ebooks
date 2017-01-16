@@ -9,6 +9,7 @@ import html
 from nltk import ngrams, word_tokenize, sent_tokenize
 
 
+
 # from secrets.secrets import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
 #  unused in heroku deploy ^, using environment vars instead (see below)
 
@@ -169,12 +170,6 @@ class Timeline:
     def __len__(self):
         return len(self.tweets)
 
-class Tweet:
-    """
-    Individual instance of a tweet object. Used for posting tweets from various bots
-    """
-    # TODO: flesh out Tweet object - Tweet.post(), Tweet.retweets() methods
-    pass
 
 
 class TwitterUser:
