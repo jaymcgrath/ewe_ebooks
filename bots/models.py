@@ -4,13 +4,12 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-# Create your models here.
 class Bot(models.Model):
     """
     Bot for posting a mashups to twitter
     """
 
-    # Note - Duration field takes a timedelta object
+    # Note - post_frequency is a duration field that takes a timedelta object
     POST_FREQS = (
                 (datetime.timedelta(hours=6), 'Four times daily'),
                 (datetime.timedelta(hours=12), 'Twice daily'),
@@ -33,7 +32,6 @@ class Bot(models.Model):
     mashup = models.ManyToManyField('content.Mashup', related_name='bots')
     user = models.ForeignKey(User, related_name='bots')
 
-
     def __str__(self):  # __unicode__ on Python 2
         return "{n}: postfreq: {pf} [{u}]".format(n=self.name, pf=self.post_frequency, u=self.user.username)
 
@@ -42,3 +40,32 @@ class Bot(models.Model):
 
     def get_absolute_url(self):
       return "/view_bot/{pk}/".format(pk=self.id)
+
+class TwitterStatus(models.Model):
+    """
+    Model for logging Mashup Output posted to twitter by Bots
+    """
+
+    item_id = models.BigIntegerField(help_text='twitter status ID of this tweet')
+    created = models.DateTimeField(auto_now_add=True, help_text='local timestamp')
+    created_twitter = models.DateTimeField(null=True, help_text='twitter creation timestamp')
+    bot = models.ForeignKey(Bot, related_name='tweets')
+
+    # quoted model names is necessary to prevent circular imports
+    mashup = models.ForeignKey('content.Mashup', related_name='tweets')
+    output = models.ForeignKey('content.Output', related_name='tweets', help_text='the output object posted to twitter')
+    text = models.CharField(max_length=157, help_text='the actual body of the tweet as posted on twitter')
+    retweet_count = models.IntegerField(default=0, help_text='the number of retweets this tweet has received')
+    screen_name = models.CharField(max_length=16, help_text='screen_name of the account that posted this')
+
+    def __str__(self):
+        return "<{b}>{t}".format(b=self.bot.name, t=self.text)
+
+    def __repr__(self):
+        return "<{b}>{t}".format(b=self.bot.name, t=self.text)
+
+    def get_absolute_url(self):
+      return "/view_tweet/{pk}/".format(pk=self.id)
+
+
+

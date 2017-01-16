@@ -97,6 +97,7 @@ class BotAuthorizeView(DetailView):
             request_token = self.object.request_token
 
             if oauth_token != request_token:
+                # Note - these tokens are temporary throwaways, so exposing them in an exception msg here is OK
                 error_msg = "Error, oauth_token {} and request_token {} do not match".format(oauth_token, request_token)
                 raise Exception(error_msg)
 
