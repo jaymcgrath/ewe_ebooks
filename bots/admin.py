@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Bot, TwitterStatus
+from .models import Bot, Tweet
 
 
 class BotAdmin(admin.ModelAdmin):
@@ -15,12 +15,11 @@ class BotAdmin(admin.ModelAdmin):
             'mashup',
     )
 
-class TwitterStatusAdmin(admin.ModelAdmin):
+class TweetAdmin(admin.ModelAdmin):
     fields = (
-            'item_id',
+            'tweet_id',
             'created_twitter',
             'bot',
-            'mashup',
             'output',
             'text',
             'retweet_count',
@@ -28,4 +27,4 @@ class TwitterStatusAdmin(admin.ModelAdmin):
     )
 
 admin.site.register(Bot, BotAdmin)
-admin.site.register(TwitterStatus, TwitterStatusAdmin)
+admin.site.register(Tweet, TweetAdmin)

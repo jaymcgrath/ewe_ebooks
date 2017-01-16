@@ -46,15 +46,16 @@ class Bot(models.Model):
     def get_absolute_url(self):
       return "/view_bot/{pk}/".format(pk=self.id)
 
-class TwitterStatus(models.Model):
+class Tweet(models.Model):
     """
     Model for logging Mashup Output posted to twitter by Bots
     """
 
-    item_id = models.BigIntegerField(help_text='twitter status ID of this tweet')
+    tweet_id = models.BigIntegerField(help_text='twitter status ID of this tweet')
     created = models.DateTimeField(auto_now_add=True, help_text='local timestamp')
     created_twitter = models.DateTimeField(null=True, help_text='twitter creation timestamp')
     bot = models.ForeignKey(Bot, related_name='tweets')
+    mashup = models.ForeignKey('content.Mashup', related_name='tweets', help_text='the mashup used in creation')
     output = models.ForeignKey('content.Output', related_name='tweets', help_text='the output object posted to twitter')
     text = models.CharField(max_length=157, help_text='the actual body of the tweet as posted on twitter')
     retweet_count = models.IntegerField(default=0, help_text='the number of retweets this tweet has received')
@@ -84,10 +85,11 @@ class TwitterStatus(models.Model):
             api = tweepy.API(auth)
 
             # Post to twitter and record details to a status object
-            this_tweet = api.update_status(self.output.body)
+            # Gotta just truncate it at 140
+            this_tweet = api.update_status(self.output.body[:140])
 
             # Assign relevant details to our object
-            self.item_id = this_tweet.id
+            self.tweet_id = this_tweet.id
             self.created_twitter = this_tweet.created_at
             self.text = this_tweet.text
             self.screen_name = this_tweet.user.screen_name

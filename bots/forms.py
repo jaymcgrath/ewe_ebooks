@@ -1,5 +1,5 @@
 from django import forms
-from .models import Bot
+from .models import Bot, Tweet
 
 
 class BotForm(forms.ModelForm):
@@ -13,4 +13,17 @@ class BotForm(forms.ModelForm):
                 'name',
                 'description',
                 'post_frequency',
+                'mashup',
                  )
+
+class TweetForm(forms.ModelForm):
+    """
+    Passthrough form for creating a tweet
+    """
+
+    class Meta:
+        model = Tweet
+        fields = (
+                'bot',
+                'output',
+        )

@@ -1,9 +1,10 @@
 from django.urls import reverse
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View, UpdateView
 from django.views.generic.edit import CreateView
 from django.shortcuts import redirect
 
-from .models import Bot
+from .models import Bot, Tweet
+from content.models import Output
 from .forms import BotForm
 
 import urllib.parse
@@ -25,6 +26,11 @@ class BotDetailView(DetailView):
     model = Bot
     context_object_name = 'bot'
     template_name = 'bots/bot_detail.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
 
 class BotListViewByUser(ListView):
     model = Bot
@@ -59,6 +65,17 @@ class BotCreateView(CreateView):
     def get_success_url(self):
         return reverse('bot-detail', args=(self.object.id,))
 
+class BotEditView(UpdateView):
+    """
+    View for updating parts of a bot
+    """
+    model = Bot
+    template_name = 'bots/bot_edit.html'
+    form_class = BotForm
+
+    def get_success_url(self):
+        return reverse('bot-detail', args=(self.object.id,))
+
 class BotAuthorizeView(DetailView):
     """
     view for three-legged oauth key retrieval to allow ewe_ebooks to post on user's behalf
@@ -80,15 +97,13 @@ class BotAuthorizeView(DetailView):
          authorization process
         """
         self.object = self.get_object()
-        try:
-            oauth_token = request.GET['oauth_token']
-            oauth_verifier = request.GET['oauth_verifier']
-        except:
-            # Set to Null if non-existant
-            oauth_token = str()
-            oauth_verifier = str()
 
-        # Check if this is a redirect from twitter authorization with the tokens:
+        # Set token values to empty str if they're not there
+        oauth_token = request.GET.get('oauth_token', '')
+        oauth_verifier = request.GET.get('oauth_verifier', '')
+
+
+        # Check if this is a callback from twitter authorization with the tokens:
         if oauth_token and oauth_verifier:
             """
             Ok, this is an oauth_callback from twitter, we have both vars in the GET env
@@ -196,6 +211,38 @@ class BotAuthorizeView(DetailView):
         return context
 
 
+class TweetCreateView(View):
+    """
+    Custom View for creating a tweet with a fully configured bot
+    """
+
+    def get(self, *args, **kwargs):
+
+        # Bot ID should have come in as a pk
+        this_bot = Bot.objects.get(id=self.kwargs['pk'])
+
+        # Bots can have multiple mashups, so select one at random
+        this_mashup = this_bot.mashup.random()
+
+        # Now, we just make an output, attach all the stuff to a Tweet instance, and save it
+
+        this_output = Output(mashup=this_mashup)
+        this_output.save()
+
+        this_tweet = Tweet(bot=this_bot, output=this_output, mashup=this_mashup)
+        this_tweet.save()
+
+        # OK, redirect to view what we just posted
+        return redirect(reverse('tweet-detail', args=(this_tweet.pk,)))
+
+
+class TweetDetailView(DetailView):
+    """
+    Basic view for displaying a single tweet
+    """
+    model = Tweet
+    context_object_name = 'tweet'
+    template_name = 'bots/tweet_detail.html'
 
 
 

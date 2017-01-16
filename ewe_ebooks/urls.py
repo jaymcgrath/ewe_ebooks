@@ -22,7 +22,7 @@ from api.content_api import OutputViewset
 from content.views import MashupCreateView, MashupListView, MashupDetailView, OutputCreateView,\
                           OutputDetailView, OutputListView, DisplayOutputView, OutputRandomView,\
                           OutputListViewByUser
-from bots.views import BotCreateView, BotDetailView, BotAuthorizeView
+from bots.views import BotCreateView, BotEditView, BotDetailView, BotAuthorizeView, TweetCreateView, TweetDetailView
 from people.views import update_profile, create_profile, UserDetailView
 from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView
 
@@ -60,6 +60,11 @@ urlpatterns = [
     url(r'^create_bot/$', BotCreateView.as_view()),
     url(r'^view_bot/(?P<pk>\d+)/$', BotDetailView.as_view(), name='bot-detail'),
     url(r'^authorize_bot/(?P<pk>\d+)/$', BotAuthorizeView.as_view(), name='bot-authorize'),
+    url(r'^edit_bot/(?P<pk>\d+)/$', BotEditView.as_view(), name='bot-edit'),
+
+    # Tweets - created by bots app
+    url(r'^view_tweet/(?P<pk>\d+)/$', TweetDetailView.as_view(), name='tweet-detail'),
+    url(r'^create_tweet/(?P<pk>\d+)/$', TweetCreateView.as_view(), name='tweet-create'),
 
     # Auth
     url(r'^login/$', views.login, {'template_name': 'people/login.html'}, name='login'),

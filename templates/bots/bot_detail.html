@@ -4,87 +4,115 @@
     <!-- custom css and js includes go here -->
 {% endblock %}
 {% block title %}
-Detail for {{ bot.name }}
+    Detail for {{ bot.name }}
 {% endblock %}
 {% block main_content %}
     <div class="container">
-    <div class="card">
+    <div class="card"><!--main card wrapper -->
         <div class="card-header text-xs-center">
             <span class="h3 text-xs-center">
-                {{ bot.name }}
+                {{ bot.name }} <i class="fa fa-gears"></i>
             </span>
+
         </div><!-- end card header -->
-        <div class="card-block">
+        <div class="card-block"><!--main card block containing the columns -->
           <div class="row">
-            <div class="col-xs-12 col-md-6">
+            <div class="col-md-12 col-lg-6">
+
+                <div class="card">
+                    <div class="card-header bg-warning text-xs-center">
+                        <span class="h5">
+                            <i class="fa fa-bullhorn"></i>
+                            Post to Twitter
+                        </span>
+                    </div>
+                    <div class="card-block text-xs-center">
+                            <a class="btn btn-primary btn-lg" href="/create_tweet/{{ bot.pk }}/" target="_blank">
+                            Post Random Content Directly to Twitter
+                            </a>
+                    </div><!--card-block-->
+                </div><!--card-->
                 <div class="card">
                     <div class="card-header bg-warning text-xs-center">
                         <span class="h5 text-xs-center">
-                            Mashups: {{ bot.mashup.all|length }}
+                            <i class="fa fa-random"></i>
+                            Mashups
                         </span>
                     </div>
-                    <div class="card-block">
-                    {% if bot.mashup.all|length < 1 %}
+                    <div class="card-block text-xs-center">
+                    {% if bot.mashup.all|length == 0 %}
                         <p class="text-xs-center">
                             This bot doesn't have any mashups attached yet.
                         </p>
-                        <p class="text-xs-center">
-                            To select mashups, click <a href="/edit_bot/{{ bot.pk }}/">here</a>
-                        </p>
                     {% else %}
+                        <p class="h6 text-xs-center">
+                            {{ bot.name }} has {{ bot.mashup.all|length }} mashups attached
+                        </p>
+                        <p class="text-xs-center">
+                            To choose mashups, click <a href="/edit_bot/{{ bot.pk }}/">here</a>
+                        </p>
                         <table class="table table-striped">
                         <thead class="thead-inverse">
                             <tr>
-                                <th class="text-xs-left">Title</th>
-                                <th class="text-xs-center">Sources</th>
+                                <th class="text-xs-left">
+                                    <span class="h4">Title</span>
+                                </th>
+                                <th class="text-xs-center">
+                                    <span class="tag tag-pill tag-default">Created</span>
+                                    <span class="tag tag-pill bg-primary">Tweeted</span>
+                                </th>
                             </tr>
                         </thead>
                         {% for mashup in bot.mashup.all%}
-                            <tr class="form-row">
+                            <tr class="form-row mashup-title"
+                            >
                                 <td>
-                                    <a href="/view_mashup/{{ mashup.id }}/">
+                                    <a href="/view_mashup/{{ mashup.id }}/" data-toggle="popover" data-placement="right"
+                                    data-content='
+                                                 {% for corpus in mashup.corpora.all %}
+                                                    {% if corpus %}
+                                                        <span class="thumb-wrapper">
+                                                            <div style="background-image:url({{ corpus.image_url }})"
+                                                                class="corpus-thumb" title="{{ corpus.desc }}" id="cimage{{ corpus.id }}"
+                                                                data-corpus_id="{{ corpus.id }}">
+                                                               {#  include the appropriate icon #}
+                                                                {% if corpus.type == "TW" %}
+                                                                    <i class="fa fa-twitter"></i>
+                                                                {% elif corpus.type == "EX" %}
+                                                                    <i class="fa fa-book"></i>
+                                                                {% endif %}
+                                                            </div>
+                                                        </span>
+                                                        {% if not forloop.last %}
+                                                        {# include the plus between elements #}
+                                                        <span class="preview-plus">
+                                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                                        </span>
+                                                        {% endif %} {# end inner loop #}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                '">
                                     {{ mashup.title }}
                                     </a>
-                                    <span class="tag tag-pill tag-default">{{ mashup.outputs.count }}</span>
                                 </td>
                                 <td>
-                                    <div class="corpus-preview">
-                                            {% for corpus in mashup.corpora.all %}
-                                                {% if corpus %}
-                                                    <span class="thumb-wrapper">
-                                                        <div style="background-image:url({{ corpus.image_url }})"
-                                                            class="corpus-thumb" title="{{ corpus.desc }}" id="cimage{{ corpus.id }}"
-                                                            data-corpus_id="{{ corpus.id }}">
-                                                           {#  include the appropriate icon #}
-                                                            {% if corpus.type == "TW" %}
-                                                                <i class="fa fa-twitter"></i>
-                                                            {% elif corpus.type == "EX" %}
-                                                                <i class="fa fa-book"></i>
-                                                            {% endif %}
-                                                        </div>
-                                                    </span>
-                                        {% if not forloop.last %}
-                                            {# include the plus between elements #}
-                                            <span class="preview-plus">
-                                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                            </span>
-                                        {% endif %} {# end inner loop #}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
+                                <span class="tag tag-pill tag-default">{{ mashup.outputs.count }}</span>
+                                <span class="tag tag-pill bg-primary">{{ mashup.tweets.count }}</span>
                                 </td>
                             </tr>
                         {% endfor %}
                         </table>
                     {% endif %}
-                    </div>
-                </div>
-            </div>
-        <div class="col-xs-12 col-md-6">
+                    </div><!--cardblock-->
+                </div><!--card-->
+            </div><!--col-->
+
+        <div class="col-md-12 col-lg-6">
             <div class="card">
                 <div class="card-header bg-warning text-xs-center">
                     <span class="h5 text-xs-center">
-                                Authorization
+                                <i class="fa fa-sign-in"></i>
+                        Authorization
                             </span>
                 </div>
                 <div class="card-block">
@@ -123,10 +151,55 @@ Detail for {{ bot.name }}
             </div><!--card-->
             <div class="card">
                 <div class="card-header bg-warning text-xs-center">
-                    Activity Report
+                    <span class="h5 text-xs-center">
+                       <i class="fa fa-twitter"></i>
+                        Activity Report
+                    </span>
                 </div>
                 <div class="card-block">
+                            {% with bot.tweets.all.0 as most_recent_tweet %}
+                                <p>
 
+                                    {{ bot.name }} has tweeted
+                                    <span class="tag tag-pill bg-primary">
+                                        {{ bot.tweets.all|length }}
+                                    </span>
+                                    times total
+                                </p>
+                                    <i class="fa fa-birthday-cake"></i>
+                                    This bot was created on
+                                    <span class="tag tag-pill bg-info">
+                                        {{ bot.created|date }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <i class="fa fa-clock-o"></i>
+                                    {% if most_recent_tweet.created_twitter is None %}
+                                        This bot hasn't tweeted yet.
+                                    {% else %}
+                                        The most recent tweet was created at
+                                        <span class="tag tag-pill bg-success">
+                                            {{ most_recent_tweet.created_twitter }}
+                                        </span>
+                                    {% endif %}
+                                </p>
+                                <p>
+                                   <i class="fa fa-drivers-license"></i>
+                                    {% if most_recent_tweet.screen_name is None %}
+                                        The latest screen name for this bot will appear here.
+                                    {% else %}
+                                        Most recently tweeting as
+                                        <span class="tag tag-pill bg-primary">
+                                            {{ most_recent_tweet.screen_name }}
+                                        </span>
+                                    {% endif %}
+                                </p>
+                                {% if most_recent_tweet.screen_name is not None %}
+                                    <a class="twitter-timeline"  data-height="400" href="https://twitter.com/{{ most_recent_tweet.screen_name }}">
+                                        Tweets by {{ most_recent_tweet.screen_name }}</a>
+                                    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+                                {% endif %}
+                            {% endwith %}
                 </div>
             </div>
        </div><!--col-->
@@ -134,4 +207,9 @@ Detail for {{ bot.name }}
     </div><!--outer card -->
   </div><!-- container -->
 
+{% endblock %}
+
+{% block footers %}
+    <script src="/static/js/bots/bot_detail.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 {% endblock %}
