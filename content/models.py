@@ -4,9 +4,10 @@ from django.db.models import F
 
 from bots.models import Bot
 from extras import mashup_algorithms
-from sources.models import Corpus, Sentence
 from .managers import RandomManager
 
+# Import the whole thing to avoid circular imports issues w extras.twittstopher and sources.models
+from sources.models import Corpus
 
 # Create your models here.
 class MashupAlgorithm(models.Model):
@@ -37,7 +38,7 @@ class Mashup(models.Model):
 
     title = models.CharField(max_length=32)
     description = models.TextField()
-    corpora = models.ManyToManyField(Corpus, related_name='mashups')
+    corpora = models.ManyToManyField('sources.Corpus', related_name='mashups')
     algorithm = models.CharField(max_length=3, choices=ALGOS, default='MJN')
     created = models.DateTimeField(auto_now_add=True)
     public = models.BooleanField(default=False, help_text='Whether to display this mashup and its output publicly')
@@ -63,7 +64,7 @@ class Output(models.Model):
     generated = models.DateTimeField(auto_now_add=True)
     num_votes = models.PositiveIntegerField(default=0)
     mashup = models.ForeignKey(Mashup, related_name='outputs')
-    sentences = models.ManyToManyField(Sentence, related_name='outputs')
+    sentences = models.ManyToManyField('sources.Sentence', related_name='outputs')
 
 
     def save(self, *args, **kwargs):
@@ -87,6 +88,7 @@ class Output(models.Model):
 
         # Update mash counts of the source corpora
         for corpus in self.mashup.corpora.all():
+
             Corpus.objects.filter(id=corpus.id).update(mash_count=F('mash_count') + 1)
 
 
