@@ -1,6 +1,7 @@
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
+from django.shortcuts import redirect
 
 from .models import Bot
 from .forms import BotForm
@@ -66,23 +67,67 @@ class BotAuthorizeView(DetailView):
     context_object_name = 'bot'
     template_name = 'bots/bot_authorize.html'
 
-    # TODO: check GET dict for the following vars: oauth_token auth_verifier - if exist, write to db and redirect back to bot view
+    # Vars for oauth dance
+    REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
+    ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
+    AUTHORIZE_URL = 'https://api.twitter.com/oauth/authorize'
 
-    def get_bot_auth_url(self):
+
+
+    def get(self, request, *args, **kwargs):
         """
-        Function for generating three-legged oauth url -
-        writes temporary keys to bot.request instance for retrieval by the callback func
+        Overwrite the default get method for this view so we can use the same view for both parts of the
+         authorization process
+        """
+        self.object = self.get_object()
+        try:
+            oauth_token = request.GET['oauth_token']
+            oauth_verifier = request.GET['oauth_verifier']
+        except:
+            # Set to Null if non-existant
+            oauth_token = str()
+            oauth_verifier = str()
 
+        # Check if this is a redirect from twitter authorization with the tokens:
+        if oauth_token and oauth_verifier:
+            """
+            Ok, this is an oauth_callback from twitter, we have both vars in the GET env
+             extract them and compare to the values in our DB, then generate and store a permanent token pair
+            """
+            request_token = self.object.request_token
+
+            if oauth_token != request_token:
+                error_msg = "Error, oauth_token {} and request_token {} do not match".format(oauth_token, request_token)
+                raise Exception(error_msg)
+
+            oauth_token_secret = self.object.request_token_secret
+
+            access_token = self.get_access_token(oauth_token, oauth_token_secret, oauth_verifier)
+
+            self.object.access_token = access_token['oauth_token']
+            self.object.access_token_secret = access_token['oauth_token_secret']
+            self.object.save()
+
+            # All saved and ready to roll. Redirect to bot detail page
+            return redirect('bot-detail', pk=self.object.pk)
+
+        # OK, not a callback.. generate an oauth authorize url via get_context_data method
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+
+    def get_request_token(self):
+        """
+        Function for generating initial request token for three-legged oauth
+        Takes no input, returns a request_token dict with two keys, oauth_token and oauth_token_secret
         """
 
-        request_token_url = 'https://api.twitter.com/oauth/request_token'
-        access_token_url = 'https://api.twitter.com/oauth/access_token'
-        authorize_url = 'https://api.twitter.com/oauth/authorize'
         # TODO : implement request.build_absolute_uri(reverse('view_name', args=(obj.pk, ))) below for more portability
-        callback_url = 'http://127.0.0.1:8000/authorize_bot/{}/'.format(self.kwargs['pk'])
+        callback_url = 'http://127.0.0.1:8000/authorize_bot/{}/'.format(self.object.pk)
+
         consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
         client = oauth.Client(consumer)
-        resp, content = client.request(request_token_url, "POST",
+        resp, content = client.request(self.REQUEST_TOKEN_URL, "POST",
                                        body=urllib.parse.urlencode({'oauth_callback':callback_url}))
 
         if resp['status'] != '200':
@@ -93,13 +138,59 @@ class BotAuthorizeView(DetailView):
         # urllib returns bytes, which will need to be decoded using the string.decode() method before use
         request_token = {key.decode(): value.decode() for key, value in request_token.items()}
 
-        return("{}?oauth_token={}".format(authorize_url, request_token['oauth_token']))
+        # Return the token dict containing token and secret
+        return(request_token)
 
-    # Add the authorization url to the context so we can present it to the user
+    def get_access_token(self, oauth_token, oauth_token_secret, oauth_verifier):
+        """
+        Func for final leg of three-legged oauth,
+        takes token and secret returned in oauth_callback GET dict and
+         exchanges them for the permanent access token and secret
+        returns an access_token dict with two keys, oauth_token and oauth_token_secret
+        """
+        token = oauth.Token(oauth_token, oauth_token_secret)
+        token.set_verifier(oauth_verifier)
+        consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+        client = oauth.Client(consumer, token)
+
+        # Now we fire the request at access token url instead of request token
+        resp, content = client.request(self.ACCESS_TOKEN_URL, "POST")
+
+        if resp['status'] != '200':
+            raise Exception("Invalid response %s." % resp['status'])
+
+        access_token = dict(urllib.parse.parse_qsl(content))
+
+        # urllib returns bytes, which will need to be decoded using the string.decode() method before use
+        access_token = {key.decode(): value.decode() for key, value in access_token.items()}
+
+        # Return the token dict containing token and secret
+        return (access_token)
+
+
+
 
     def get_context_data(self, **kwargs):
+        """
+        Add the authorization url to the context so we can link it in the template
+        save the request token data to model for later comparison
+        """
+
         context = super().get_context_data(**kwargs)
-        bot_auth_url = self.get_bot_auth_url()
+
+        # Generate temporary auth tokens
+        request_token = self.get_request_token()
+
+        # Retrieve our model instance
+        this_bot = self.get_object()
+
+        # Update and save tokens to db for later comparison
+        this_bot.request_token = request_token['oauth_token']
+        this_bot.request_token_secret = request_token['oauth_token_secret']
+        this_bot.save()
+
+        # Format url with the request token and add it to the context
+        bot_auth_url = "{}?oauth_token={}".format(self.AUTHORIZE_URL, request_token['oauth_token'])
         context.update({'bot_auth_url': bot_auth_url})
         return context
 

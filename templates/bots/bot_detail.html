@@ -11,10 +11,16 @@ Detail for {{ bot.name }}
     <div class="container">
         <div class="card-header text-xs-center">
             {# Show prompt to authorize/configure twitter oauth #}
-            {% if not bot.consumer_secret %}
+            {% if not bot.access_token %}
                 <p>It looks like you haven't configured this bot to post on twitter yet.</p>
                 <p>To get started, create a new <a href="http://www.twitter.com/">Twitter</a> account for this bot and log in to it.</p>
-                <p>After that, click <a href="/authorize_bot/{{ bot.id }}/">here</p>
+            <p>After that, click <a href="/authorize_bot/{{ bot.id }}/">here</a></p>
+            {% else %}
+                <p> This bot seems to be authorized for twitter. To re-authorize,
+                    <a href="/authorize_bot/{{ bot.id }}/">
+                        here
+                    </a>
+                </p>
             {% endif %}
         </div>
         </div>
