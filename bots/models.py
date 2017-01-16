@@ -1,8 +1,13 @@
 import datetime
+import os
 
+import tweepy
 from django.contrib.auth.models import User
 from django.db import models
 
+
+CONSUMER_KEY = os.environ['CONSUMER_KEY']
+CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
 
 class Bot(models.Model):
     """
@@ -50,9 +55,6 @@ class TwitterStatus(models.Model):
     created = models.DateTimeField(auto_now_add=True, help_text='local timestamp')
     created_twitter = models.DateTimeField(null=True, help_text='twitter creation timestamp')
     bot = models.ForeignKey(Bot, related_name='tweets')
-
-    # quoted model names is necessary to prevent circular imports
-    mashup = models.ForeignKey('content.Mashup', related_name='tweets')
     output = models.ForeignKey('content.Output', related_name='tweets', help_text='the output object posted to twitter')
     text = models.CharField(max_length=157, help_text='the actual body of the tweet as posted on twitter')
     retweet_count = models.IntegerField(default=0, help_text='the number of retweets this tweet has received')
@@ -66,6 +68,33 @@ class TwitterStatus(models.Model):
 
     def get_absolute_url(self):
       return "/view_tweet/{pk}/".format(pk=self.id)
+
+    def save(self, *args, **kwargs):
+        """
+        attempt to generate an output instance and post it to twitter, log result
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        if not self.pk:
+            # Only post to twitter when creating a new object
+            auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+            auth.set_access_token(self.bot.access_token, self.bot.access_token_secret)
+            api = tweepy.API(auth)
+
+            # Post to twitter and record details to a status object
+            this_tweet = api.update_status(self.output.body)
+
+            # Assign relevant details to our object
+            self.item_id = this_tweet.id
+            self.created_twitter = this_tweet.created_at
+            self.text = this_tweet.text
+            self.screen_name = this_tweet.user.screen_name
+
+        # Either way, save it
+
+        super().save(*args, **kwargs)
 
 
 
