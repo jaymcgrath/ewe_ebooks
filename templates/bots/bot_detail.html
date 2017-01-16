@@ -6,24 +6,132 @@
 {% block title %}
 Detail for {{ bot.name }}
 {% endblock %}
-
 {% block main_content %}
     <div class="container">
+    <div class="card">
         <div class="card-header text-xs-center">
-            {# Show prompt to authorize/configure twitter oauth #}
-            {% if not bot.access_token %}
-                <p>It looks like you haven't configured this bot to post on twitter yet.</p>
-                <p>To get started, create a new <a href="http://www.twitter.com/">Twitter</a> account for this bot and log in to it.</p>
-            <p>After that, click <a href="/authorize_bot/{{ bot.id }}/">here</a></p>
-            {% else %}
-                <p> This bot seems to be authorized for twitter. To re-authorize,
-                    <a href="/authorize_bot/{{ bot.id }}/">
-                        here
-                    </a>
-                </p>
-            {% endif %}
-        </div>
-        </div>
-    </div>
+            <span class="h3 text-xs-center">
+                {{ bot.name }}
+            </span>
+        </div><!-- end card header -->
+        <div class="card-block">
+          <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header bg-warning text-xs-center">
+                        <span class="h5 text-xs-center">
+                            Mashups: {{ bot.mashup.all|length }}
+                        </span>
+                    </div>
+                    <div class="card-block">
+                    {% if bot.mashup.all|length < 1 %}
+                        <p class="text-xs-center">
+                            This bot doesn't have any mashups attached yet.
+                        </p>
+                        <p class="text-xs-center">
+                            To select mashups, click <a href="/edit_bot/{{ bot.pk }}/">here</a>
+                        </p>
+                    {% else %}
+                        <table class="table table-striped">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th class="text-xs-left">Title</th>
+                                <th class="text-xs-center">Sources</th>
+                            </tr>
+                        </thead>
+                        {% for mashup in bot.mashup.all%}
+                            <tr class="form-row">
+                                <td>
+                                    <a href="/view_mashup/{{ mashup.id }}/">
+                                    {{ mashup.title }}
+                                    </a>
+                                    <span class="tag tag-pill tag-default">{{ mashup.outputs.count }}</span>
+                                </td>
+                                <td>
+                                    <div class="corpus-preview">
+                                            {% for corpus in mashup.corpora.all %}
+                                                {% if corpus %}
+                                                    <span class="thumb-wrapper">
+                                                        <div style="background-image:url({{ corpus.image_url }})"
+                                                            class="corpus-thumb" title="{{ corpus.desc }}" id="cimage{{ corpus.id }}"
+                                                            data-corpus_id="{{ corpus.id }}">
+                                                           {#  include the appropriate icon #}
+                                                            {% if corpus.type == "TW" %}
+                                                                <i class="fa fa-twitter"></i>
+                                                            {% elif corpus.type == "EX" %}
+                                                                <i class="fa fa-book"></i>
+                                                            {% endif %}
+                                                        </div>
+                                                    </span>
+                                        {% if not forloop.last %}
+                                            {# include the plus between elements #}
+                                            <span class="preview-plus">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </span>
+                                        {% endif %} {# end inner loop #}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </table>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        <div class="col-xs-12 col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning text-xs-center">
+                    <span class="h5 text-xs-center">
+                                Authorization
+                            </span>
+                </div>
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-xs-4 text-xs-center">
+                            {% if not bot.access_token %}
+                                <div class="text-xs-center">
+                                    <i class="fa fa-thumbs-down fa-4x"></i>
+                                </div>
+                                <div class="text-xs-center h6">
+                                    Not Authorized
+                                </div>
+                            {% else %}
+                                <div class="text-xs-center">
+                                    <i class="fa fa-thumbs-up fa-4x"></i>
+                                </div>
+                                <div class="text-xs-center h6">
+                                    Authorized
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-xs-8">
+                            {# Show prompt to authorize/configure twitter oauth #}
+                            {% if not bot.access_token %}
+                                <p>It looks like you haven't configured this bot to post on twitter yet.</p>
+                                <p>To get started, create a new <a href="http://www.twitter.com/">Twitter</a> account for this bot and log in to it.</p>
+                                <p>After that, click <a href="/authorize_bot/{{ bot.id }}/">here</a></p>
+                            {% else %}
+                                <p> This bot appears to be authorized for twitter. If it's not working, reauthorize by clicking
+                                <a href="/authorize_bot/{{ bot.id }}/">here</a>
+                                </p>
+                            {% endif %}
+                        </div><!--col-->
+                    </div><!--row-->
+                </div><!--cardblock-->
+            </div><!--card-->
+            <div class="card">
+                <div class="card-header bg-warning text-xs-center">
+                    Activity Report
+                </div>
+                <div class="card-block">
+
+                </div>
+            </div>
+       </div><!--col-->
+     </div><!--row-->
+    </div><!--outer card -->
+  </div><!-- container -->
 
 {% endblock %}
