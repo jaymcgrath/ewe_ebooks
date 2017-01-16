@@ -45,6 +45,7 @@ def OutputCreateView(request):
         # mashup_id is passed in as a hidden form field
         mashup = Mashup.objects.get(id=request.POST['mashup_id'])
 
+
         # check each corpus for the last time it was updated, then update if necessary default: 1 day
         for corpus in mashup.corpora.all():
             corpus_utils.freshen_corpus(corpus)
