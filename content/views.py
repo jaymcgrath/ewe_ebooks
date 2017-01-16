@@ -45,30 +45,32 @@ def OutputCreateView(request):
         # mashup_id is passed in as a hidden form field
         mashup = Mashup.objects.get(id=request.POST['mashup_id'])
 
-
-        # check each corpus for the last time it was updated, then update if necessary default: 1 day
-        for corpus in mashup.corpora.all():
-            corpus_utils.freshen_corpus(corpus)
-
-        # Hard coded algo lookups based on choice field.. more algorithms will be added here and on the
-        # mashup model as they are written
-
-        if mashup.algorithm == 'MJN':
-            # Randomly order the corpora we're going to join, this will generate better output
-            mashed, parent_sents = mashup_algorithms.mouse_join(mashup.corpora.all(), smashtag=True)
-        else:
-            #TODO: add other join methods.. MJN used for everything rn
-            mashed, parent_sents = mashup_algorithms.mouse_join(mashup.corpora.all(), smashtag=True)
-
-        # TODO - create relational table linking parent sentences (sentence1 and sentence2) and Output
-        this_output = Output.objects.create(body=mashed, mashup=mashup)
+        this_output = Output(mashup=mashup)
         this_output.save()
 
-        this_output.sentences.add(*parent_sents)
-
-        # Update mash_counts for the various corpora just used:
-        for corpus in mashup.corpora.all():
-            Corpus.objects.filter(id=corpus.id).update(mash_count=F('mash_count') + 1)
+        # # check each corpus for the last time it was updated, then update if necessary default: 1 day
+        # for corpus in mashup.corpora.all():
+        #     corpus_utils.freshen_corpus(corpus)
+        #
+        # # Hard coded algo lookups based on choice field.. more algorithms will be added here and on the
+        # # mashup model as they are written
+        #
+        # if mashup.algorithm == 'MJN':
+        #     # Randomly order the corpora we're going to join, this will generate better output
+        #     mashed, parent_sents = mashup_algorithms.mouse_join(mashup.corpora.all(), smashtag=True)
+        # else:
+        #     #TODO: add other join methods.. MJN used for everything rn
+        #     mashed, parent_sents = mashup_algorithms.mouse_join(mashup.corpora.all(), smashtag=True)
+        #
+        # # TODO - create relational table linking parent sentences (sentence1 and sentence2) and Output
+        # this_output = Output.objects.create(body=mashed, mashup=mashup)
+        # this_output.save()
+        #
+        # this_output.sentences.add(*parent_sents)
+        #
+        # # Update mash_counts for the various corpora just used:
+        # for corpus in mashup.corpora.all():
+        #     Corpus.objects.filter(id=corpus.id).update(mash_count=F('mash_count') + 1)
 
 
     # Relies on the get_absolute_url method on Output model

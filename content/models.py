@@ -1,8 +1,11 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import F
 
 from bots.models import Bot
+from extras import mashup_algorithms
 from sources.models import Corpus, Sentence
+from .managers import RandomManager
 
 
 # Create your models here.
@@ -41,6 +44,9 @@ class Mashup(models.Model):
     user = models.ForeignKey(User, related_name='mashups', default=1)
     bot = models.ManyToManyField(Bot, related_name='mashups')
 
+    # Add custom objects.random method for retrieving a random instance
+    objects = RandomManager()
+
     def __str__(self):  # __unicode__ on Python 2
         return self.title
 
@@ -62,14 +68,27 @@ class Output(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Get the mashup algorithm and sources, then do some munging and save it
+        The get the mashup algo and sources, then do some munging and save it
 
-        :param args:
-        :param kwargs:
-        :return:
         """
+        if self.mashup.algorithm == 'MJN':
+            # Randomly order the corpora we're going to join, this will generate better output
+            mashed, parent_sents = mashup_algorithms.mouse_join(self.mashup.corpora.all(), smashtag=True)
+        else:
+            # TODO: add other join methods.. MJN used for everything rn
+            mashed, parent_sents = mashup_algorithms.mouse_join(self.mashup.corpora.all(), smashtag=True)
+
+        self.body = mashed
 
         super().save(*args, **kwargs)
+
+        # Save the parent sentences.. M2M needs an instance first, so we add them after saving
+        self.sentences.add(*parent_sents)
+
+        # Update mash counts of the source corpora
+        for corpus in self.mashup.corpora.all():
+            Corpus.objects.filter(id=corpus.id).update(mash_count=F('mash_count') + 1)
+
 
     def __str__(self):  # __unicode__ on Python 2
         return "{m}: {b}.. {v}".format(m=self.mashup.title, b=self.body[:33], v=self.num_votes)
