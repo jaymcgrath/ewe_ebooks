@@ -11,7 +11,8 @@
     <div class="card"><!--main card wrapper -->
         <div class="card-header text-xs-center">
             <span class="h3 text-xs-center">
-                {{ bot.name }} <i class="fa fa-gears"></i>
+                <i class="fa fa-gears"></i>
+                    {{ bot.name }}
             </span>
 
         </div><!-- end card header -->
@@ -55,18 +56,17 @@
                         <thead class="thead-inverse">
                             <tr>
                                 <th class="text-xs-left">
-                                    <span class="h4">Title</span>
-                                </th>
-                                <th class="text-xs-center">
-                                    <span class="tag tag-pill tag-default">Created</span>
-                                    <span class="tag tag-pill bg-primary">Tweeted</span>
+                                    <span class="h4 text-xs-center">Mashup</span>
+                                    <span class="pull-right">
+                                        <span class="tag tag-pill tag-default ">Created</span>
+                                        <span class="tag tag-pill bg-primary">Tweeted</span>
+                                    </span>
                                 </th>
                             </tr>
                         </thead>
                         {% for mashup in bot.mashup.all%}
-                            <tr class="form-row mashup-title"
-                            >
-                                <td>
+                            <tr class="form-row mashup-title">
+                                <td class="pull-left">
                                     <a href="/view_mashup/{{ mashup.id }}/" data-toggle="popover" data-placement="right"
                                     data-content='
                                                  {% for corpus in mashup.corpora.all %}
@@ -94,8 +94,6 @@
                                                 '">
                                     {{ mashup.title }}
                                     </a>
-                                </td>
-                                <td>
                                 <span class="tag tag-pill tag-default">{{ mashup.outputs.count }}</span>
                                 <span class="tag tag-pill bg-primary">{{ mashup.tweets.count }}</span>
                                 </td>
