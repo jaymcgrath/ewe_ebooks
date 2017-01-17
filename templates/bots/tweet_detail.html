@@ -2,15 +2,24 @@
 {% load static %}
 {% block more_headers %}
     <!-- custom css and js includes go here -->
+
 {% endblock %}
 {% block title %}
     Detail for Tweet {{ tweet.tweet_id }} by {{ tweet.screen_name }}
 {% endblock %}
 
 {% block main_content %}
-    <div class="container">
+    <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <div class="container" id="tweet-container">
         <span class="h5">At {{tweet.created_twitter }}, {{ tweet.bot.name }} tweeted:</span>
-        {{ tweet.created_twitter }}
+        <script>
+            twttr.widgets.createTweet("{{ tweet.tweet_id }}", document.getElementById("tweet-container"),
+            {
+                linkColor: "#55acee"
+            }
+            );
+        </script>
+
 
     </div>
 {% endblock %}
