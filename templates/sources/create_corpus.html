@@ -44,7 +44,7 @@ Add a new source
                 {{ form.body|add_attrs:"class:form-control, placeholder: Paste the body of the excerpt here, arira-label: Input for the source body" }}
                 <input type="submit" value="submit" class="btn-info">
             </div>
-            <div class="form-group row" id="hashtag_items">
+            <div class="form-group row hidden" id="hashtag_items">
                  <span class="input-group-addon" id="hashtag1">#</span>
                     {{ form.twitter_hashtag|add_attrs:"placeholder:Twitter Hashtag, aria-label: Input the Twitter Hashtag, aria-describedby:hashtag1" }}
                 <input type="submit" value="submit" class="btn-info btn-lg">
