@@ -19,11 +19,11 @@ from django.contrib import admin
 from rest_framework import routers
 
 from api.content_api import OutputViewset
-from content.views import MashupCreateView, MashupListView, MashupDetailView, OutputCreateView,\
+from content.views import MashupCreateView, MashupListView, MashupUserListView, MashupDetailView, OutputCreateView,\
                           OutputDetailView, OutputListView, DisplayOutputView, OutputRandomView,\
                           OutputListViewByUser
 from bots.views import BotCreateView, BotEditView, BotDetailView, BotAuthorizeView, TweetCreateView, TweetDetailView
-from people.views import update_profile, create_profile, UserDetailView
+from people.views import update_profile, create_profile, UserDetailView, WelcomeView
 from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView
 
 # Instantiate Router
@@ -49,6 +49,7 @@ urlpatterns = [
     # Content Generation and Management
     url(r'^create_mashup/$', MashupCreateView.as_view()),
     url(r'^list_mashups/$', MashupListView.as_view()),
+    url(r'^my_mashups/$', MashupUserListView.as_view()),
     url(r'^view_mashup/(?P<pk>\d+)/$', MashupDetailView.as_view()),
     url(r'^create_output/$', OutputCreateView),
     url(r'^random/$', OutputRandomView),
@@ -71,6 +72,7 @@ urlpatterns = [
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^signup/$', create_profile, name='signup'),
     url(r'^edit_profile/$', update_profile, name='update-profile'),
+    url(r'^welcome/$', WelcomeView, name='welcome'),
     url(r'^dashboard/$', UserDetailView.as_view(), name='dashboard'),
 
     # API Endpoints
