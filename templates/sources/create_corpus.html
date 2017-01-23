@@ -1,41 +1,60 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load people_extras %} {# custom filters #}
+{% block extra_headers %}
+<link href="{% static 'css/sources/create_corpus.css' %}" rel="stylesheet">
+{% endblock %}
 {% block title %}
 Add a new source
 {% endblock %}
 {% block notifications %}
     {{ form.errors }}
 {% endblock %}
-
 {% block  main_content %}
     <form action="" method="post" novalidate>
         {% csrf_token %}
         <div class="container">
+            <h4>What kind of source would you like to add?</h4>
             <div class="form-group row">
-                <div class="col-xs-6">
-                    What kind of source are you adding?
-                </div>
-                <div class="col-xs-6">
-                    <div class="dropdown">
-                        {{ form.variety }}
-                    </div>
+                <div class="btn-group" data-toggle="buttons">
+                    {% for value, text in form.variety.field.choices %}
+                        <label class="btn btn-primary btn-lg {% if forloop.first %} active {% endif %} radio-label"  >
+                            <input id="var{{ value }}" type="radio" name="variety" value="{{ value }}"
+                                {% if value == 'TW' %} checked {% endif %}>
+                            {% if value == 'TW' %}
+                                <i class="fa fa-twitter"></i>
+                            {% elif value == 'EX'%}
+                                <i class="fa fa-book"></i>
+                            {% elif value == 'HS'%}
+                                <i class="fa fa-hashtag"></i>
+                            {% endif %}
+                            {{ text }} {# human readable name of corpus variety #}
+                        </label>
+                    {% endfor %}
                 </div><!--endcol-->
             </div><!--endrow-->
             <div class="form-group row" id="twitter_items">
                  <span class="input-group-addon" id="username1">@</span>
-                {{ form.twitter_username }}
-                <input type="submit" value="submit" class="btn-info">
+                    {{ form.twitter_username|add_attrs:"placeholder:Twitter Username, aria-label: Input the Twitter Username, aria-describedby:username1" }}
+                <input type="submit" value="submit" class="btn-info btn-lg">
             </div>
             <div class="form-group row hidden" id="excerpt_items">
-                {{ form.title }}
-                {{ form.description }}
-                {{ form.body }}
+                {{ form.title|add_attrs:"class:form-control, placeholder:Choose a title for this source, aria-label:Input the source title" }}
+                {{ form.description|add_attrs:"class:form-control, placeholder:A brief description of this source, aria-label: Input for the source description" }}
+                {{ form.body|add_attrs:"class:form-control, placeholder: Paste the body of the excerpt here, arira-label: Input for the source body" }}
                 <input type="submit" value="submit" class="btn-info">
+            </div>
+            <div class="form-group row" id="hashtag_items">
+                 <span class="input-group-addon" id="hashtag1">#</span>
+                    {{ form.twitter_hashtag|add_attrs:"placeholder:Twitter Hashtag, aria-label: Input the Twitter Hashtag, aria-describedby:hashtag1" }}
+                <input type="submit" value="submit" class="btn-info btn-lg">
             </div>
         </div><!--endcontainer-->
     </form>
+
 {% endblock %}
 
 {% block footers %}
     <script src="{% static "js/sources/create_corpus.js" %}"></script>
 {% endblock%}
+
