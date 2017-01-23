@@ -46,7 +46,7 @@ class BotListViewByUser(ListView):
     # TODO: fix this.. passing queryset in to template
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(user__id=self.kwargs['pk'])
+        return qs.filter(created_by__id=self.kwargs['pk'])
 
 class BotCreateView(CreateView):
     """
@@ -58,8 +58,7 @@ class BotCreateView(CreateView):
     form_class = BotForm
 
     def form_valid(self, form):
-        user = self.request.user
-        form.instance.user = user
+        form.instance.created_by = self.request.user
         return super(BotCreateView, self).form_valid(form)
 
     def get_success_url(self):

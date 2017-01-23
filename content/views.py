@@ -24,6 +24,10 @@ class MashupCreateView(LoginRequiredMixin, CreateView):
     form_class = MashupForm
     success_url = '/list_mashups/'
 
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super(MashupCreateView, self).form_valid(form)
+
 
 class MashupListView(ListView):
     """
@@ -49,7 +53,7 @@ class MashupUserListView(LoginRequiredMixin, MashupListView):
 
     def get_queryset(self, **kwargs):
         # Filter these mashups by the currently logged in user
-        qs = Mashup.objects.filter(user=self.request.user)
+        qs = Mashup.objects.filter(created_by=self.request.user)
 
         return qs
 
@@ -58,6 +62,7 @@ class MashupDetailView(DetailView):
     model = Mashup
     context_object_name = 'mashup'
     template_name = 'content/mashup_detail.html'
+
 
 @login_required
 def OutputCreateView(request):
@@ -73,6 +78,8 @@ def OutputCreateView(request):
         this_output.save()
 
     return redirect(this_output)
+
+
 @login_required
 def OutputRandomView(request):
     """
@@ -152,7 +159,7 @@ class OutputListView(ListView):
         return context
 
 
-class OutputListViewByUser(ListView):
+class OutputUserListView(ListView):
     model = Output
     # TODO: Attach user to output
     context_object_name = 'output_list'
@@ -163,12 +170,11 @@ class OutputListViewByUser(ListView):
         context = super().get_context_data(**kwargs)
         return context
 
-    # TODO: fix this.. passing queryset in to template
+    # TODO: fix this.. get outputs filtered by mashup filtered by user
+
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(mashup__user__id=self.kwargs['pk'])
-
-
+        return qs.filter(mashup__created_by__id=self.kwargs['pk'])
 
 
 class OutputDetailView(DetailView):
@@ -179,9 +185,8 @@ class OutputDetailView(DetailView):
     context_object_name = 'output'
     template_name = 'content/output_detail.html'
 
-class CreateOutputView(generics.ListCreateAPIView):
-    pass
-    # TODO: create this view
+
+#TODO: move to api app
 
 class DisplayOutputView(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -190,8 +195,3 @@ class DisplayOutputView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Output.objects.all()
     serializer_class = OutputSerializer
     # TODO: create this view
-
-
-
-
-

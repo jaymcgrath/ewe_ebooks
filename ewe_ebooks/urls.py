@@ -21,7 +21,7 @@ from rest_framework import routers
 from api.content_api import OutputViewset
 from content.views import MashupCreateView, MashupListView, MashupUserListView, MashupDetailView, OutputCreateView,\
                           OutputDetailView, OutputListView, DisplayOutputView, OutputRandomView,\
-                          OutputListViewByUser
+                          OutputUserListView
 from bots.views import BotCreateView, BotEditView, BotDetailView, BotAuthorizeView, TweetCreateView, TweetDetailView
 from people.views import update_profile, create_profile, UserDetailView, WelcomeView
 from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView
@@ -55,7 +55,7 @@ urlpatterns = [
     url(r'^random/$', OutputRandomView),
     url(r'^view_output/(?P<pk>\d+)/$', OutputDetailView.as_view(), name='output-detail'),
     url(r'^list_output/$', OutputListView.as_view(), name='output-list'),
-    url(r'^list_output/(?P<pk>\d+)', OutputListViewByUser.as_view()),
+    url(r'^list_output/(?P<pk>\d+)', OutputUserListView.as_view()),
 
     # Bots - Creation and Management
     url(r'^create_bot/$', BotCreateView.as_view()),

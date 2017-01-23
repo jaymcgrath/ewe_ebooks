@@ -16,6 +16,10 @@ class CorpusCreateView(LoginRequiredMixin, CreateView):
     form_class = CorpusForm
     success_url = '/list_sources/'
 
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super(CorpusCreateView, self).form_valid(form)
+
 
 class CorpusListView(ListView):
     model = Corpus

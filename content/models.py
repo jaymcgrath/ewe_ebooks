@@ -42,7 +42,7 @@ class Mashup(models.Model):
     algorithm = models.CharField(max_length=3, choices=ALGOS, default='MJN')
     created = models.DateTimeField(auto_now_add=True)
     public = models.BooleanField(default=False, help_text='Whether to display this mashup and its output publicly')
-    user = models.ForeignKey(User, related_name='mashups', default=1)
+    created_by = models.ForeignKey(User, related_name='mashups')
     bot = models.ManyToManyField(Bot, related_name='mashups')
 
     # Add custom objects.random method for retrieving a random instance

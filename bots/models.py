@@ -35,13 +35,13 @@ class Bot(models.Model):
     access_token_secret = models.CharField(max_length=255, null=True, blank=True,
                                            help_text='permanent access token secret for posting to twitter')
     mashup = models.ManyToManyField('content.Mashup', related_name='bots')
-    user = models.ForeignKey(User, related_name='bots')
+    created_by = models.ForeignKey(User, related_name='bots')
 
     def __str__(self):  # __unicode__ on Python 2
-        return "{n}: postfreq: {pf} [{u}]".format(n=self.name, pf=self.post_frequency, u=self.user.username)
+        return "{n}: postfreq: {pf} [{u}]".format(n=self.name, pf=self.post_frequency, u=self.created_by.username)
 
     def __repr__(self):
-        return "{n}: postfreq: {pf} [{u}]".format(n=self.name, pf=self.post_frequency, u=self.user.username)
+        return "{n}: postfreq: {pf} [{u}]".format(n=self.name, pf=self.post_frequency, u=self.created_by.username)
 
     def get_absolute_url(self):
       return "/view_bot/{pk}/".format(pk=self.id)
@@ -92,6 +92,8 @@ class Tweet(models.Model):
             self.tweet_id = this_tweet.id
             self.created_twitter = this_tweet.created_at
             self.text = this_tweet.text
+
+            # This is the twitter user from the tweepy api that just posted the tweet, not a django user object
             self.screen_name = this_tweet.user.screen_name
 
         # Either way, save it

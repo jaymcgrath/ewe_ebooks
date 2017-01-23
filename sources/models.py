@@ -31,8 +31,7 @@ class Corpus(models.Model):
     twitter_hashtag = models.CharField(max_length=140, unique=True, null=True)
     image_url = models.CharField(max_length=256, null=True)
     author = models.TextField(max_length=64, null=True)
-    # TODO: remove default=1 from added_by to link it with people.Member
-    added_by = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     mash_count = models.BigIntegerField(default=0, editable=False)
     last_tweet_id = models.BigIntegerField(default=1, editable=False, help_text='id of most recent saved tweet')
 
@@ -78,7 +77,6 @@ class Corpus(models.Model):
                 self.author = self.twitter_username
                 self.image_url = usr.image
                 self.last_tweet_id = tl.last_tweet_id
-                self.added_by = self.request.user
 
                 super(Corpus, self).save(*args, **kwargs)
 
