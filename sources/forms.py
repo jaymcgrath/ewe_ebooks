@@ -8,7 +8,7 @@ class CorpusForm(forms.ModelForm):
     """
     class Meta:
         model = Corpus
-        fields = ('twitter_username', 'variety', 'title', 'body', 'description',)
+        fields = ('twitter_username', 'variety', 'title', 'body', 'description', 'twitter_hashtag',)
 
     def __init__(self, *args, **kwargs):
         super(CorpusForm, self).__init__(*args, **kwargs)
@@ -48,12 +48,12 @@ class CorpusForm(forms.ModelForm):
         }
         self.fields['body'].widget.attrs.update(body_attrs)
 
-        twitter_username_attrs = {
-            'type':'text',
-            'placeholder':"username",
-            'aria-describedby':"username1"
-        }
-        self.fields['twitter_username'].widget.attrs.update(twitter_username_attrs)
+        # twitter_username_attrs = {
+        #     'type':'text',
+        #     'placeholder':"username",
+        #     'aria-describedby':"username1"
+        # }
+        # self.fields['twitter_username'].widget.attrs.update(twitter_username_attrs)
 
 
 class WordForm(forms.ModelForm):

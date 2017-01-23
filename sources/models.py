@@ -17,6 +17,7 @@ class Corpus(models.Model):
     VARIETY_CHOICES = (
                     ("TW", "Twitter User"),
                     ("EX", "Text Excerpt"),
+                    ("HS", "Twitter Hashtag"),
                     )
 
     title = models.CharField(max_length=64, help_text='The title for this source')
@@ -27,6 +28,7 @@ class Corpus(models.Model):
     is_public = models.BooleanField(default=False)
     variety = models.CharField(max_length=2, choices=VARIETY_CHOICES, default='TW')
     twitter_username = models.CharField(max_length=15, unique=True, null=True)
+    twitter_hashtag = models.CharField(max_length=140, unique=True, null=True)
     image_url = models.CharField(max_length=256, null=True)
     author = models.TextField(max_length=64, null=True)
     # TODO: remove default=1 from added_by to link it with people.Member
@@ -76,6 +78,7 @@ class Corpus(models.Model):
                 self.author = self.twitter_username
                 self.image_url = usr.image
                 self.last_tweet_id = tl.last_tweet_id
+                self.added_by = self.request.user
 
                 super(Corpus, self).save(*args, **kwargs)
 
@@ -110,13 +113,15 @@ class Corpus(models.Model):
             else:
                 # Calling from corpus_utils.freshen_corpus, so just update instead
                 super(Corpus, self).save(*args, **kwargs)
-        else:
+
+        elif self.variety == "EX":
             """
             Save method for external corpora
             """
 
             super(Corpus, self).save(*args, **kwargs)
 
+            # Business logic is stored in bookstopher module
             ex = Excerpt(self.body)
 
             # Parse sentences with NLTK sentence Parser
@@ -148,6 +153,10 @@ class Corpus(models.Model):
             for word in ex.words:
                 wrd = Word.objects.create(corpus=self, word=word)
                 wrd.save()
+        else:
+            # Hashtag
+            pass
+
 
 
 

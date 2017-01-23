@@ -3,10 +3,12 @@ from django.views.generic.edit import CreateView
 from django.views.generic import ListView, DetailView, UpdateView
 from .forms import CorpusForm
 from .models import Corpus
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here!
 
-class CorpusCreateView(CreateView):
+class CorpusCreateView(LoginRequiredMixin, CreateView):
     """
     View for adding a and processing a source (corpus)
     """
@@ -24,6 +26,7 @@ class CorpusListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(CorpusListView, self).get_context_data(**kwargs)
         return context
+
 
 class CorpusDetailView(DetailView):
     """
