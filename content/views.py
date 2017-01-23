@@ -1,5 +1,7 @@
 import random
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
@@ -7,28 +9,49 @@ from django.views.generic.edit import CreateView
 from rest_framework import generics
 
 from api.serializers import OutputSerializer
-from extras import mashup_algorithms, corpus_utils
+from extras import mashup_algorithms
 from sources.models import Corpus
 from .forms import MashupForm
-from .models import Mashup, Output, Bot
+from .models import Mashup, Output
 
 
-# Create your views here.
-class MashupCreateView(CreateView):
+class MashupCreateView(LoginRequiredMixin, CreateView):
     """
     Class view for adding a mashup.
     """
+
     template_name = 'content/create_mashup.html'
     form_class = MashupForm
     success_url = '/list_mashups/'
 
 
 class MashupListView(ListView):
+    """
+    Generic mashup list available to everyone
+    """
+
     model = Mashup
     queryset = Mashup.objects.order_by('-created')
+
     def get_context_data(self, **kwargs):
         context = super(MashupListView, self).get_context_data(**kwargs)
         return context
+
+
+class MashupUserListView(LoginRequiredMixin, MashupListView):
+    """
+    Mashup list view filtered by logged in user.. subclasses MashupListView
+    """
+
+    def get_context_data(self, **kwargs):
+        context = super(MashupListView, self).get_context_data(**kwargs)
+        return context
+
+    def get_queryset(self, **kwargs):
+        # Filter these mashups by the currently logged in user
+        qs = Mashup.objects.filter(user=self.request.user)
+
+        return qs
 
 
 class MashupDetailView(DetailView):
@@ -36,7 +59,7 @@ class MashupDetailView(DetailView):
     context_object_name = 'mashup'
     template_name = 'content/mashup_detail.html'
 
-
+@login_required
 def OutputCreateView(request):
     """
     FBV for making content from a mashup
@@ -50,7 +73,7 @@ def OutputCreateView(request):
         this_output.save()
 
     return redirect(this_output)
-
+@login_required
 def OutputRandomView(request):
     """
     Endpoint for generating output from 2 randomly selected corpora
