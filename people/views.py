@@ -88,6 +88,15 @@ class UserDetailView(DetailView):
     template_name = 'people/user_detail.html'
 
     def get_object(self):
-        #import ipdb; ipdb.set_trace()
+        return get_object_or_404(User, pk=self.request.session['_auth_user_id'])
+
+
+@method_decorator(login_required, name='dispatch')
+class WelcomeView(DetailView):
+    model = User
+    context_object_name = 'user'
+    template_name='people/welcome.html'
+
+    def get_object(self):
         return get_object_or_404(User, pk=self.request.session['_auth_user_id'])
 
