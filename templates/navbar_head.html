@@ -1,72 +1,11 @@
 <!-- Header -->
-<nav class="navbar navbar-dark bg-inverse">
-<span class="navbar-text float-xs-left">
-    <li class="nav-item dropdown">
-        <a class="nav-link navbar-inverse dropdown-toggle nav-top" href="http://example.com" id="supportedContentDropdown"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i>
-</a>
-        <div class="dropdown-menu bg-inverse" aria-labelledby="supportedContentDropdown">
-            {# Show dashboard and logout links to this user if they are logged in #}
-            {% if request.user.is_authenticated %}
-                <item class="dropdown-item">{{ request.user.username }}</item>
-                <a class="dropdown-item" href="/dashboard/">Dashboard</a>
-                <a class="dropdown-item" href="/logout/">Log Out</a>
-            {# Otherwise, show login and signup links #}
-            {% else %}
-                <a class="dropdown-item" href="/login/">Log in</a>
-                <a class="dropdown-item" href="/signup/">Sign Up</a>
-            {% endif %}
-        </div>
-    </li>
-</span>
-
-<span class="navbar-text float-xs-left">
-    <li class="nav-item dropdown">
-        <a class="dropdown-toggle nav-top" href="http://example.com" id="supportedContentDropdown"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Output</a>
-        <div class="dropdown-menu bg-inverse" aria-labelledby="supportedContentDropdown">
-            <a class="dropdown-item" href="/list_output/">Browse Popular</a>
-            {# Show a link to this user's unique content if they are logged in #}
-            {% if request.user.is_authenticated %}
-                <a class="dropdown-item" href="/list_output/{{ request.user.id }}/">Output You've Created</a>
-            {% endif %}
-        </div>
-    </li>
-</span>
-
-<span class="navbar-text float-xs-left">
-    <li class="nav-item dropdown">
-        <a class="nav-link navbar-inverse dropdown-toggle" href="http://example.com" id="supportedContentDropdown"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Combinations</a>
-        <div class="dropdown-menu bg-inverse" aria-labelledby="supportedContentDropdown">
-            <a class="dropdown-item" href="/list_mashups/">Browse</a>
-            <a class="dropdown-item" href="/create_mashup/">Create</a>
-            <a class="dropdown-item" href="/list_mashups/">Popular</a>
-        </div>
-    </li>
-</span>
-
-<span class="navbar-text float-xs-left">
-    <li class="nav-item dropdown">
-        <a class="nav-link navbar-inverse dropdown-toggle" href="#" id="supportedContentDropdown"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sources</a>
-        <div class="dropdown-menu bg-inverse" aria-labelledby="supportedContentDropdown">
-            <a class="dropdown-item" href="/list_sources/">Browse Existing Sources</a>
-            <a class="dropdown-item" href="/add_source/">Add A Source</a>
-            <!-- management link placeholder
-            <a class="dropdown-item" href="#">Manage</a>
-            -->
-        </div>
-    </li>
-</span>
-<a class="navbar-brand float-xs-right" href="https://github.com/jaymcgrath/ewe_ebooks">
-        <span class="fa-stack">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-twitter fa-stack-1x fa-lg" style="color: cyan; "></i>
-            <i class="fa fa-random fa-stack-1x" style="font-size: .45em; margin-top: 1px; color: darkblue;"></i>
-        </span>
-       Ewe_Ebooks
-    </a>
+<nav class="navbar navbar-dark bg-inverse{# hidden-md-down #}">
+    {% include "navbar_lg_up.html" %}
 </nav>
+{#  scaffolding for responsive navbar goes here #}
 
-<!-- /Header -->
+{#<nav class="navbar navbar-dark bg-inverse hidden-lg-up">#}
+     {#  include "navbar_md_down.html" #}
+{#                                    #}
+{#</nav>#}
+{#<!-- /Header -->#}
