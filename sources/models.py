@@ -30,7 +30,7 @@ class Corpus(models.Model):
     twitter_username = models.CharField(max_length=15, unique=True, null=True)
     twitter_hashtag = models.CharField(max_length=140, unique=True, null=True)
     image_url = models.CharField(max_length=256, null=True)
-    author = models.TextField(max_length=64, null=True)
+    author = models.CharField(max_length=64, null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     mash_count = models.BigIntegerField(default=0, editable=False)
     last_tweet_id = models.BigIntegerField(default=1, editable=False, help_text='id of most recent saved tweet')
@@ -77,6 +77,7 @@ class Corpus(models.Model):
                 self.author = self.twitter_username
                 self.image_url = usr.image
                 self.last_tweet_id = tl.last_tweet_id
+                self.twitter_hashtag = None
 
                 super(Corpus, self).save(*args, **kwargs)
 
@@ -116,7 +117,9 @@ class Corpus(models.Model):
             """
             Save method for external corpora
             """
-
+            # For Null=True Unique field:
+            self.twitter_hashtag = None
+            self.twitter_username = None
             super(Corpus, self).save(*args, **kwargs)
 
             # Business logic is stored in bookstopher module
@@ -231,7 +234,7 @@ class Sentence(models.Model):
     Sentences from all corpora
     """
     # TODO: create custom tagged model for storing word:tag pairs as sentences
-    sentence = models.CharField(max_length=1024)
+    sentence = models.TextField()
     corpus = models.ForeignKey(Corpus, related_name='sentences')
 
     objects = RandomManager()
