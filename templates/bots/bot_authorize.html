@@ -8,12 +8,26 @@ Detail for {{ bot.name }}
 {% endblock %}
 
 {% block main_content %}
-    <div class="container">
-        <div class="card-header text-xs-center">
+        <div class="card text-xs-center">
             {# Show prompt to authorize/configure twitter oauth #}
-            <p>To authorize ewe_ebooks to post this bot's tweets to twitter, click
-                <a href="{{ bot_auth_url }}">here</a></p>
+            <div class="card-header">
+                <span class="text-info">
+                    <i class="fa fa-gears fa-5x"></i>
+                </span>
+                <span class="text-info">
+                    <i class="fa fa-plus fa-2x"></i>
+                </span>
+                <span class="text-info">
+                    <i class="fa fa-twitter fa-5x"></i>
+                </span>
+            </div>
+            <div class="card-block">
+            <h2>Authorization Step 1 for {{ bot.name }} </h2>
+            <p>In order for this bot to post to twitter, it needs to be authorized.</p>
+            <p>First, visit <a href="http://www.twitter.com/">Twitter</a> and confirm that you are logged in with the account
+            you have created for this bot. </p>
+            <p>Then, click the button below to authorize {{ bot.name }} to post to Twitter</p>
+                <a class="btn btn-lg btn-danger" href="{{ bot_auth_url }}">Authorize {{ bot.name }}</a>
+                </div>
         </div>
-    </div>
-
 {% endblock %}
