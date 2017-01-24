@@ -28,9 +28,15 @@
                         </span>
                     </div>
                     <div class="card-block text-xs-center">
-                            <a class="btn btn-primary btn-lg" href="/create_tweet/{{ bot.pk }}/" target="_blank">
+                            {% if bot.access_token and bot.access_token_secret %}
+                            <a class="btn btn-primary btn-lg " href="/create_tweet/{{ bot.pk }}/" target="_blank">
                             Post Random Content Directly to Twitter
                             </a>
+                            {% else %}
+                                <p>{{ bot.name }} is not authorized to post to twitter.</p>
+                                <p>Follow the steps in the section marked "Authorization"</p>
+
+                            {% endif %}
                     </div><!--card-block-->
                 </div><!--card-->
                 <div class="card">
