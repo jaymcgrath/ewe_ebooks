@@ -8,7 +8,7 @@ class CorpusForm(forms.ModelForm):
     """
     class Meta:
         model = Corpus
-        fields = ('twitter_username', 'variety', 'title', 'body', 'description', 'twitter_hashtag',)
+        fields = ('twitter_username', 'variety', 'title', 'body', 'description', 'twitter_hashtag', 'author')
 
     def __init__(self, *args, **kwargs):
         super(CorpusForm, self).__init__(*args, **kwargs)
