@@ -1,6 +1,6 @@
 "use strict";
 
-$('#id_title').prop('classs', 'form-control');
+$('#id_title').prop('class', 'form-control');
 $('#id_title').prop('placeholder', 'Together at Last! <mashup title goes here>');
 
 
