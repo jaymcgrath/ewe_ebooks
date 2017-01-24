@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView, View, UpdateView
 from django.views.generic.edit import CreateView
 from django.shortcuts import redirect
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Bot, Tweet
 from content.models import Output
 from .forms import BotForm
@@ -19,7 +19,7 @@ ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 ACCESS_TOKEN_SECRET = os.environ['ACCESS_TOKEN_SECRET']
 
 
-class BotDetailView(DetailView):
+class BotDetailView(LoginRequiredMixin, DetailView):
     """
     Conventional view for a single Bot
     """
@@ -32,7 +32,7 @@ class BotDetailView(DetailView):
 
         return context
 
-class BotListViewByUser(ListView):
+class BotListViewByUser(LoginRequiredMixin, ListView):
     model = Bot
     # TODO: Attach user to output
     context_object_name = 'bot_list'
@@ -48,13 +48,13 @@ class BotListViewByUser(ListView):
         qs = super().get_queryset()
         return qs.filter(created_by__id=self.kwargs['pk'])
 
-class BotCreateView(CreateView):
+class BotCreateView(LoginRequiredMixin, CreateView):
     """
     Basic create view for defining a bot - oauth stuff happens separately
     """
 
     model = Bot
-    template_name = 'content/create_bot.html'
+    template_name = 'bots/create_bot.html'
     form_class = BotForm
 
     def form_valid(self, form):
@@ -64,7 +64,7 @@ class BotCreateView(CreateView):
     def get_success_url(self):
         return reverse('bot-detail', args=(self.object.id,))
 
-class BotEditView(UpdateView):
+class BotEditView(LoginRequiredMixin, UpdateView):
     """
     View for updating parts of a bot
     """
@@ -75,7 +75,7 @@ class BotEditView(UpdateView):
     def get_success_url(self):
         return reverse('bot-detail', args=(self.object.id,))
 
-class BotAuthorizeView(DetailView):
+class BotAuthorizeView(LoginRequiredMixin, DetailView):
     """
     view for three-legged oauth key retrieval to allow ewe_ebooks to post on user's behalf
     """
@@ -210,7 +210,7 @@ class BotAuthorizeView(DetailView):
         return context
 
 
-class TweetCreateView(View):
+class TweetCreateView(LoginRequiredMixin, View):
     """
     Custom View for creating a tweet with a fully configured bot
     """
@@ -228,8 +228,11 @@ class TweetCreateView(View):
         this_output = Output(mashup=this_mashup)
         this_output.save()
 
+
         this_tweet = Tweet(bot=this_bot, output=this_output, mashup=this_mashup)
         this_tweet.save()
+
+
 
         # OK, redirect to view what we just posted
         return redirect(reverse('tweet-detail', args=(this_tweet.pk,)))
