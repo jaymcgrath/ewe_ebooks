@@ -24,16 +24,12 @@
                         <!-- Corpus thumbnails go here -->
 
                         <span id="example_thumbs" class="example-thumbs">
-
                             <!-- grayed out example stuff -->
                             <i class="fa fa-meh-o fa-4x text-muted" aria-hidden="true"></i>
-
                             <span id="example_plus" class="preview-plus">
                                 <i class="fa fa-plus text-muted" aria-hidden="true" id="example_plus_char"></i>
                             </span>
-
                             <i class="fa fa-smile-o fa-4x text-muted" aria-hidden="true"></i>
-
                         </span>
                     </div><!-- end card body -->
 
@@ -59,7 +55,7 @@
             </div><!-- end column -->
 
             <div class="col-xs-6 list-group">
-                <div class="corpus-select" id="cselect{{ corpus.id }}" data-corpus_id="{{ corpus.id }}">
+                <div class="corpus-select" id="corpus_select">
                     {% for corpus in form.fields.corpora.queryset.all %}
                         <div class="card corpus-card list-group-item" id="corpus-card{{ corpus.id }}"
                              data-corpus_id="{{ corpus.id }}" data-corpus_image_url="{{ corpus.image_url }}"
@@ -99,8 +95,9 @@
                         </div><!-- end corpus-card -->
                     {% endfor %}
                 </div><!-- end corpus-select -->
+            </div><!--end col-xs-6 -->
         </div><!-- end row -->
-        </form>
+     </form>
     </div><!-- end container> -->
     </section>
 {% endblock %}
