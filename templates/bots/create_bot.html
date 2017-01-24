@@ -4,15 +4,98 @@
 {% block title %} Create a Twitter bot - Step 1 {% endblock %}
 
 {% block more_headers %}
-
     <link href="{% static 'css/content/create_mashup.css' %}" rel="stylesheet">
+{% endblock %}
 
+{% block notifications %}
+    {{ form.errors }}
 {% endblock %}
 
 {% block main_content %}
+    <h2> Create a bot for posting mashup output to Twitter</h2>
     <form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-     <input type="submit" value="Create it!" class="btn-primary" id="create_mashup_button">
+        {% csrf_token %}
+        <div class="container" id="form_container">
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <p>{{ form.name|add_attrs:"class:form-control, placeholder:A nickname for this bot" }}</p>
+                    <p>{{ form.description|add_attrs:"class:form-control, placeholder:A brief description of this bot" }}</p>
+                    <div class="form-group row">
+                        <span class="h5">
+                            How often should this bot post?
+                        </span>
+                        <div class="btn-group" data-toggle="buttons">
+                            {% for value, text in form.post_frequency.field.choices %}
+                                <label class="btn btn-primary {% if forloop.first %} active {% endif %} radio-label"  >
+                                    <input id="pf{{ value }}" type="radio" name="post_frequency" value="{{ value }}"
+                                        {% if forloop.first %} checked {% endif %}>
+                                    {{ text }} {# human readable duration #}
+                                </label>
+                            {% endfor %}
+                        </div><!--endcol-->
+            </div><!--endrow-->
+                </div><!--leftdiv-->
+                <div class="col-xs-12 col-md-6 list-group">
+                    <div class="card-header bg-inverse">
+                        <span class="text-muted h4">
+                            Mashup Name
+                        </span>
+                            <span class="tag tag-pill tag-default">output</span>
+                            <span class="tag tag-pill bg-primary">tweets</span>
+
+                    </div>
+                    {% for mashup in form.fields.mashup.queryset.all %}
+                        <div class="card mashup-card list-group-item" id="mashup-card{{ mashup.id }}"
+                             data-mashup_id="{{ mashup.id }}" data-mashup_image_url="{{ mashup.image_url }}"
+                             data-mashup_type="{{ mashup.type }}">
+                            <input type="checkbox" name="mashup"
+                                   value="{{ mashup.id }}" id="mbox{{ mashup.id }}" class="hidden">
+                            <div class="media">
+                                <div class="media-body" data-toggle="popover" data-placement="top"
+                                    data-content='
+                                                 {% for corpus in mashup.corpora.all %}
+                                                    {% if corpus %}
+                                                        <span class="thumb-wrapper">
+                                                            <div style="background-image:url({{ corpus.image_url }})"
+                                                                class="corpus-thumb" title="{{ corpus.desc }}" id="cimage{{ corpus.id }}"
+                                                                data-corpus_id="{{ corpus.id }}">
+                                                               {#  include the appropriate icon #}
+                                                                {% if corpus.type == "TW" %}
+                                                                    <i class="fa fa-twitter"></i>
+                                                                {% elif corpus.type == "EX" %}
+                                                                    <i class="fa fa-book"></i>
+                                                                {% endif %}
+                                                            </div>
+                                                        </span>
+                                                        {% if not forloop.last %}
+                                                        {# include the plus between elements #}
+                                                        <span class="preview-plus">
+                                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                                        </span>
+                                                        {% endif %} {# end inner loop #}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                '">
+                                    <h6 class="media-heading mashup-title">
+                                        {{ mashup.title }}
+                                        <span class="tag tag-pill tag-default">{{ mashup.outputs.count }}</span>
+                                        <span class="tag tag-pill bg-primary">{{ mashup.tweets.count }}</span>
+                                    </h6>
+                                    <span class="mashup-desc">
+                                        {{ mashup.description }}
+                                    </span>
+                                </div><!--media body-->
+                            </div><!--media-->
+                        </div><!--card-->
+                    {% endfor %}
+                </div><!--col-->
+            </div><!--row-->
+        </section><!--container-->
+     <input type="submit" value="Create it!" class="btn-primary" id="create_bot_button">
     </form>
+{% endblock %}
+
+{% block footers %}
+    <script src="/static/js/bots/create_bot.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 {% endblock %}
