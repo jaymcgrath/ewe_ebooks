@@ -40,6 +40,7 @@ Add a new source
             </div>
             <div class="form-group row hidden" id="excerpt_items">
                 {{ form.title|add_attrs:"class:form-control, placeholder:Choose a title for this source, aria-label:Input the source title" }}
+                {{ form.author|add_attrs:"class:form-control, placeholder:The author of this excerpt, aria-label:Input the source author" }}
                 {{ form.description|add_attrs:"class:form-control, placeholder:A brief description of this source, aria-label: Input for the source description" }}
                 {{ form.body|add_attrs:"class:form-control, placeholder: Paste the body of the excerpt here, arira-label: Input for the source body" }}
                 <input type="submit" value="submit" class="btn-info">
