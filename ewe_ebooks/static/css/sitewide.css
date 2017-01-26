@@ -1,11 +1,15 @@
 body, html {
     height: 100%;
-    background-repeat: no-repeat;
-    background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
 }
+
+.main-content {
+    padding-top: 2em;
+}
+
 .navbar a {
  color: #fff;
 }
+
 
 .pagenheimer {
     display: flex;
@@ -29,6 +33,37 @@ body, html {
     display: none;
 }
 
+/* some nux pallette bgs */
+
+.bg-purple {
+    background-color: #802392;
+}
+
+.bg-ebony {
+    background-color: #5F634F;
+}
+
+.bg-blue {
+    background-color: #3D5A80;
+}
+
+.bg-green {
+    background-color: #008852;
+}
+
+.bg-silver {
+    background-color: #ADAEB2;
+}
+
+.bg-yellow {
+    background-color: #EFD28D;
+}
+
+
+
+.bg-orange {
+    background-color: #F46036
+}
 
 /* Corpus Thumbnail Classes */
 
