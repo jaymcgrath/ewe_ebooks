@@ -11,8 +11,9 @@ class BotAdmin(admin.ModelAdmin):
             'request_token_secret',
             'access_token',
             'access_token_secret',
-            'user',
+            'created_by',
             'mashup',
+            'is_active',
     )
 
 class TweetAdmin(admin.ModelAdmin):
