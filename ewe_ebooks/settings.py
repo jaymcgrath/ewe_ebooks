@@ -22,7 +22,7 @@ DEBUG = True
 #ADMINS = os.environ['ADMINS']
 
 ALLOWED_HOSTS = ['*']
-DEFAULT_FROM_EMAIL = os.environ['FROM_EMAIL']
+DEFAULT_FROM_EMAIL = os.environ.get('FROM_EMAIL','')
 
 # Don't want to get spammed during dev
 if DEBUG is True:
@@ -31,9 +31,9 @@ else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = os.environ['FROM_EMAIL']
+EMAIL_HOST_USER = os.environ.get('FROM_EMAIL', '')
 EMAIL_PORT = '465'
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASS']
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS', '')
 EMAIL_SUBJECT_PREFIX = '[Django]'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
@@ -45,7 +45,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['DB_KEY']
+SECRET_KEY = os.environ.get('DB_KEY', '')
 
 
 
@@ -68,7 +68,7 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'gunicorn',
-
+    'django_cron',
 
 ]
 
@@ -84,6 +84,10 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
+CRON_CLASSES = [
+    "bots.cron.GenerateTweets",
+    # ...
+]
 ROOT_URLCONF = 'ewe_ebooks.urls'
 
 TEMPLATES = [
@@ -121,7 +125,7 @@ DATABASES = {
          'ENGINE': 'django.db.backends.postgresql_psycopg2',
          'NAME': 'ewe_ebooks',
          'USER': 'ewe_user',
-         'PASSWORD': os.environ['DB_PASSWORD'],
+         'PASSWORD': os.environ.get('DB_PASSWORD', ''),
          'HOST': 'localhost',
          'PORT': '5432',
      }
@@ -185,8 +189,6 @@ STATICFILES_DIRS = (
 # https://warehouse.python.org/project/whitenoise/
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
-
 
 # Auth
 
