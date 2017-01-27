@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timedelta, timezone
 import os
 
 import tweepy
@@ -16,16 +16,16 @@ class Bot(models.Model):
 
     # Note - post_frequency is a duration field that takes a timedelta object
     POST_FREQS = (
-                (datetime.timedelta(hours=6), 'Four times daily'),
-                (datetime.timedelta(hours=12), 'Twice daily'),
-                (datetime.timedelta(days=1), 'Once Daily'),
-                (datetime.timedelta(days=2), 'Every Other Day'),
+                (timedelta(hours=6), 'Four times daily'),
+                (timedelta(hours=12), 'Twice daily'),
+                (timedelta(days=1), 'Once Daily'),
+                (timedelta(days=2), 'Every Other Day'),
     )
     name = models.CharField(max_length=64, help_text='A name for this bot (can be different from twitter username)')
     description = models.TextField(null=True, help_text='A brief description of how this bot looks on Twitter')
-    post_frequency = models.DurationField(null=True, choices=POST_FREQS, default='12 hours',
+    post_frequency = models.DurationField(null=True, choices=POST_FREQS, default=timedelta(hours=12),
                                           help_text='how frequently this bot posts')
-    post_count = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=False, help_text='toggle switch examined when posting to twitter')
     created = models.DateTimeField(auto_now_add=True, help_text='when this bot was created')
     updated = models.DateTimeField(auto_now=True, help_text='the last time this bot was updated')
     request_token = models.CharField(max_length=255, null=True, blank=True, help_text='temporary key from oauth')
@@ -45,6 +45,7 @@ class Bot(models.Model):
 
     def get_absolute_url(self):
       return "/view_bot/{pk}/".format(pk=self.id)
+
 
 class Tweet(models.Model):
     """
@@ -93,12 +94,16 @@ class Tweet(models.Model):
             self.created_twitter = this_tweet.created_at
             self.text = this_tweet.text
 
+            # Since we just tweeted, update the bot to reflect this
+            self.bot.updated = datetime.now(timezone.utc)
+
             # This is the twitter user from the tweepy api that just posted the tweet, not a django user object
             self.screen_name = this_tweet.user.screen_name
 
         # Either way, save it
 
         super().save(*args, **kwargs)
+
 
 
 
