@@ -69,8 +69,25 @@ INSTALLED_APPS = [
     'rest_framework',
     'gunicorn',
     'django_cron',
+    # All Auth pieces:
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
 ]
+
+# All Auth Settings:
+
+SITE_ID = 1  # Actually from contrib.sites, but only here bc of allauth
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_PASSWORD_MIN_LENGTH = 6
+
+
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -129,7 +146,7 @@ DATABASES = {
          'HOST': 'localhost',
          'PORT': '5432',
      }
- }
+}
 
 # Heroku / gunicorn stuff
 db_from_env = dj_database_url.config(conn_max_age=500)
@@ -153,6 +170,17 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+ )
+
+
+
 
 
 # Internationalization
