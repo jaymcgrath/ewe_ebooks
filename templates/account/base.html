@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load static %}
+    <script  src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/css/tether.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap-flex.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+    <link href="{% static 'css/sitewide.css' %}" rel="stylesheet">
+
+    {% block more_headers %}
+        <!-- optional other scripts go here -->
+    {% endblock %}
+
+  <title>{% block title %} Ewe Ebooks{% endblock %}</title>
+
+  </head>
+  <body class="bg-blue">
+    {% block nav_bar_head %}
+
+    {% include "navbar_head.html" %}
+
+    {% endblock %}
+    <span class="notification_widget">
+        {% block notifications %}
+
+        {% endblock %}
+    </span>
+    <main class="container main-content jumbotron">
+    {% block content %}
+        <!-- awesome stuff goes here -->
+    {% endblock %}
+    </main>
+  </body>
+{% block footers %}
+{% endblock %}
+</html>
+
+
