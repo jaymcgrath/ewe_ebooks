@@ -1,12 +1,12 @@
 import random
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
 from rest_framework import generics
+from extras.mixins import VerifiedEmailRequiredMixin
 
 from api.serializers import OutputSerializer
 from extras import mashup_algorithms
@@ -14,8 +14,9 @@ from sources.models import Corpus
 from .forms import MashupForm
 from .models import Mashup, Output
 
+from allauth.account.decorators import verified_email_required
 
-class MashupCreateView(LoginRequiredMixin, CreateView):
+class MashupCreateView(VerifiedEmailRequiredMixin, CreateView):
     """
     Class view for adding a mashup.
     """
@@ -42,7 +43,7 @@ class MashupListView(ListView):
         return context
 
 
-class MashupUserListView(LoginRequiredMixin, MashupListView):
+class MashupUserListView(VerifiedEmailRequiredMixin, MashupListView):
     """
     Mashup list view filtered by logged in user.. subclasses MashupListView
     """
@@ -64,7 +65,7 @@ class MashupDetailView(DetailView):
     template_name = 'content/mashup_detail.html'
 
 
-@login_required
+@verified_email_required
 def OutputCreateView(request):
     """
     FBV for making content from a mashup
@@ -77,10 +78,11 @@ def OutputCreateView(request):
         this_output = Output(mashup=mashup)
         this_output.save()
 
+    #TODO - resolve this for GET requests as well
     return redirect(this_output)
 
 
-@login_required
+@verified_email_required
 def OutputRandomView(request):
     """
     Endpoint for generating output from 2 randomly selected corpora
@@ -125,10 +127,9 @@ def OutputRandomView(request):
         mashup_details = {
             'title': "{} vs. {} (rando)".format(corpus1.twitter_username, corpus2.twitter_username),
             'description': "randomly created, new mashup from /random/",
-            'algorithm': 'MJN', #TODO: select this randomly too
+            'algorithm': 'MJN',  #TODO: select this randomly too
             'public': True
             }
-
 
         mashup = Mashup(**mashup_details)
         mashup.save()

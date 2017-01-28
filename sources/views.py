@@ -3,12 +3,13 @@ from django.views.generic.edit import CreateView
 from django.views.generic import ListView, DetailView, UpdateView
 from .forms import CorpusForm
 from .models import Corpus
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+
+from extras.mixins import VerifiedEmailRequiredMixin
 
 # Create your views here!
 
-class CorpusCreateView(LoginRequiredMixin, CreateView):
+
+class CorpusCreateView(VerifiedEmailRequiredMixin, CreateView):
     """
     View for adding a and processing a source (corpus)
     """
