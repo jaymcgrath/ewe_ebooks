@@ -47,7 +47,7 @@ urlpatterns = [
     url(r'^view_source/(?P<pk>\d+)/$', CorpusDetailView.as_view()),
 
     # Content Generation and Management
-    url(r'^create_mashup/$', MashupCreateView.as_view()),
+    url(r'^create_mashup/$', MashupCreateView.as_view(), name='create-mashup'),
     url(r'^list_mashups/$', MashupListView.as_view()),
     url(r'^my_mashups/$', MashupUserListView.as_view()),
     url(r'^view_mashup/(?P<pk>\d+)/$', MashupDetailView.as_view()),
@@ -67,11 +67,16 @@ urlpatterns = [
     url(r'^view_tweet/(?P<pk>\d+)/$', TweetDetailView.as_view(), name='tweet-detail'),
     url(r'^create_tweet/(?P<pk>\d+)/$', TweetCreateView.as_view(), name='tweet-create'),
 
-    # Auth
-    url(r'^login/$', views.login, {'template_name': 'people/login.html'}, name='login'),
-    url(r'^logout/$', views.logout, name='logout'),
-    url(r'^signup/$', create_profile, name='signup'),
-    url(r'^edit_profile/$', update_profile, name='update-profile'),
+    # AllAuth
+    url(r'^accounts/', include('allauth.urls')),
+    url(r'^accounts/profile/', UserDetailView.as_view(), name='account_profile'),
+
+    # Old Auth Schema
+    # url(r'^login/$', views.login, {'template_name': 'people/login.html'}, name='login'),
+    # url(r'^logout/$', views.logout, name='logout'),
+    # url(r'^signup/$', create_profile, name='signup'),
+    # url(r'^edit_profile/$', update_profile, name='update-profile'),
+
     url(r'^welcome/$', WelcomeView, name='welcome'),
     url(r'^dashboard/$', UserDetailView.as_view(), name='dashboard'),
 
