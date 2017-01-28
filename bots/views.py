@@ -7,6 +7,8 @@ from .models import Bot, Tweet
 from content.models import Output
 from .forms import BotForm
 
+
+from extras.mixins import VerifiedEmailRequiredMixin
 import urllib.parse
 import oauth2 as oauth
 import os
@@ -19,7 +21,7 @@ ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 ACCESS_TOKEN_SECRET = os.environ['ACCESS_TOKEN_SECRET']
 
 
-class BotDetailView(LoginRequiredMixin, DetailView):
+class BotDetailView(VerifiedEmailRequiredMixin, DetailView):
     """
     Conventional view for a single Bot
     """
@@ -32,7 +34,7 @@ class BotDetailView(LoginRequiredMixin, DetailView):
 
         return context
 
-class BotListViewByUser(LoginRequiredMixin, ListView):
+class BotListViewByUser(VerifiedEmailRequiredMixin, ListView):
     model = Bot
     # TODO: Attach user to output
     context_object_name = 'bot_list'
@@ -48,7 +50,7 @@ class BotListViewByUser(LoginRequiredMixin, ListView):
         qs = super().get_queryset()
         return qs.filter(created_by__id=self.kwargs['pk'])
 
-class BotCreateView(LoginRequiredMixin, CreateView):
+class BotCreateView(VerifiedEmailRequiredMixin, CreateView):
     """
     Basic create view for defining a bot - oauth stuff happens separately
     """
@@ -64,7 +66,7 @@ class BotCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('bot-detail', args=(self.object.id,))
 
-class BotEditView(LoginRequiredMixin, UpdateView):
+class BotEditView(VerifiedEmailRequiredMixin, UpdateView):
     """
     View for updating parts of a bot
     """
@@ -75,7 +77,7 @@ class BotEditView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('bot-detail', args=(self.object.id,))
 
-class BotAuthorizeView(LoginRequiredMixin, DetailView):
+class BotAuthorizeView(VerifiedEmailRequiredMixin, DetailView):
     """
     view for three-legged oauth key retrieval to allow ewe_ebooks to post on user's behalf
     """
@@ -210,7 +212,7 @@ class BotAuthorizeView(LoginRequiredMixin, DetailView):
         return context
 
 
-class TweetCreateView(LoginRequiredMixin, View):
+class TweetCreateView(VerifiedEmailRequiredMixin, View):
     """
     Custom View for creating a tweet with a fully configured bot
     """
