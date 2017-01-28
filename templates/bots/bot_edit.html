@@ -65,13 +65,24 @@
                                                  {% for corpus in mashup.corpora.all %}
                                                     {% if corpus %}
                                                         <span class="thumb-wrapper">
-                                                            <div style="background-image:url({{ corpus.image_url }})"
+                                                            <div style="background-image:url(
+                                                            {% if corpus.variety == "TW" %}
+                                                                {# make sure there actually is an image #}
+                                                                {% if corpus.image_url %}
+                                                                    {{ corpus.image_url }}
+                                                                {# otherwise load a placeholder #}
+                                                                {% else %}
+                                                                    {% static "img/corpus_placeholder.png" %}
+                                                                {% endif %}
+                                                            {% elif corpus.variety == "EX" %}
+                                                                {% static "img/excerpt_thumb.png" %}
+                                                            {% endif %})"
                                                                 class="corpus-thumb" title="{{ corpus.desc }}" id="cimage{{ corpus.id }}"
                                                                 data-corpus_id="{{ corpus.id }}">
                                                                {#  include the appropriate icon #}
-                                                                {% if corpus.type == "TW" %}
+                                                                {% if corpus.variety == "TW" %}
                                                                     <i class="fa fa-twitter"></i>
-                                                                {% elif corpus.type == "EX" %}
+                                                                {% elif corpus.variety == "EX" %}
                                                                     <i class="fa fa-book"></i>
                                                                 {% endif %}
                                                             </div>

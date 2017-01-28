@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}
     Sources: All
 {% endblock %}
@@ -31,21 +31,29 @@
         {% for corpus in object_list %}
         <tr>
             <td>
-                {% if corpus.image_url %}
                     <span class="thumb-wrapper">
-                                    <div style="background-image:url({{ corpus.image_url }})"
-                                                class="corpus-thumb"
-                                                     title="{{ corpus.description }}" id="cimage{{ corpus.id }}"
-                                                     data-corpus_id="{{ corpus.id }}">
-                                    {#  include the appropriate icon #}
-                                                    {% if corpus.type == "TW" %}
+                                    <div style="background-image:url(
+                                            {% if corpus.variety == "TW" %}
+                                                {# make sure there actually is an image #}
+                                                {% if corpus.image_url %}
+                                                    {{ corpus.image_url }}
+                                                {# otherwise load a placeholder #}
+                                                {% else %}
+                                                    {% static "img/corpus_placeholder.png" %}
+                                                {% endif %}
+                                            {% elif corpus.variety == "EX" %}
+                                                {% static "img/excerpt_thumb.png" %}
+                                            {% endif %}
+                                            )" class="corpus-thumb" title="{{ corpus.description }}"
+                                            id="cimage{{ corpus.id }}" data-corpus_id="{{ corpus.id }}">
+                                            {#  include the appropriate icon #}
+                                                    {% if corpus.variety == "TW" %}
                                                         <i class="fa fa-twitter"></i>
-                                                    {% elif corpus.type == "EX" %}
+                                                    {% elif corpus.variety == "EX" %}
                                                         <i class="fa fa-book"></i>
                                                     {% endif %}
                                     </div>
                                 </span>
-                {% endif %}
             </td>
             <td>
                 <a href="/view_source/{{ corpus.id }}/">

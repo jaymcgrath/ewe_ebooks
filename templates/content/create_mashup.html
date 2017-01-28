@@ -63,7 +63,21 @@
                             <input type="checkbox" name="corpora" value="{{ corpus.id }}"
                                    id="cbox{{ corpus.id }}" class="hidden">
                             <div class="media">
-                                    <div style="background-image:url({{ corpus.image_url }})"
+                                    <div style="background-image:
+                                            url(
+                                            {% if corpus.variety == "TW" %}
+                                                {# make sure there actually is an image #}
+                                                {% if corpus.image_url %}
+                                                    {{ corpus.image_url }}
+                                                {# otherwise load a placeholder #}
+                                                {% else %}
+                                                    {% static "img/corpus_placeholder.png" %}
+                                                {% endif %}
+                                            {% elif corpus.variety == "EX" %}
+                                                {% static "img/excerpt_thumb.png" %}
+                                            {% endif %}
+
+                                            )"
                                          class="media-object media-left media-middle corpus-thumb"
                                          title="{{ corpus.description }}" id="cimage{{ corpus.id }}"
                                          data-corpus_id="{{ corpus.id }}">
