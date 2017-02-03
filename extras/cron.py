@@ -21,7 +21,7 @@ class RefreshCorpora(CronJobBase):
         # Get expiration date for the timeline
         fresh_until = datetime.now(timezone.utc) - timedelta(days=DAYS_TIL_STALE)
         # Retrieve corpora updated less recently than the expiration
-        corpus_queue = Corpus.objects.filter(updated__lt=fresh_until)
+        corpus_queue = Corpus.objects.filter(updated__lt=fresh_until).filter(variety__exact='TW')
 
         # Examine all the bots and tweet if they are overdue
         for this_corpus in corpus_queue:
