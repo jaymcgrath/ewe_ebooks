@@ -19,8 +19,8 @@ from django.contrib import admin
 from rest_framework import routers
 
 from api.content_api import OutputViewset
-from content.views import MashupCreateView, MashupListView, MashupUserListView, MashupDetailView, OutputCreateView,\
-                          OutputDetailView, OutputListView, DisplayOutputView, OutputRandomView,\
+from content.views import MashupCreateView, MashupListView, MashupUserListView, MashupDetailView, create_output,\
+                          OutputDetailView, OutputListView, DisplayOutputView, create_output_random,\
                           OutputUserListView
 from bots.views import BotCreateView, BotEditView, BotDetailView, BotAuthorizeView, TweetCreateView, TweetDetailView
 from people.views import update_profile, create_profile, UserDetailView, WelcomeView
@@ -51,8 +51,8 @@ urlpatterns = [
     url(r'^list_mashups/$', MashupListView.as_view()),
     url(r'^my_mashups/$', MashupUserListView.as_view()),
     url(r'^view_mashup/(?P<pk>\d+)/$', MashupDetailView.as_view()),
-    url(r'^create_output/$', OutputCreateView),
-    url(r'^random/$', OutputRandomView),
+    url(r'^create_output/$', create_output),
+    url(r'^random/$', create_output_random),
     url(r'^view_output/(?P<pk>\d+)/$', OutputDetailView.as_view(), name='output-detail'),
     url(r'^list_output/$', OutputListView.as_view(), name='output-list'),
     url(r'^list_output/(?P<pk>\d+)', OutputUserListView.as_view()),
