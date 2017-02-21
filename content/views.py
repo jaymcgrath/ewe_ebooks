@@ -66,7 +66,7 @@ class MashupDetailView(DetailView):
 
 
 @verified_email_required
-def OutputCreateView(request):
+def create_output(request):
     """
     FBV for making content from a mashup
     """
@@ -83,7 +83,7 @@ def OutputCreateView(request):
 
 
 @verified_email_required
-def OutputRandomView(request):
+def create_output_random(request):
     """
     Endpoint for generating output from 2 randomly selected corpora
     Optional save button on display
