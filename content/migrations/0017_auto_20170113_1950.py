@@ -9,6 +9,8 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
+        # Need to build bots first before using as ForeignKey field
+        ('bots', '__first__'),
         ('content', '0016_auto_20170113_1800'),
     ]
 
