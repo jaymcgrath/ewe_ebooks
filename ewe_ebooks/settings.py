@@ -17,18 +17,14 @@ import dj_database_url
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Yes Safety net
-DEBUG = True
+DEBUG = False
 
 #ADMINS = os.environ['ADMINS']
 
 ALLOWED_HOSTS = ['*']
 DEFAULT_FROM_EMAIL = os.environ.get('FROM_EMAIL','')
 
-# Don't want to get spammed during dev
-if DEBUG is True:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.environ.get('FROM_EMAIL', '')
