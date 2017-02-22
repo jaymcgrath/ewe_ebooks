@@ -132,16 +132,16 @@ class Corpus(models.Model):
             """
             # TODO: Uncomment after writing algorithms that use each data type
             for word1, word2 in ex.bigrams:
-                 bg = Bigram.objects.create(corpus=self, word1=word1, word2=word2)
-                 bg.save()
+                bg = Bigram.objects.create(corpus=self, word1=word1, word2=word2)
+                bg.save()
 
             for word1, word2, word3 in ex.trigrams:
-                 tg = Trigram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3)
-                 tg.save()
+                tg = Trigram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3)
+                tg.save()
 
             for word1, word2, word3, word4 in ex.quadgrams:
-                 qg = Quadgram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3, word4=word4)
-                 qg.save()
+                qg = Quadgram.objects.create(corpus=self, word1=word1, word2=word2, word3=word3, word4=word4)
+                qg.save()
 
             for sentence in ex.sentences:
                 sent = Sentence.objects.create(corpus=self, sentence=sentence)
