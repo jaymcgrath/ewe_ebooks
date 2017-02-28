@@ -55,7 +55,7 @@ urlpatterns = [
     url(r'^random/$', create_output_random),
     url(r'^view_output/(?P<pk>\d+)/$', OutputDetailView.as_view(), name='output-detail'),
     url(r'^list_output/$', OutputListView.as_view(), name='output-list'),
-    url(r'^list_output/(?P<pk>\d+)', OutputUserListView.as_view()),
+    url(r'^list_output/(?P<pk>\d+)/$', OutputUserListView.as_view()),
 
     # Bots - Creation and Management
     url(r'^create_bot/$', BotCreateView.as_view()),
