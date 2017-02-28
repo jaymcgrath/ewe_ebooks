@@ -21,7 +21,7 @@ DEBUG = False
 
 #ADMINS = os.environ['ADMINS']
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['ewe-ebooks.herokuapp.com', 'ewe_ebooks.com',]
 DEFAULT_FROM_EMAIL = os.environ.get('FROM_EMAIL','')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
