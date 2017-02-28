@@ -16,6 +16,7 @@ class Bot(models.Model):
 
     # Note - post_frequency is a duration field that takes a timedelta object
     POST_FREQS = (
+                (timedelta(minutes=1), 'Really Bringing It'),
                 (timedelta(hours=1), 'Hourly'),
                 (timedelta(hours=6), 'Four times daily'),
                 (timedelta(hours=12), 'Twice daily'),
