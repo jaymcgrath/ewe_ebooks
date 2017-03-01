@@ -239,4 +239,4 @@ class TweetDetailView(DetailView):
     """
     model = Tweet
     context_object_name = 'tweet'
-    template_name = 'bots/tweet_detail.html'    
+    template_name = 'bots/tweet_detail.html'
