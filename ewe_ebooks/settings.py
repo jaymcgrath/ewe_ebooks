@@ -9,32 +9,27 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
-# Update database configuration with $DATABASE_URL.
-
 
 import os
 import dj_database_url
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Yes Safety net
 DEBUG = False
 
-#ADMINS = os.environ['ADMINS']
+ADMINS = os.environ['ADMINS']
 
 ALLOWED_HOSTS = ['ewe-ebooks.herokuapp.com', 'ewe_ebooks.com',]
 DEFAULT_FROM_EMAIL = os.environ.get('FROM_EMAIL','')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = os.environ.get('FROM_EMAIL', '')
-EMAIL_PORT = '465'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS', '')
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER =  os.environ.get('SENDGRID_USERNAME', '')
+EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD', '')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 EMAIL_SUBJECT_PREFIX = '[Django]'
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
 
-ADMINS = ['Jay', 'eweebooks@gmail.com',]
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
