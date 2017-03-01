@@ -14,6 +14,7 @@ class BotForm(forms.ModelForm):
                 'description',
                 'post_frequency',
                 'mashup',
+                'is_active',
                  )
 
 class TweetForm(forms.ModelForm):
