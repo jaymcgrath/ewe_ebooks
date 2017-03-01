@@ -34,7 +34,7 @@
                             {% endfor %}
                         </div><!--endcol-->
                         <div class="container">
-                            {% if not object.access_token or object.access_token_secret %}
+                            {% if not object.access_token %}
                                 <p class="h6">Activation button appears here when bot is authorized on Twitter</p>
                             {% elif object.access_token and object.access_token_secret %}
                                 <p class="h5">{{ form.is_active}} Activate this Bot?</p>
