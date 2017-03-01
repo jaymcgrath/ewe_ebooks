@@ -2,7 +2,6 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView, View, UpdateView
 from django.views.generic.edit import CreateView
 from django.shortcuts import redirect
-from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Bot, Tweet
 from content.models import Output
 from .forms import BotForm
@@ -34,6 +33,7 @@ class BotDetailView(VerifiedEmailRequiredMixin, DetailView):
 
         return context
 
+
 class BotListViewByUser(VerifiedEmailRequiredMixin, ListView):
     model = Bot
     # TODO: Attach user to output
@@ -49,6 +49,7 @@ class BotListViewByUser(VerifiedEmailRequiredMixin, ListView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(created_by__id=self.kwargs['pk'])
+
 
 class BotCreateView(VerifiedEmailRequiredMixin, CreateView):
     """
@@ -66,16 +67,19 @@ class BotCreateView(VerifiedEmailRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('bot-detail', args=(self.object.id,))
 
+
 class BotEditView(VerifiedEmailRequiredMixin, UpdateView):
     """
     View for updating parts of a bot
     """
+
     model = Bot
     template_name = 'bots/bot_edit.html'
     form_class = BotForm
 
     def get_success_url(self):
         return reverse('bot-detail', args=(self.object.id,))
+
 
 class BotAuthorizeView(VerifiedEmailRequiredMixin, DetailView):
     """
@@ -90,8 +94,6 @@ class BotAuthorizeView(VerifiedEmailRequiredMixin, DetailView):
     ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
     AUTHORIZE_URL = 'https://api.twitter.com/oauth/authorize'
 
-
-
     def get(self, request, *args, **kwargs):
         """
         Overwrite the default get method for this view so we can use the same view for both parts of the
@@ -102,7 +104,6 @@ class BotAuthorizeView(VerifiedEmailRequiredMixin, DetailView):
         # Set token values to empty str if they're not there
         oauth_token = request.GET.get('oauth_token', '')
         oauth_verifier = request.GET.get('oauth_verifier', '')
-
 
         # Check if this is a callback from twitter authorization with the tokens:
         if oauth_token and oauth_verifier:
@@ -132,20 +133,18 @@ class BotAuthorizeView(VerifiedEmailRequiredMixin, DetailView):
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
-
     def get_request_token(self):
         """
         Function for generating initial request token for three-legged oauth
         Takes no input, returns a request_token dict with two keys, oauth_token and oauth_token_secret
         """
 
-        # TODO : implement request.build_absolute_uri(reverse('view_name', args=(obj.pk, ))) below for more portability
-        callback_url = 'http://127.0.0.1:8000/authorize_bot/{}/'.format(self.object.pk)
+        callback_url = self.request.build_absolute_uri(reverse('bot-authorize', args=(self.object.pk, )))
 
         consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
         client = oauth.Client(consumer)
         resp, content = client.request(self.REQUEST_TOKEN_URL, "POST",
-                                       body=urllib.parse.urlencode({'oauth_callback':callback_url}))
+                                       body=urllib.parse.urlencode({'oauth_callback': callback_url}))
 
         if resp['status'] != '200':
             raise Exception("Invalid response %s." % resp['status'])
@@ -156,7 +155,7 @@ class BotAuthorizeView(VerifiedEmailRequiredMixin, DetailView):
         request_token = {key.decode(): value.decode() for key, value in request_token.items()}
 
         # Return the token dict containing token and secret
-        return(request_token)
+        return request_token
 
     def get_access_token(self, oauth_token, oauth_token_secret, oauth_verifier):
         """
@@ -182,10 +181,7 @@ class BotAuthorizeView(VerifiedEmailRequiredMixin, DetailView):
         access_token = {key.decode(): value.decode() for key, value in access_token.items()}
 
         # Return the token dict containing token and secret
-        return (access_token)
-
-
-
+        return access_token
 
     def get_context_data(self, **kwargs):
         """
@@ -230,11 +226,8 @@ class TweetCreateView(VerifiedEmailRequiredMixin, View):
         this_output = Output(mashup=this_mashup)
         this_output.save()
 
-
         this_tweet = Tweet(bot=this_bot, output=this_output, mashup=this_mashup)
         this_tweet.save()
-
-
 
         # OK, redirect to view what we just posted
         return redirect(reverse('tweet-detail', args=(this_tweet.pk,)))
@@ -246,13 +239,4 @@ class TweetDetailView(DetailView):
     """
     model = Tweet
     context_object_name = 'tweet'
-    template_name = 'bots/tweet_detail.html'
-
-
-
-
-
-
-
-
-
+    template_name = 'bots/tweet_detail.html'    
