@@ -52,7 +52,6 @@ def freshen_corpus(corpus):
     corpus.save()
 
 
-
             # TODO: update corpus with fresh tweets and relateds -- break logic out of Corpus.save method?
 
 
