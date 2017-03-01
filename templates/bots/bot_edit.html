@@ -33,7 +33,14 @@
                                 </label>
                             {% endfor %}
                         </div><!--endcol-->
-            </div><!--endrow-->
+                        <div class="container">
+                            {% if not object.access_token or object.access_token_secret %}
+                                <p class="h6">Activation button appears here when bot is authorized on Twitter</p>
+                            {% elif object.access_token and object.access_token_secret %}
+                                <p class="h5">{{ form.is_active}} Activate this Bot?</p>
+                            {% endif %}
+                        </div>
+                    </div><!--endrow-->
                 </div><!--leftdiv-->
                 <div class="col-xs-12 col-md-6 list-group">
                     <div class="card-header bg-inverse">
@@ -108,8 +115,8 @@
                             </div><!--media-->
                         </div><!--card-->
                     {% endfor %}
-                </div><!--col-->
-            </div><!--row-->
+                </div><!--row-->
+            </div><!--col-->
         </section><!--container-->
      <input type="submit" value="Submit" class="btn-primary" id="create_bot_button">
     </form>
