@@ -173,7 +173,7 @@
                     </span>
                 </div>
                 <div class="card-block">
-                            {% with bot.tweets.all.0 as most_recent_tweet %}
+                            {% with bot.tweets|last as most_recent_tweet %}
                                 <p>
 
                                     {{ bot.name }} has tweeted
