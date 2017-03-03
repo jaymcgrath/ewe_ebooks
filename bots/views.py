@@ -30,7 +30,15 @@ class BotDetailView(VerifiedEmailRequiredMixin, DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
+        obj = self.get_object()
 
+
+        try:
+            most_recent_tweet = obj.tweets.latest('created')
+        except:
+            most_recent_tweet = None
+
+        context.update({'most_recent_tweet': most_recent_tweet})
         return context
 
 

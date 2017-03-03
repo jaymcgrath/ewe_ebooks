@@ -173,7 +173,6 @@
                     </span>
                 </div>
                 <div class="card-block">
-                            {% with bot.tweets|last as most_recent_tweet %}
                                 <p>
 
                                     {{ bot.name }} has tweeted
@@ -215,7 +214,6 @@
                                         Tweets by {{ most_recent_tweet.screen_name }}</a>
                                     <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
                                 {% endif %}
-                            {% endwith %}
                 </div>
             </div>
        </div><!--col-->
