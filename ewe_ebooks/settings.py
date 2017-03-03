@@ -96,6 +96,7 @@ MIDDLEWARE = [
 
 CRON_CLASSES = [
     "bots.cron.GenerateTweets",
+    "sources.cron.RefreshCorpora",
     # ...
 ]
 ROOT_URLCONF = 'ewe_ebooks.urls'
