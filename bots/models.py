@@ -98,6 +98,7 @@ class Tweet(models.Model):
 
             # Since we just tweeted, update the bot to reflect this
             self.bot.updated = datetime.now(timezone.utc)
+            self.bot.save()
 
             # This is the twitter user from the tweepy api that just posted the tweet, not a django user object
             self.screen_name = this_tweet.user.screen_name
