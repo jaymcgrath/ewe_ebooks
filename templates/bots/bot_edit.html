@@ -21,26 +21,14 @@
                     <p>{{ form.name|add_attrs:"class:form-control, placeholder:A nickname for this bot" }}</p>
                     <p>{{ form.description|add_attrs:"class:form-control, placeholder:A brief description of this bot" }}</p>
                     <div class="form-group row">
-                        <span class="h5">
+                        <p class="h5">
                             How often should this bot post?
-                        </span>
-                        <div class="btn-group" data-toggle="buttons">
-                            {% for value, text in form.post_frequency.field.choices %}
-                                <label class="btn btn-primary {% if forloop.first %} active {% endif %} radio-label"  >
-                                    <input id="pf{{ value }}" type="radio" name="post_frequency" value="{{ value }}"
-                                        {% if forloop.first %} checked {% endif %}>
-                                    {{ text }} {# human readable duration #}
-                                </label>
-                            {% endfor %}
-                        </div><!--endcol-->
-                        <div class="container">
-                            {% if not object.access_token %}
-                                <p class="h6">Activation button appears here when bot is authorized on Twitter</p>
-                            {% elif object.access_token and object.access_token_secret %}
-                                <p class="h5">{{ form.is_active}} Activate this Bot?</p>
-                            {% endif %}
+                        </p>
+                        <div class="form-group">
+                            {{ form.post_frequency|add_attrs:"class:form-control" }}
                         </div>
                     </div><!--endrow-->
+
                 </div><!--leftdiv-->
                 <div class="col-xs-12 col-md-6 list-group">
                     <div class="card-header bg-inverse">
