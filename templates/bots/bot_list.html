@@ -3,6 +3,61 @@
 {% block more_headers %}
     <!-- custom css and js calls go here -->
 {% endblock %}
-
+  {% for bot in bot_list %}
+            {{ bot.name }} {{ bot.tweets.all|length }}
+        {% endfor %}
 {% block main_content %}
+    {%  if bot_list %}
+        <div class="container-responsive" style="padding-top: 25px">
+        <table class="table bg-silver">
+        <thead class="thead-inverse">
+            <tr>
+              <th class="text-xs-left">
+                  Bot Name <span class="tag tag-pill tag-default">tweets</span>
+              </th>
+              <th class="text-xs-left">Description</th>
+              <th class="text-xs-center">Authorized?</th>
+            </tr>
+        </thead>
+            {% for bot in bot_list %}
+                <tr class="form-row">
+                    <td>
+                        <a href="/view_bot/{{ bot.id }}/">
+                        {{ bot.name }}
+                        </a>
+                        <span class="tag tag-pill tag-default">{{ bot.tweets.all|length }}</span>
+                    </td>
+                    <td>
+                        {{ bot.description }}
+                    </td>
+                    <td>
+                        {% if bot.access_token and bot.access_token_secret %}
+                            <div class="text-xs-center">
+                                <i class="fa fa-thumbs-up fa-2x btn-success"></i>
+                            </div>
+                        {% else %}
+                            <div class="text-xs-center">
+                                <i class="fa fa-thumbs-down fa-2x btn-danger"></i>
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        </div>
+    {% else %}
+        <div class="card">
+                    <div class="card-header bg-warning text-xs-center">
+                        <span class="h5">
+                            <i class="fa fa-frown-o"></i>
+                            You don't have any bots yet
+                        </span>
+                    </div>
+                    <div class="card-block text-xs-center">
+                    <a class="btn btn-primary btn-lg " href="/create_bot/">
+                        Create a Bot
+                    </a>
+                    </div><!--card-block-->
+                </div><!--card-->
+    {% endif %}
 {% endblock %}

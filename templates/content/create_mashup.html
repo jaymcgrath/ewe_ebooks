@@ -56,6 +56,7 @@
 
             <div class="col-xs-6 list-group">
                 <div class="corpus-select" id="corpus_select">
+                <a class="btn btn-primary " href="/add_source/">Add a source</a>
                     {% for corpus in form.fields.corpora.queryset.all %}
                         <div class="card corpus-card list-group-item" id="corpus-card{{ corpus.id }}"
                              data-corpus_id="{{ corpus.id }}" data-corpus_image_url="{{ corpus.image_url }}"
