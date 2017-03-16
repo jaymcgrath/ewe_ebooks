@@ -42,9 +42,8 @@ class BotDetailView(VerifiedEmailRequiredMixin, DetailView):
         return context
 
 
-class BotListViewByUser(VerifiedEmailRequiredMixin, ListView):
+class BotUserListView(VerifiedEmailRequiredMixin, ListView):
     model = Bot
-    # TODO: Attach user to output
     context_object_name = 'bot_list'
     template_name = 'bots/bot_list.html'
     # queryset = Output.objects.filter(output__id=self.kwargs['pk'])
@@ -57,6 +56,23 @@ class BotListViewByUser(VerifiedEmailRequiredMixin, ListView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(created_by__id=self.kwargs['pk'])
+
+
+class BotListView(VerifiedEmailRequiredMixin, ListView):
+    model = Bot
+    # TODO: Attach user to output
+    context_object_name = 'bot_list'
+    template_name = 'bots/bot_list.html'
+    # queryset = Output.objects.filter(output__id=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    # TODO: fix this.. passing queryset in to template
+    # def get_queryset(self):
+    #     qs = super().get_queryset()
+    #
 
 
 class BotCreateView(VerifiedEmailRequiredMixin, CreateView):
