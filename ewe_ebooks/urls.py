@@ -23,7 +23,7 @@ from content.views import MashupCreateView, MashupListView, MashupUserListView, 
                           OutputDetailView, OutputListView, DisplayOutputView, create_output_random,\
                           OutputUserListView
 from bots.views import BotCreateView, BotEditView, BotDetailView, BotAuthorizeView, TweetCreateView, TweetDetailView,\
-                        BotListView, BotUserListView
+                        BotListView, BotUserListView, TweetListView
 from people.views import update_profile, create_profile, UserDetailView, WelcomeView
 from sources.views import CorpusCreateView, CorpusListView, CorpusDetailView
 
@@ -34,7 +34,7 @@ router.register(r'output', OutputViewset)
 
 urlpatterns = [
     # Root URL
-    url(r'^$', OutputListView.as_view()),
+    url(r'^$', OutputListView.as_view(), name='main-page'),
 
     # Admin Area
     url(r'^nothinghere/', admin.site.urls),
