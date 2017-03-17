@@ -14,7 +14,6 @@
                 <i class="fa fa-gears"></i>
                     {{ bot.name }}
             </span>
-
         </div><!-- end card header -->
         <div class="card-block"><!--main card block containing the columns -->
           <div class="row">
@@ -30,7 +29,7 @@
                     <div class="card-block text-xs-center">
                             {% if bot.access_token and bot.access_token_secret %}
                             <a class="btn btn-primary btn-lg " href="/create_tweet/{{ bot.pk }}/" target="_blank">
-                            Post Random Content Directly to Twitter
+                            Generate and Post a Tweet Immediately
                             </a>
                             {% else %}
                                 <p>{{ bot.name }} is not authorized to post to twitter.</p>

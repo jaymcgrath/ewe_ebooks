@@ -69,11 +69,8 @@
             {% if request.user.is_authenticated %}
                 <a class="dropdown-item" href="/create_bot/">Create a Bot</a>
                 <a class="dropdown-item" href="/list_bots/{{ request.user.id }}/">Your Bots</a>
-            {% else %}
-            <p>To get started:</p>
-                <a class="dropdown-item" href="{% url 'account_login' %}">Log In</a>
-                <a class="dropdown-item" href="{% url 'account_signup' %}">Sign Up</a>
             {% endif %}
+            <a class="dropdown-item" href="/list_bots/">Browse Bots</a>
             <!-- management link placeholder
             <a class="dropdown-item" href="#">Manage</a>
             -->
