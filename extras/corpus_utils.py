@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from tzlocal import get_localzone
 
 from sources.models import Sentence, Hashtag
-from .twittstopher import Timeline
+from .twittstopher import Timeline, TwitterUser
 
 
 
@@ -23,6 +23,10 @@ def freshen_corpus(corpus):
     # Check to see if freshening is necessary
 
     tl = Timeline(corpus.twitter_username, last_tweet_id=corpus.last_tweet_id)
+    usr = TwitterUser(corpus.twitter_username)
+
+    if usr.image != corpus.image_url:
+        corpus.image_url = usr.image
 
     for sentence in tl.sentences:
         sent = Sentence.objects.create(corpus=corpus, sentence=sentence)
