@@ -152,9 +152,13 @@ def create_output_random(request):
 
 class OutputListView(ListView):
     model = Output
-    # TODO: Filter this to only show most recent or top or something like that
+
     context_object_name = 'output_list'
     template_name = 'content/output_list.html'
+
+    # Reverse order by creation date, slice top 25
+    queryset = Output.objects.all().order_by('-generated')[:25]
+
     def get_context_data(self, **kwargs):
         context = super(OutputListView, self).get_context_data(**kwargs)
         return context
