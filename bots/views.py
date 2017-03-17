@@ -264,3 +264,16 @@ class TweetDetailView(DetailView):
     model = Tweet
     context_object_name = 'tweet'
     template_name = 'bots/tweet_detail.html'
+
+class TweetListView(ListView):
+    model = Tweet
+    context_object_name = 'tweet_list'
+    template_name = 'bots/tweet_list.html'
+    
+    # Order by newest first, limit to 25 records
+    queryset = Tweet.objects.all().order_by('-created')[:25]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
