@@ -74,3 +74,8 @@ htmlcov
 Procfile.windows*
 winserver.bat
 shell_plus.bat
+
+# Vagrant #
+######################
+Vagrantfile
+.vagrant*
