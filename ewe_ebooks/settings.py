@@ -99,7 +99,11 @@ CRON_CLASSES = [
     "sources.cron.RefreshCorpora",
     # ...
 ]
+
+DJANGO_CRON_DELETE_LOGS_OLDER_THAN = 1
+
 ROOT_URLCONF = 'ewe_ebooks.urls'
+
 
 TEMPLATES = [
     {
